@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Заказ оформлен — Чайный Мир{% endblock %}
+
+{% block content %}
+<section class="cart" style="text-align: center; padding: 100px 0;">
+    <div class="container">
+        <h1 style="font-size: 36px; color: #4a5d3a; margin-bottom: 20px;">Спасибо за заказ!</h1>
+        <p style="font-size: 18px; margin: 20px 0;">Ваш заказ <strong>№{{ order.id }}</strong> успешно принят.</p>
+        <p style="color: #777; margin-bottom: 30px;">Мы свяжемся с вами по телефону <strong>{{ order.phone }}</strong> для подтверждения.</p>
+        
+        <a href="{% url 'main:catalog' %}" class="button-catalog" style="display: inline-block;">
+            Вернуться в каталог
+        </a>
+    </div>
+</section>
+{% endblock %}

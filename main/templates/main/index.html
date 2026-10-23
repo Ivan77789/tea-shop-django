@@ -1,0 +1,144 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Главная — Чайный Мир{% endblock %}
+
+{% block content %}
+    {% csrf_token %} <!-- Токен для AJAX -->
+
+    <section class="hero">
+        <picture>
+            <source media="(max-width: 768px)" srcset="{% static 'img/hero-banner-phon-version-chinese-tea.jpg' %}">
+            <img src="{% static 'img/hero-banner-chinese-tea.jpg' %}" alt="" class="hero-img">
+        </picture>
+
+        <div class="hero-content">
+            <p>Настоящий китайский чай</p>
+            <h1>Вкус традиций в каждой чашке</h1>
+            <p>Качественный китайский чай напрямую от проверенных поставщиков</p>
+            <a href="{% url 'main:catalog' %}" class="button-catalog">Перейти к каталогу</a>
+        </div>
+    </section>
+
+    <section class="popular-products">
+        <div class="container">
+
+            <div class="popular-header">
+                <h2>Популярные товары</h2>
+                <a href="{% url 'main:catalog' %}" class="popular-all">
+                    Весь каталог <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+            
+            <div class="product-grid">
+                {% for product in products %}
+                    <div class="product-card">
+                        <div class="product-card-image">
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            
+                            <!-- Добавили data-id, чтобы сердечко знало, какой товар брать -->
+                            <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
+                                <i class="bi bi-heart" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="product-name">
+                            <a href="{% url 'main:product_detail' product.slug %}">
+                                <h3 class="product-title">{{ product.name }}</h3>
+                            </a>
+                        </div>
+                        <p class="product-description">{{ product.weight }} г</p>
+                        <p class="product-price">
+                            {{ product.price }} <span class="product-price-currency">₴</span>
+                        </p>
+                        
+                        <!-- Добавили класс add-to-cart-btn и data-id для корзины -->
+                        <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}">
+                            <i class="bi bi-cart" aria-hidden="true"></i> В корзину
+                        </button>
+                    </div>
+                {% empty %}
+                    <p>Товары пока не добавлены.</p>
+                {% endfor %}
+            </div>
+
+        </div>
+    </section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // 1. ДОБАВЛЕНИЕ В КОРЗИНУ
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.add-to-cart-btn');
+        if (btn) {
+            e.preventDefault();
+            const productId = btn.dataset.id;
+            const originalHtml = btn.innerHTML;
+            const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+            btn.disabled = true;
+            btn.innerHTML = 'Добавляем...';
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': token,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'quantity=1'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    // Обновляем бейдж в шапке
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) badge.textContent = data.cart_total_items;
+                    
+                    // Показываем успех
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Добавлено!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
+            });
+        }
+    });
+
+    // 2. ДОБАВЛЕНИЕ В ИЗБРАННОЕ
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.favorite-btn');
+        if (btn) {
+            e.preventDefault();
+            
+            {% if not user.is_authenticated %}
+                window.location.href = "{% url 'users:login' %}";
+                return;
+            {% endif %}
+
+            const productId = btn.dataset.id; // Берем ID прямо из кнопки
+            const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            fetch(`/favorite/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': token}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="bi bi-heart"></i>';
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

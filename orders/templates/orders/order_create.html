@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Оформление заказа — Чайный Мир{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+<section class="order">
+    <div class="container">
+        <div class="order-header">
+            <h1>Оформление заказа</h1>
+            <p class="order-text">Пожалуйста, заполните данные для доставки и выберите способ оплаты</p>
+        </div>
+        
+        <form method="post" action="{% url 'orders:order_create' %}">
+            {% csrf_token %}
+            <div class="order-layout">
+                
+                <!-- ЛЕВАЯ КОЛОНКА: ФОРМА -->
+                <div class="order-items">
+                    
+                    <!-- Блок 1: Контакты -->
+                    <div class="order-head">
+                        <span class="order-one">1</span>
+                        <h2 class="order-title">Контактные данные</h2>
+                    </div>
+                    <div class="order-name-fone">
+                        <div class="form-field">
+                            <label for="{{ form.first_name.id_for_label }}">Имя <span class="required">*</span></label>
+                            {{ form.first_name }}
+                        </div>
+                        <div class="form-field">
+                            <label for="{{ form.last_name.id_for_label }}">Фамилия <span class="required">*</span></label>
+                            {{ form.last_name }}
+                        </div>
+                    </div>
+                    
+                    <div class="order-name-fone">
+                        <div class="form-field">
+                            <label for="{{ form.email.id_for_label }}">Email <span class="required">*</span></label>
+                            {{ form.email }}
+                        </div>
+                        <div class="form-field">
+                            <label for="{{ form.phone.id_for_label }}">Телефон <span class="required">*</span></label>
+                            {{ form.phone }}
+                        </div>
+                    </div>
+
+                    <!-- Блок 2: Доставка -->
+                    <div class="order-block">
+                        <div class="order-head">
+                            <span class="order-one">2</span>
+                            <h2 class="order-title">Данные доставки</h2>
+                        </div>
+
+                        <div class="form-field">
+                            <label for="{{ form.city.id_for_label }}">Город <span class="required">*</span></label>
+                            {{ form.city }}
+                        </div>
+
+                        <div class="form-field">
+                            <label for="{{ form.address.id_for_label }}">Адрес <span class="required">*</span></label>
+                            {{ form.address }}
+                        </div>
+
+                        <div class="form-field">
+                            <label for="{{ form.comment.id_for_label }}">Комментарий к заказу</label>
+                            {{ form.comment }}
+                        </div>
+                    </div>
+
+                    <!-- Блок 3: Оплата (пока визуальный) -->
+                    <div class="order-block">
+                        <div class="order-head">
+                            <span class="order-one">3</span>
+                            <h2 class="order-title">Способ оплаты</h2>
+                        </div>
+
+                        <div class="radio-group">
+                            <label class="radio-option">
+                                <input type="radio" name="payment" value="cod" checked>
+                                <span class="radio-circle"></span>
+                                <div class="radio-text">
+                                    <p class="radio-title">Наложенный платеж</p>
+                                    <p class="radio-desc">Оплата при получении товара на отделении Новой Почты.</p>
+                                </div>
+                            </label>
+
+                            <label class="radio-option">
+                                <input type="radio" name="payment" value="card">
+                                <span class="radio-circle"></span>
+                                <div class="radio-text">
+                                    <p class="radio-title">Оплата картой онлайн</p>
+                                    <p class="radio-desc">Оплата банковской картой на сайте (Visa, Mastercard).</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn-checkout">
+                        Подтвердить заказ
+                        <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                    </button>
+                </div>
+
+                <!-- ПРАВАЯ КОЛОНКА: ИТОГО ИЗ КОРЗИНЫ -->
+                <aside class="order-summary">
+                    <h2 class="order-summary-title">Ваш заказ</h2>
+
+                    <div class="order-summary-items">
+                        {% for item in cart %}
+                        <div class="order-summary-item">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            <div class="order-summary-info">
+                                <p class="order-summary-name">{{ item.product.name }}</p>
+                                <p class="order-summary-desc">{{ item.product.weight }} г</p>
+                                <p style="font-size: 12px; color: #999;">Кол-во: {{ item.quantity }} шт.</p>
+                            </div>
+                            <p class="order-summary-price">{{ item.total_price }} ₴</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="order-summary-totals">
+                        <div class="order-summary-row">
+                            <span>Товары ({{ cart|length }})</span>
+                            <span>{{ cart.get_total_price }} ₴</span>
+                        </div>
+
+                        <div class="order-summary-row">
+                            <span>Доставка</span>
+                            <span>По тарифам Новой Почты</span>
+                        </div>
+
+                        <div class="order-summary-total">
+                            <span>Итого</span>
+                            <span>{{ cart.get_total_price }} ₴</span>
+                        </div>
+                    </div>
+
+                    <div class="order-summary-delivery">
+                        <i class="bi bi-truck" aria-hidden="true"></i>
+                        <div>
+                            <p class="order-summary-delivery-title">Доставка</p>
+                            <p class="order-summary-delivery-desc">Новой Почтой. Срок: 1–3 дня.</p>
+                        </div>
+                    </div>
+
+                    <a href="{% url 'cart:cart_detail' %}" class="order-summary-back">
+                        <i class="bi bi-arrow-left" aria-hidden="true"></i>
+                        Вернуться в корзину
+                    </a>
+                </aside>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

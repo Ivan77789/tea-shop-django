@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Личный кабинет — Чайный Мир{% endblock %}
+
+{% block content %}
+<section class="account">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- ============================================================
+                 ЛЕВЫЙ САЙДБАР
+                 ============================================================ -->
+            <!-- САЙДБАР -->
+            <aside class="account-sidebar">
+                <nav class="account-menu">
+                    <a href="{% url 'users:account' %}" class="account-menu-item {% if request.resolver_match.url_name == 'account' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person"></i> Личный кабинет
+                    </a>
+                    <a href="{% url 'users:orders_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'orders_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-box"></i> Мои заказы
+                    </a>
+                    <a href="{% url 'main:favorites' %}" class="account-menu-item {% if request.resolver_match.url_name == 'favorites' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-heart"></i> Избранное
+                    </a>
+                    <a href="{% url 'users:profile_edit' %}" class="account-menu-item {% if request.resolver_match.url_name == 'profile_edit' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person-gear"></i> Мои данные
+                    </a>
+                    <a href="{% url 'users:address_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'address_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-geo-alt"></i> Адреса доставки
+                    </a>
+                    <a href="{% url 'users:password_change' %}" class="account-menu-item {% if request.resolver_match.url_name == 'password_change' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-lock"></i> Сменить пароль
+                    </a>
+                </nav>
+
+                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
+                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    Выйти
+                </a>
+            </aside>
+
+            <!-- ============================================================
+                 ПРАВАЯ ЧАСТЬ — контент
+                 ============================================================ -->
+            <div class="account-content">
+
+                <div class="account-header">
+                    <h1>Личный кабинет</h1>
+                    <p class="account-subtitle">Здесь вы можете управлять своими данными, заказами и настройками.</p>
+                </div>
+
+                <!-- Карточка профиля -->
+                <div class="account-profile">
+
+                    <div class="account-profile-main">
+                        <div class="account-avatar">
+                            <i class="bi bi-person-fill" aria-hidden="true"></i>
+                        </div>
+                        <div class="account-profile-info">
+                            <!-- Выводим данные пользователя -->
+                            <h2>{{ user.username }}</h2>
+                            <p>{{ user.email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="account-stats">
+
+                        <div class="account-stat">
+                            <i class="bi bi-box" aria-hidden="true"></i>
+                            <div>
+                                <p class="account-stat-label">Всего заказов</p>
+                                <!-- Считаем заказы пользователя -->
+                                <p class="account-stat-value">{{ orders.count }}</p>
+                            </div>
+                        </div>
+
+                        <div class="account-stat">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                            <div>
+                                <p class="account-stat-label">В избранном</p>
+                                <!-- Считаем избранное пользователя -->
+                                <p class="account-stat-value">{{ user.favorites.count }}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Последние заказы -->
+                <div class="account-orders">
+                    <div class="account-orders-header">
+                        <h2>Последние заказы</h2>
+                    </div>
+
+                    <div class="account-orders-list">
+                        <!-- ЦИКЛ ПО ЗАКАЗАМ ИЗ БАЗЫ -->
+                        {% for order in orders %}
+                        <div class="account-order">
+                            <!-- Берем картинку первого товара из заказа (если есть) -->
+                            {% if order.items.first %}
+                                <img src="{{ order.items.first.product.image.url }}" alt="{{ order.items.first.product.name }}" class="account-order-img">
+                            {% else %}
+                                <div class="account-order-img" style="background:#eee;"></div>
+                            {% endif %}
+                            
+                            <div class="account-order-info">
+                                <p class="account-order-name">Заказ №{{ order.id }}</p>
+                                <p class="account-order-desc">Товаров: {{ order.items.count }}</p>
+                                <p class="account-order-num">Статус: В обработке</p>
+                            </div>
+                            
+                            <div class="account-order-price">
+                                <p class="account-order-sum">{{ order.get_total_cost }} ₴</p>
+                                <p class="account-order-date">{{ order.created|date:"d.m.Y" }}</p>
+                            </div>
+                        </div>
+                        {% empty %}
+                        <p style="color: #777;">У вас пока нет заказов.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

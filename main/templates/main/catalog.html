@@ -1,0 +1,264 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+{% block title %}Каталог — Чайный Мир{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+{% endblock %}
+
+
+{% block content %}
+
+<section class="catalog">
+    <div class="container">
+        <div class="catalog-layout">
+
+            <!-- ЛЕВАЯ КОЛОНКА: ФИЛЬТРЫ -->
+            <aside class="catalog-filter">
+                <ul class="filter-list">
+                    <!-- Все товары -->
+                    <li>
+                        <a href="{% url 'main:catalog' %}"
+                           class="filter-link {% if not request.GET.category %}filter-link--active{% endif %}">
+                            <span>Все товары</span>
+                            <span class="filter-count">{{ total_count }}</span>
+                        </a>
+                    </li>
+
+                    <!-- Категории -->
+                    {% for category in categories %}
+                        {% if category.products.count > 0 %}
+                        <li>
+                            <a href="?category={{ category.slug }}"
+                               class="filter-link {% if request.GET.category == category.slug %}filter-link--active{% endif %}">
+                                <span>{{ category.name }}</span>
+                                <span class="filter-count">{{ category.products.count }}</span>
+                            </a>
+                        </li>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+                <form method="get" action="{% url 'main:catalog' %}" class="catalog-filters-form">
+                    <div class="filter-price">
+                        <p class="filter-title">Цена</p>
+
+                        <div class="price-inputs">
+                            <label class="price-field">
+                                <span>от</span>
+                                <input type="number" name="price_min" id="price-min" min="0" max="1000"
+                                       value="{{ request.GET.price_min|default:100 }}">
+                            </label>
+                            <label class="price-field">
+                                <span>до</span>
+                                <input type="number" name="price_max" id="price-max" min="0" max="1000"
+                                       value="{{ request.GET.price_max|default:600 }}">
+                            </label>
+                        </div>
+
+                        <div id="slider-connect"></div>
+
+                        <div class="filter-sort">
+                            <label for="sort" class="filter-title">Сортировка</label>
+                            <select id="sort" name="sort" class="sort-select">
+                                <option value="popular" {% if request.GET.sort == 'popular' %}selected{% endif %}>По популярности</option>
+                                <option value="price-asc" {% if request.GET.sort == 'price-asc' %}selected{% endif %}>Сначала дешёвые</option>
+                                <option value="price-desc" {% if request.GET.sort == 'price-desc' %}selected{% endif %}>Сначала дорогие</option>
+                                <option value="new" {% if request.GET.sort == 'new' %}selected{% endif %}>Сначала новые</option>
+                            </select>
+                        </div>
+                    </div>
+                </form>
+            </aside>
+
+            <!-- ПРАВАЯ КОЛОНКА: ТОВАРЫ -->
+            <div class="catalog-products">
+                <div class="catalog-title">
+                    <h1>Каталог чая</h1>
+                    <p>Натуральный китайский чай напрямую от проверенных поставщиков</p>
+                </div>
+
+                <div id="catalog-results">
+                    {% include 'main/includes/product_list.html' %}
+                </div>
+                
+            </div> 
+        </div> 
+     
+        <div id="pagination-container">
+            {% include 'main/includes/pagination.html' %}
+        </div>
+
+    </div> 
+</section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.js"></script>
+
+<script>
+    // ============================================
+    // 1. СЛАЙДЕР ЦЕНЫ
+    // ============================================
+    const slider = document.getElementById('slider-connect');
+    const inputMin = document.getElementById('price-min');
+    const inputMax = document.getElementById('price-max');
+    const filterForm = document.querySelector('.catalog-filters-form');
+
+    if (slider) {
+        noUiSlider.create(slider, {
+            start: [parseInt(inputMin.value), parseInt(inputMax.value)],
+            connect: true,
+            range: { 'min': 0, 'max': 1000 },
+            step: 10
+        });
+
+        slider.noUiSlider.on('update', function (values) {
+            inputMin.value = Math.round(values[0]);
+            inputMax.value = Math.round(values[1]);
+        });
+
+        slider.noUiSlider.on('change', function () { loadProducts(); });
+
+        inputMin.addEventListener('change', function () { slider.noUiSlider.set([this.value, null]); });
+        inputMax.addEventListener('change', function () { slider.noUiSlider.set([null, this.value]); });
+    }
+
+    // ============================================
+    // 2. AJAX-ФИЛЬТРАЦИЯ
+    // ============================================
+    async function loadProducts(urlParams) {
+        if (!urlParams) {
+            urlParams = new URLSearchParams(new FormData(filterForm));
+            urlParams.delete('page');
+        }
+
+        try {
+            const response = await fetch(`{% url 'main:catalog_ajax' %}?${urlParams}`);
+            const data = await response.json();
+            document.getElementById('catalog-results').innerHTML = data.products_html;
+            document.getElementById('pagination-container').innerHTML = data.pagination_html;
+            history.pushState({}, '', `?${urlParams}`);
+        } catch (error) {
+            console.error('Ошибка:', error);
+        }
+    }
+
+    if (filterForm) {
+        filterForm.addEventListener('submit', function (e) { e.preventDefault(); loadProducts(); });
+        const inputs = filterForm.querySelectorAll('input[type="number"], select');
+        inputs.forEach(input => {
+            input.addEventListener('input', () => {
+                clearTimeout(window.filterTimer);
+                window.filterTimer = setTimeout(loadProducts, 500);
+            });
+        });
+    }
+
+    // ============================================
+    // 3. ДОБАВЛЕНИЕ В КОРЗИНУ
+    // ============================================
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.add-to-cart-btn');
+        
+        if (btn) {
+            e.preventDefault();
+            const productId = btn.dataset.id;
+            const originalHtml = btn.innerHTML;
+            
+            // Берем токен
+            const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+            const token = tokenInput ? tokenInput.value : '';
+
+            btn.disabled = true;
+            btn.innerHTML = 'Добавляем...';
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': token,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: 'quantity=1'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) badge.textContent = data.cart_total_items;
+                    
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Добавлено!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка добавления:', error);
+                btn.innerHTML = 'Ошибка';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }, 1500);
+            });
+        }
+    });
+
+    // ============================================
+    // 4. ПАГИНАЦИЯ
+    // ============================================
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest('.pagination a');
+        if (link) {
+            e.preventDefault();
+            const urlParams = new URLSearchParams(link.search);
+            loadProducts(urlParams);
+            window.scrollTo({ top: document.querySelector('.catalog-products').offsetTop - 100, behavior: 'smooth' });
+        }
+    });
+
+    // ============================================
+    // 5. КНОПКА "НАЗАД"
+    // ============================================
+    window.addEventListener('popstate', function () {
+        const urlParams = new URLSearchParams(window.location.search);
+        loadProducts(urlParams); // <--- ТУТ БЫЛО ОБОРВАНО, ТЕПЕРЬ ВСЁ НА МЕСТЕ
+    });
+
+        // ДОБАВЛЕНИЕ В ИЗБРАННОЕ
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.favorite-btn');
+        if (btn) {
+            e.preventDefault();
+            // Если пользователь не вошел — отправляем на страницу логина
+            {% if not user.is_authenticated %}
+                window.location.href = "{% url 'users:login' %}";
+                return;
+            {% endif %}
+
+            const productId = btn.closest('.product-card').querySelector('.add-to-cart-btn').dataset.id; // или data-id на самой кнопке
+            const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            
+            fetch(`/favorite/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': token}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'added') {
+                    btn.classList.add('active');
+                    btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+                } else {
+                    btn.classList.remove('active');
+                    btn.innerHTML = '<i class="bi bi-heart"></i>';
+                }
+            });
+        }
+    });    
+</script>
+{% endblock %}

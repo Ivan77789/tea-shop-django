@@ -1,0 +1,44 @@
+{% load static %}
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-columns">
+
+                <div class="footer-col-left">
+                    <div class="footer-brand">
+                        <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+                        <h3 class="footer-header">Чай из Китая</h3>
+                    </div>
+                    <p>Лучшие сорта китайского чая<br>для ценителей</p>
+                </div>
+
+
+                <div class="footer-col">
+                    <nav class="footer-menu">
+                        <a href="{% url 'main:index' %}">Главная</a>
+                        <a href="{% url 'main:catalog' %}">Каталог</a>
+                        <a href="{% url 'main:about' %}">О нас</a>
+                        <a href="{% url 'main:contacts' %}">Контакты</a>
+                    </nav>
+                </div>
+
+                <div class="footer-col-right">
+                    <div class="footer-social">
+                        <a href="#">
+                            <img src="{% static 'icons/telegram.svg' %}" alt="Telegram">
+                        </a>
+                        <a href="#">
+                            <img src="{% static 'icons/instagram.svg' %}" alt="Instagram">
+                        </a>
+                        <a href="#">
+                            <img src="{% static 'icons/youtube.svg' %}" alt="YouTube">
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="footer-bottom">
+                <p>© 2026 Чай из Китая. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>

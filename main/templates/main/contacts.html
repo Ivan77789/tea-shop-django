@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Контакты — Чайный Мир{% endblock %}
+
+
+
+{% block content %}
+<section class="contacts-hero">
+
+    <picture>
+        <source media="(max-width: 768px)" srcset="{% static 'img/contacts-hero-mobile.jpg' %}">
+        <img src="{% static 'img/contacts-hero.jpg' %}" alt="Чайная церемония" class="contacts-hero-img">
+    </picture>
+
+    <div class="contacts-hero-content">
+        <nav class="breadcrumbs" aria-label="Хлебные крошки">
+            <a href="index.html">Главная</a>
+            <span>/</span>
+            <span>Контакты</span>
+        </nav>
+
+        <h1>Контакты</h1>
+
+        <p class="contacts-hero-lead">
+            Если у вас есть вопросы, напишите нам —<br>
+            мы всегда на связи и с радостью поможем.
+        </p>
+    </div>
+
+</section>
+
+
+        <section class="contacts-body">
+            <div class="container">
+                <div class="contacts-layout">
+
+                    <!-- ЛЕВАЯ КОЛОНКА: контактная информация -->
+                    <div class="contacts-info">
+
+                        <div class="contacts-item">
+                            <i class="bi bi-telephone" aria-hidden="true"></i>
+                            <div>
+                                <p class="contacts-item-title">Телефон</p>
+                                <a href="tel:+380971234567" class="contacts-item-value">+380 (97) 123-45-67</a>
+                                <p class="contacts-item-note">с 09:00 до 18:00 (Пн-Пт)</p>
+                            </div>
+                        </div>
+
+                        <div class="contacts-item">
+                            <i class="bi bi-envelope" aria-hidden="true"></i>
+                            <div>
+                                <p class="contacts-item-title">Email</p>
+                                <a href="mailto:info@chai-kitala.ua" class="contacts-item-value">info@chai-kitala.ua</a>
+                                <p class="contacts-item-note">Мы отвечаем в течение 1–2 часов</p>
+                            </div>
+                        </div>
+
+                        <div class="contacts-item">
+                            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                            <div>
+                                <p class="contacts-item-title">Адрес</p>
+                                <p class="contacts-item-value">г. Киев, ул. Приморская, 15</p>
+                                <p class="contacts-item-note">(офис и пункт выдачи)</p>
+                            </div>
+                        </div>
+
+                        <div class="contacts-item">
+                            <i class="bi bi-clock" aria-hidden="true"></i>
+                            <div>
+                                <p class="contacts-item-title">График работы</p>
+                                <p class="contacts-item-value">Пн – Пт: 09:00 – 18:00</p>
+                                <p class="contacts-item-note">Сб – Вс: выходной</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- ЦЕНТР: форма -->
+                    <div class="contacts-form-block">
+                        <h2>Напишите нам</h2>
+                        <p class="contacts-form-desc">Заполните форму, и мы свяжемся с вами в ближайшее время.</p>
+
+                        <form class="contacts-form" method="post">
+                            {% csrf_token %}
+                            
+                            {# ВЫВОДИМ ОШИБКИ ВАЛИДАЦИИ (если пользователь ввел плохой email) #}
+                            {{ form.non_field_errors }}
+
+                            {# ЦИКЛ ПО ВСЕМ ПОЛЯМ ИЗ forms.py #}
+                            {% for field in form %}
+                                <div class="form-field">
+                                    
+                                    {# Выводим название поля (Ваше имя, Email, Сообщение) #}
+                                    <label for="{{ field.id_for_label }}">
+                                        {{ field.label }} 
+                                        {% if field.field.required %}<span class="required">*</span>{% endif %}
+                                    </label>
+                                    
+                                    {# Выводим само поле ввода (input или textarea) #}
+                                    {{ field }}
+                                    
+                                    {# Если в этом поле есть ошибка (например, "Введите корректный email") — показываем ее #}
+                                    {% if field.errors %}
+                                        <span class="error-text">{{ field.errors.0 }}</span>
+                                    {% endif %}
+                                    
+                                </div>
+                            {% endfor %}
+
+                            <button type="submit" class="btn-checkout">
+                                Отправить сообщение
+                                <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                    </div>
+
+
+                    <!-- ПРАВАЯ КОЛОНКА: карта -->
+                    <div class="contacts-map">
+
+                        <div class="contacts-map-image">
+                            <iframe
+                                src="https://www.openstreetmap.org/export/embed.html?bbox=30.5,50.4,30.6,50.5&layer=mapnik"
+                                width="100%" height="300" style="border: 0;">
+                            </iframe>
+                        </div>
+
+                        <div class="contacts-map-info">
+                            <i class="bi bi-geo-alt" aria-hidden="true"></i>
+                            <div>
+                                <p class="contacts-item-title">Как нас найти</p>
+                                <p class="contacts-item-note">Мы находимся по адресу:<br>г. Киев, ул. Приморская, 15.
+                                    Рядом есть удобная парковка.</p>
+                                <a href="#" class="contacts-map-link">
+                                    Открыть на Google Maps
+                                    <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                                </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ============================================================
+             СЕКЦИЯ 3: ПЛАШКА TELEGRAM
+             ============================================================ -->
+        <section class="contacts-cta">
+            <div class="container">
+                <div class="contacts-cta-block">
+                    <i class="bi bi-leaf" aria-hidden="true"></i>
+                    <div class="contacts-cta-text">
+                        <h3>Есть вопрос?</h3>
+                        <p>Напишите нам в мессенджер — мы ответим максимально быстро!</p>
+                    </div>
+                    <a href="#" class="contacts-cta-btn">
+                        <i class="bi bi-telegram" aria-hidden="true"></i>
+                        Написать в Telegram
+                    </a>
+                </div>
+            </div>
+        </section>
+{% endblock  %}
+
+
+    
+
+
+

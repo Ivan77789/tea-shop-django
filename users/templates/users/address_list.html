@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Адреса доставки — Чайный Мир{% endblock %}
+
+{% block content %}
+<section class="account">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- САЙДБАР -->
+            <aside class="account-sidebar">
+                <nav class="account-menu">
+                    <a href="{% url 'users:account' %}" class="account-menu-item {% if request.resolver_match.url_name == 'account' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person"></i> Личный кабинет
+                    </a>
+                    <a href="{% url 'users:orders_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'orders_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-box"></i> Мои заказы
+                    </a>
+                    <a href="{% url 'main:favorites' %}" class="account-menu-item {% if request.resolver_match.url_name == 'favorites' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-heart"></i> Избранное
+                    </a>
+                    <a href="{% url 'users:profile_edit' %}" class="account-menu-item {% if request.resolver_match.url_name == 'profile_edit' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person-gear"></i> Мои данные
+                    </a>
+                    <a href="{% url 'users:address_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'address_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-geo-alt"></i> Адреса доставки
+                    </a>
+                    <a href="{% url 'users:password_change' %}" class="account-menu-item {% if request.resolver_match.url_name == 'password_change' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-lock"></i> Сменить пароль
+                    </a>
+                </nav>
+
+                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
+                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    Выйти
+                </a>
+            </aside>
+
+            <!-- КОНТЕНТ -->
+            <div class="account-content">
+                <div class="account-header">
+                    <h1>Адреса доставки</h1>
+                    <p class="account-subtitle">Здесь вы сможете сохранять адреса для быстрого оформления заказов.</p>
+                </div>
+                
+                <div style="background: #fff; padding: 30px; border-radius: 12px; text-align: center;">
+                    <p style="color: #777;">У вас пока нет сохраненных адресов.</p>
+                    <button class="button-catalog" style="margin-top: 20px;" onclick="alert('Функция добавления адресов в разработке!')">Добавить адрес</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

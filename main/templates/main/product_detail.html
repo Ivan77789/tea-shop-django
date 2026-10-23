@@ -1,0 +1,327 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ product.name }} — Чайный Мир{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nouislider@15.7.0/dist/nouislider.min.css">
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+
+    <section class="product">
+        <div class="container">
+
+            <div class="product-layout">
+                <div class="product-gallery">
+
+                    <div class="gallery-thumbs">
+                        {% for image in product.images.all %}
+                            <button>
+                                <img src="{{ image.image.url }}" alt="{{ product.name }}">
+                            </button>
+                        {% empty %}
+                            <button>
+                                <img src="{% static 'img/no-img.jpg' %}" alt="">
+                            </button>
+                        {% endfor %}
+                    </div>
+
+                    <div class="gallery-main">
+                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        <button type="button" class="favorite-btn" aria-label="В избранное">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
+
+                </div>
+                <div class="product-info">
+
+                    <p class="product-category">{{ product.category.slug }}</p>
+                    <h1>{{ product.name }}</h1>
+                    <p class="product-short-desc">Один из самых известных и ценных зелёных чаёв Китая...</p>
+
+                    <div class="product-purchase">
+                        <div class="product-price-block">
+                            <p class="product-price">{{ product.price }} <span class="product-price-currency">₴</span></p>
+                            <p class="product-weight">{{ product.weight }} г</p>
+                        </div>
+
+                        <div class="product-control">
+                            <div class="quantity">
+                                <button type="button" class="quantity-btn minus" aria-label="Уменьшить">−</button>
+                                <input type="number" class="quantity-input" value="1" min="1" max="99" aria-label="Количество">
+                                <button type="button" class="quantity-btn plus" aria-label="Увеличить">+</button>
+                            </div>
+
+                            <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}">
+                                <i class="bi bi-cart" aria-hidden="true"></i>
+                                В корзину
+                            </button>
+
+                        </div>
+                    </div>
+
+                    <div class="product-features">
+                        <div class="feature">
+                            <i class="bi bi-leaf" style="transform: scaleX(-1);"></i>
+                            <span>Натуральный продукт</span>
+                        </div>
+                        <div class="feature">
+                            <i class="bi bi-truck"></i>
+                            <span>Быстрая доставка по Украине</span>
+                        </div>
+                        <div class="feature">
+                            <i class="bi bi-shield-check"></i>
+                            <span>Гарантия качества</span>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <div class="container">
+            <div class="product-layout-down">
+                <nav class="tabs-nav">
+                    <a href="#" class="tab-link active" data-tab="desc">Описание</a>
+                    <a href="#" class="tab-link" data-tab="specs">Характеристики</a>
+                    <a href="#" class="tab-link" data-tab="delivery">Доставка</a>
+                </nav>
+
+                <div class="tabs-content">
+
+                    <div class="tab-panel active" data-panel="desc">
+                        {{ product.description|linebreaks }}
+                    </div>
+
+                    <aside class="product-specs tab-panel" data-panel="specs">
+                        {% if product.attr_type %}
+                        <div class="spec-row">
+                            <i class="bi bi-leaf spec-icon" style="transform: scaleX(-1);"></i>
+                            <span class="spec-label">Тип</span>
+                            <span class="spec-value">{{ product.attr_type }}</span>
+                        </div>
+                        {% endif %}
+
+                        {% if product.attr_origin %}
+                        <div class="spec-row">
+                            <i class="bi bi-geo-alt spec-icon"></i>
+                            <span class="spec-label">Место происхождения</span>
+                            <span class="spec-value">{{ product.attr_origin }}</span>
+                        </div>
+                        {% endif %}
+
+                        {% if product.attr_temperature %}
+                        <div class="spec-row">
+                            <i class="bi bi-thermometer-half spec-icon"></i>
+                            <span class="spec-label">Температура заваривания</span>
+                            <span class="spec-value">{{ product.attr_temperature }}</span>
+                        </div>
+                        {% endif %}
+
+                        {% if product.attr_time %}
+                        <div class="spec-row">
+                            <i class="bi bi-clock spec-icon"></i>
+                            <span class="spec-label">Время заваривания</span>
+                            <span class="spec-value">{{ product.attr_time }}</span>
+                        </div>
+                        {% endif %}
+                    </aside>
+                    
+                    <div class="tab-panel" data-panel="delivery">
+                        <p>Доставка Новой Почтой по всей Украине. Срок: 1–3 дня.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </section>
+
+
+    <!-- ПОХОЖИЕ ТОВАРЫ -->
+    <section class="popular-products">
+        <div class="container">
+            <div class="popular-header">
+                <h2>Похожие товары</h2>
+                <a href="{% url 'main:catalog' %}" class="popular-all">
+                    Весь каталог <i class="bi bi-arrow-right" aria-hidden="true"></i>
+                </a>
+            </div>
+
+            <div class="product-grid">
+                {% for related in related_products %}
+                <div class="product-card">
+                    <div class="product-card-image">
+                        <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                        <button type="button" class="favorite-btn" aria-label="В избранное">
+                            <i class="bi bi-heart" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    <div class="product-name">
+                        <a href="{% url 'main:product_detail' related.slug %}">
+                            <h3 class="product-title">{{ related.name }}</h3>
+                        </a>
+                    </div>
+                    <p class="product-description">{{ related.category.name }}, {{ related.weight }} г</p>
+                    <p class="product-price">{{ related.price }} <span class="product-price-currency">₴</span></p>
+                    <button type="button" class="product-btn add-to-cart-btn" data-id="{{ related.id }}">
+                        <i class="bi bi-cart" aria-hidden="true"></i> В корзину
+                    </button>
+                </div>
+                {% empty %}
+                    <p>Похожих товаров пока нет.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // ============================================
+    // 1. ГАЛЕРЕЯ (переключение миниатюр)
+    // ============================================
+    const thumbs = document.querySelectorAll('.gallery-thumbs button');
+    const mainImg = document.querySelector('.gallery-main img');
+
+    thumbs.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+            const newSrc = thumb.querySelector('img').src;
+            mainImg.src = newSrc;
+        });
+    });
+
+    // ============================================
+    // 2. СЧЕТЧИК (плюс / минус)
+    // ============================================
+    const qtyInput = document.querySelector('.quantity-input');
+    const btnMinus = document.querySelector('.quantity-btn.minus');
+    const btnPlus = document.querySelector('.quantity-btn.plus');
+
+    if (btnMinus && btnPlus && qtyInput) {
+        btnMinus.addEventListener('click', () => {
+            let val = parseInt(qtyInput.value);
+            if (val > 1) qtyInput.value = val - 1;
+        });
+        btnPlus.addEventListener('click', () => {
+            let val = parseInt(qtyInput.value);
+            if (val < 99) qtyInput.value = val + 1;
+        });
+    }
+
+    // ============================================
+    // 3. ДОБАВЛЕНИЕ В КОРЗИНУ (AJAX)
+    // ============================================
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.add-to-cart-btn');
+        
+        if (btn) {
+            e.preventDefault();
+            const productId = btn.dataset.id;
+            const originalHtml = btn.innerHTML;
+            
+            // Берем количество (если это страница товара, иначе 1)
+            let qty = 1;
+            if (qtyInput && btn.closest('.product-info')) {
+                qty = qtyInput.value;
+            }
+
+            const tokenInput = document.querySelector('[name=csrfmiddlewaretoken]');
+            const token = tokenInput ? tokenInput.value : '';
+
+            btn.disabled = true;
+            btn.innerHTML = 'Добавляем...';
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': token,
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: `quantity=${qty}`
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) badge.textContent = data.cart_total_items;
+                    
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Добавлено!';
+                    setTimeout(() => {
+                        btn.innerHTML = originalHtml;
+                        btn.disabled = false;
+                    }, 1500);
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                btn.innerHTML = 'Ошибка';
+                setTimeout(() => {
+                    btn.innerHTML = originalHtml;
+                    btn.disabled = false;
+                }, 1500);
+            });
+        }
+    });
+
+    // ============================================
+    // 4. ТАБЫ (Описание / Характеристики / Доставка)
+    // ============================================
+    const tabLinks = document.querySelectorAll('.tab-link');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+
+    tabLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const tabName = link.dataset.tab;
+            
+            tabLinks.forEach(l => l.classList.remove('active'));
+            tabPanels.forEach(p => p.classList.remove('active'));
+            
+            link.classList.add('active');
+            document.querySelector(`.tab-panel[data-panel="${tabName}"]`).classList.add('active');
+        });
+    });
+});
+
+// ДОБАВЛЕНИЕ В ИЗБРАННОЕ
+document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.favorite-btn');
+    if (btn) {
+        e.preventDefault();
+        // Если пользователь не вошел — отправляем на страницу логина
+        {% if not user.is_authenticated %}
+            window.location.href = "{% url 'users:login' %}";
+            return;
+        {% endif %}
+
+        const productId = btn.closest('.product-card').querySelector('.add-to-cart-btn').dataset.id; // или data-id на самой кнопке
+        const token = document.querySelector('[name=csrfmiddlewaretoken]').value;
+        
+        fetch(`/favorite/toggle/${productId}/`, {
+            method: 'POST',
+            headers: {'X-CSRFToken': token}
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'added') {
+                btn.classList.add('active');
+                btn.innerHTML = '<i class="bi bi-heart-fill"></i>';
+            } else {
+                btn.classList.remove('active');
+                btn.innerHTML = '<i class="bi bi-heart"></i>';
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

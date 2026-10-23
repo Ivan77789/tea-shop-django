@@ -1,0 +1,58 @@
+ {% load static %}
+ 
+ <header class="header">
+        <div class="container header-inner">
+            <a href="{% url 'main:index' %}" class="header-brand">
+                <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+                <span class="header-brand-text">Чай из Китая</span>
+            </a>
+
+            <nav class="header-nav">
+                <a href="{% url 'main:index' %}"
+                class="header-link {% if request.resolver_match.url_name == 'index' %}header-link--active{% endif %}">
+                    Главная
+                </a>
+
+                <a href="{% url 'main:catalog' %}"
+                class="header-link {% if request.resolver_match.url_name == 'catalog' %}header-link--active{% endif %}">
+                    Каталог
+                </a>
+
+                <a href="{% url 'main:about' %}"
+                class="header-link {% if request.resolver_match.url_name == 'about' %}header-link--active{% endif %}">
+                    О нас
+                </a>
+
+                <a href="{% url 'main:contacts' %}"
+                class="header-link {% if request.resolver_match.url_name == 'contacts' %}header-link--active{% endif %}">
+                    Контакты
+                </a>
+            </nav>
+
+                       <div class="header-icons">
+                <a href="#">
+                    <img src="{% static 'icons/search.svg' %}" alt="Поиск">
+                </a>
+                
+                {% if user.is_authenticated %}
+                    <!-- Если вошел: показываем иконку профиля, ведущую в кабинет, и ссылку выхода -->
+                    <a href="{% url 'users:account' %}" aria-label="Личный кабинет" style="display: flex; align-items: center; gap: 5px;">
+                        <img src="{% static 'icons/person.svg' %}" alt="Профиль">
+                        <span style="font-size: 13px; font-weight: 600;">{{ user.username }}</span>
+                    </a>
+                    <a href="{% url 'users:logout' %}" style="font-size: 13px; color: #d9534f;">Выйти</a>
+                {% else %}
+                    <!-- Если не вошел: ведем на страницу входа -->
+                    <a href="{% url 'users:login' %}" aria-label="Войти">
+                        <img src="{% static 'icons/person.svg' %}" alt="Профиль">
+                    </a>
+                {% endif %}
+
+                <a href="{% url 'cart:cart_detail' %}" class="header-cart" aria-label="Корзина">
+                    <img src="{% static 'icons/cart3.svg' %}" alt="">
+                    <span class="cart-badge">{{ cart|length }}</span>
+                </a>
+            </div>
+        </div>
+
+    </header>

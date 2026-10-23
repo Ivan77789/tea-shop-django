@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Мои данные — Чайный Мир{% endblock %}
+
+{% block extra_css %}
+<style>
+    /* Стили для переключателя (как на макете) */
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 44px;
+        height: 24px;
+        flex-shrink: 0;
+    }
+    .switch input { 
+        opacity: 0;
+        width: 0;
+        height: 0;
+    }
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0; left: 0; right: 0; bottom: 0;
+        background-color: #ccc;
+        transition: .4s;
+        border-radius: 24px;
+    }
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 18px;
+        width: 18px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: .4s;
+        border-radius: 50%;
+    }
+    input:checked + .slider {
+        background-color: #4a5d3a;
+    }
+    input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<section class="account">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- САЙДБАР -->
+            <aside class="account-sidebar">
+                <nav class="account-menu">
+                    <a href="{% url 'users:account' %}" class="account-menu-item {% if request.resolver_match.url_name == 'account' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person"></i> Личный кабинет
+                    </a>
+                    <a href="{% url 'users:orders_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'orders_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-box"></i> Мои заказы
+                    </a>
+                    <a href="{% url 'main:favorites' %}" class="account-menu-item {% if request.resolver_match.url_name == 'favorites' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-heart"></i> Избранное
+                    </a>
+                    <a href="{% url 'users:profile_edit' %}" class="account-menu-item {% if request.resolver_match.url_name == 'profile_edit' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-person-gear"></i> Мои данные
+                    </a>
+                    <a href="{% url 'users:address_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'address_list' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-geo-alt"></i> Адреса доставки
+                    </a>
+                    <a href="{% url 'users:password_change' %}" class="account-menu-item {% if request.resolver_match.url_name == 'password_change' %}account-menu-item--active{% endif %}">
+                        <i class="bi bi-lock"></i> Сменить пароль
+                    </a>
+                </nav>
+
+                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
+                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    Выйти
+                </a>
+            </aside>
+
+            <!-- КОНТЕНТ -->
+            <div class="account-content">
+                <div class="account-header">
+                    <h1><i class="bi bi-person" style="margin-right: 10px;"></i> Мои данные</h1>
+                    <p class="account-subtitle">Здесь вы можете изменить свои личные данные и контактную информацию.</p>
+                </div>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div style="background: #e6efe2; color: #4a5d3a; padding: 10px; border-radius: 6px; margin-bottom: 20px;">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <!-- ОДНА ФОРМА ДЛЯ ВСЕГО -->
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    <div class="profile-layout" style="display: grid; grid-template-columns: 2fr 1fr; gap: 30px;">
+                        
+                        <!-- ЛЕВАЯ КОЛОНКА -->
+                        <div>
+                            <!-- Личные данные -->
+                            <div style="background: #fff; padding: 30px; border-radius: 12px; margin-bottom: 20px;">
+                                <h2 style="font-size: 20px; margin-bottom: 20px;">Личные данные</h2>
+                                
+                                <div class="form-field" style="margin-bottom: 15px;">
+                                    <label>Имя</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="bi bi-person"></i>
+                                        {{ u_form.first_name }}
+                                    </div>
+                                </div>
+
+                                <div class="form-field" style="margin-bottom: 15px;">
+                                    <label>Email</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="bi bi-envelope"></i>
+                                        {{ u_form.email }}
+                                    </div>
+                                </div>
+
+                                <div class="form-field" style="margin-bottom: 15px;">
+                                    <label>Телефон (необязательно)</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="bi bi-telephone"></i>
+                                        {{ p_form.phone }}
+                                    </div>
+                                </div>
+
+                                <!-- НОВЫЕ ПОЛЯ -->
+                                <div class="form-field" style="margin-bottom: 15px;">
+                                    <label>Город по умолчанию</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="bi bi-geo-alt"></i>
+                                        {{ p_form.default_city }}
+                                    </div>
+                                </div>
+
+                                <div class="form-field" style="margin-bottom: 0;">
+                                    <label>Адрес по умолчанию</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="bi bi-house"></i>
+                                        {{ p_form.default_address }}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Подписка -->
+                            <div style="background: #fff; padding: 30px; border-radius: 12px;">
+                                <h2 style="font-size: 20px; margin-bottom: 20px;">Подписка на новости</h2>
+                                <label style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                                    <div style="display: flex; gap: 15px; align-items: center;">
+                                        <i class="bi bi-envelope" style="font-size: 24px; color: #777;"></i>
+                                        <span>Получать новости и специальные предложения на email</span>
+                                    </div>
+                                    <div class="switch">
+                                        {{ p_form.subscribe_news }}
+                                        <span class="slider"></span>
+                                    </div>
+                                </label>
+                                <div style="margin-top: 15px; background: #f5f1ea; padding: 10px 15px; border-radius: 6px; font-size: 12px; color: #777; display: flex; gap: 10px; align-items: center;">
+                                    <i class="bi bi-info-circle"></i> Вы будете получать только важные уведомления. Без спама.
+                                </div>
+                            </div>
+
+                            <!-- Кнопка сохранения -->
+                            <button type="submit" class="btn-checkout" style="width: 100%; margin-top: 20px;">Сохранить изменения</button>
+                        </div>
+
+                        <!-- ПРАВАЯ КОЛОНКА: ПРОФИЛЬ -->
+                        <div style="background: #fff; padding: 30px; border-radius: 12px; text-align: center; height: fit-content;">
+                            <div class="account-avatar" style="margin: 0 auto 15px; width: 80px; height: 80px;">
+                                <i class="bi bi-person-fill" style="font-size: 40px;"></i>
+                            </div>
+                            <!-- Показываем имя, которое сейчас в базе (до сохранения) -->
+                            <h3 style="margin-bottom: 5px;">{{ user.first_name|default:user.username }}</h3>
+                            <p style="color: #777; font-size: 14px; margin-bottom: 25px;">{{ user.email }}</p>
+                            
+                            <hr style="border: none; border-top: 1px solid #eee; margin-bottom: 20px;">
+                            
+                            <div style="text-align: left; font-size: 14px;">
+                                <div style="display: flex; gap: 10px; margin-bottom: 15px;">
+                                    <i class="bi bi-calendar" style="color: #777; font-size: 18px;"></i>
+                                    <div>
+                                        <p style="color: #777; font-size: 12px; margin: 0;">Дата регистрации</p>
+                                        <p style="margin: 0;">{{ user.date_joined|date:"d.m.Y" }}</p>
+                                    </div>
+                                </div>
+                                <div style="display: flex; gap: 10px;">
+                                    <i class="bi bi-shield-check" style="color: #777; font-size: 18px;"></i>
+                                    <div>
+                                        <p style="color: #777; font-size: 12px; margin: 0;">Статус</p>
+                                        <p style="margin: 0;">Пользователь</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

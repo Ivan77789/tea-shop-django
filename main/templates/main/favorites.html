@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Избранное — Чайный Мир{% endblock %}
+
+{% block content %}
+<section class="account">
+    <div class="container">
+        <div class="account-layout">
+
+            <!-- САЙДБАР -->
+            <aside class="account-sidebar">
+            <nav class="account-menu">
+                <a href="{% url 'users:account' %}" class="account-menu-item {% if request.resolver_match.url_name == 'account' %}account-menu-item--active{% endif %}">
+                    <i class="bi bi-person"></i> Личный кабинет
+                </a>
+                <a href="{% url 'users:orders_list' %}" class="account-menu-item {% if request.resolver_match.url_name == 'orders_list' %}account-menu-item--active{% endif %}">
+                    <i class="bi bi-box"></i> Мои заказы
+                </a>
+                <a href="{% url 'main:favorites' %}" class="account-menu-item {% if request.resolver_match.url_name == 'favorites' %}account-menu-item--active{% endif %}">
+                    <i class="bi bi-heart"></i> Избранное
+                </a>
+                <a href="{% url 'users:profile_edit' %}" class="account-menu-item {% if request.resolver_match.url_name == 'profile_edit' %}account-menu-item--active{% endif %}">
+                    <i class="bi bi-person-gear"></i> Мои данные
+                </a>
+                <a href="#" class="account-menu-item">
+                    <i class="bi bi-geo-alt"></i> Адреса доставки
+                </a>
+                <a href="{% url 'users:password_change' %}" class="account-menu-item {% if request.resolver_match.url_name == 'password_change' %}account-menu-item--active{% endif %}">
+                    <i class="bi bi-lock"></i> Сменить пароль
+                </a>
+            </nav>
+
+                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
+                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                    Выйти
+                </a>
+            </aside>
+
+            <!-- КОНТЕНТ -->
+            <div class="account-content">
+
+                <div class="favorites-header">
+                    <h1>
+                        <i class="bi bi-heart" aria-hidden="true"></i>
+                        Избранное
+                    </h1>
+                    <!-- Выводим реальное количество товаров -->
+                    <p class="favorites-count">{{ products|length }} товаров</p>
+                </div>
+
+                <p class="favorites-subtitle">Здесь собраны товары, которые вы добавили в избранное.</p>
+
+                <div class="product-grid favorites-grid">
+                    
+                    <!-- ЦИКЛ ПО ТОВАРАМ ИЗ БАЗЫ -->
+                    {% for product in products %}
+                    <div class="product-card" id="fav-card-{{ product.id }}">
+                        <div class="product-card-image">
+                            <!-- Берем картинку из базы -->
+                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            
+                            <!-- Кнопка удаления из избранного -->
+                            <button type="button" class="favorite-btn active remove-fav-btn" data-id="{{ product.id }}" aria-label="Убрать из избранного">
+                                <i class="bi bi-heart-fill" aria-hidden="true"></i>
+                            </button>
+                        </div>
+                        <div class="product-name">
+                            <!-- Ссылка на конкретный товар -->
+                            <a href="{% url 'main:product_detail' product.slug %}">
+                                <h3 class="product-title">{{ product.name }}</h3>
+                            </a>
+                        </div>
+                        <p class="product-description">{{ product.weight }} г</p>
+                        <p class="product-price">{{ product.price }} ₴</p>
+                        <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}">
+                            <i class="bi bi-cart" aria-hidden="true"></i>
+                            В корзину
+                        </button>
+                    </div>
+                    {% empty %}
+                    <!-- Если избранное пустое -->
+                    <div style="text-align: center; width: 100%; padding: 50px 0;">
+                        <p style="color: #777; margin-bottom: 20px;">Вы пока ничего не добавили в избранное.</p>
+                        <a href="{% url 'main:catalog' %}" class="button-catalog">Перейти в каталог</a>
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+    // Берем токен безопасности
+    const csrfToken = '{{ csrf_token }}';
+
+    // 1. Добавление в корзину из избранного
+    document.addEventListener('click', function(e) {
+        const btn = e.target.closest('.add-to-cart-btn');
+        if (btn) {
+            e.preventDefault();
+            const productId = btn.dataset.id;
+            const originalHtml = btn.innerHTML;
+            
+            btn.disabled = true;
+            btn.innerHTML = 'Добавляем...';
+
+            fetch(`/cart/add/${productId}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken, 'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'quantity=1'
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) badge.textContent = data.cart_total_items;
+                    btn.innerHTML = '<i class="bi bi-check-lg"></i> Добавлено!';
+                    setTimeout(() => { btn.innerHTML = originalHtml; btn.disabled = false; }, 1500);
+                }
+            });
+        }
+    });
+
+    // 2. Удаление из избранного (клик по залитому сердечку)
+    document.querySelectorAll('.remove-fav-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const productId = this.dataset.id;
+            
+            fetch(`/favorite/toggle/${productId}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'removed') {
+                    // Удаляем карточку товара с экрана
+                    const card = document.getElementById(`fav-card-${productId}`);
+                    if (card) card.remove();
+                    
+                    // Обновляем счетчик в заголовке
+                    const countEl = document.querySelector('.favorites-count');
+                    if (countEl) {
+                        let count = parseInt(countEl.textContent) - 1;
+                        countEl.textContent = count + ' товаров';
+                    }
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}

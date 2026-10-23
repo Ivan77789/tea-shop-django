@@ -1,0 +1,213 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Корзина — Чайный Мир{% endblock %}
+
+{% block content %}
+ {% csrf_token %}
+<section class="cart">
+    <div class="container">
+        <div class="cart-header">
+            <h1>Корзина</h1>
+            <p>Проверьте состав заказа и перейдите к оформлению</p>
+        </div>
+
+        {% if cart|length > 0 %}
+        <div class="cart-layout">
+            
+            <!-- ЛЕВАЯ КОЛОНКА: СПИСОК ТОВАРОВ -->
+            <div class="cart-items">
+                <div class="cart-block-1">
+                    
+                    <div class="cart-head">
+                        <span class="cart-name-goods">Товар</span>
+                        <span>Цена</span>
+                        <span>Количество</span>
+                        <span>Сумма</span>
+                        <span></span>
+                    </div>
+
+                    {% for item in cart %}
+                    <div class="cart-item" id="cart-item-{{ item.product.id }}">
+                        
+                        <div class="cart-item-info">
+                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            <div>
+                                <p class="cart-item-title">{{ item.product.name }}</p>
+                                <p class="cart-item-desc">{{ item.product.weight }} г</p>
+                            </div>
+                        </div>
+    
+                        <p class="cart-item-price">{{ item.price }} ₴</p>
+    
+                        <div class="quantity quantity--small">
+                            <button type="button" class="quantity-btn minus" data-id="{{ item.product.id }}">−</button>
+                            <input type="number" class="quantity-input" value="{{ item.quantity }}" readonly>
+                            <button type="button" class="quantity-btn plus" data-id="{{ item.product.id }}">+</button>
+                        </div>
+    
+                        <p class="cart-item-total" id="total-price-{{ item.product.id }}">{{ item.total_price }} ₴</p>
+    
+                        <button type="button" class="cart-item-remove remove-btn" data-id="{{ item.product.id }}" aria-label="Удалить">
+                            <i class="bi bi-x-lg" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                    {% endfor %}
+
+                    <button type="button" class="cart-clear-2" id="clear-cart-btn">
+                        <i class="bi bi-trash3-fill"></i>
+                        <p>Очистить корзину</p>
+                    </button>
+                </div>
+
+                <!-- БЛОК ПРЕИМУЩЕСТВ (ТЕ САМЫЕ ЭЛЕМЕНТЫ) -->
+                <div class="cart-features">
+                    <div class="feature-delivery">
+                        <i class="bi bi-truck"></i>
+                        <div>
+                            <span class="feature-title">Быстрая доставка</span>
+                            <p class="feature-desc">По Украине<br>в течение 1–3 дней</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-garant">
+                        <i class="bi bi-shield-check"></i>
+                        <div>
+                            <span>Гарантия качества</span>
+                            <p>Только проверенные<br>поставщики</p>
+                        </div>
+                    </div>
+
+                    <div class="feature-natur">
+                        <i class="bi bi-leaf" style="transform: scaleX(-1);"></i>
+                        <div>
+                            <span>Натуральный продукт</span>
+                            <p>Без добавок<br>и ароматизаторов</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ПРАВАЯ КОЛОНКА: ИТОГО -->
+            <section class="cart-total">
+                <div class="cart-features-2">
+                    <span class="cart-text">Итого</span>
+                    
+                    <div class="cart-product-info">
+                        <div class="cart-info-2">
+                            <p>Товары ({{ cart|length }} шт.)</p>
+                            <p>{{ cart.get_total_price }} ₴</p>
+                        </div>
+
+                        <div class="cart-discount">
+                            <p>Скидка</p>
+                            <p>0 ₴</p>
+                        </div>
+
+                        <div class="summary-total">
+                            <span>К оплате</span>
+                            <span id="cart-total-price">{{ cart.get_total_price }} ₴</span>
+                        </div>
+
+                            <div class="button-bay">
+                                <a href="{% url 'orders:order_create' %}" class="btn-cart" style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
+                                    <i class="bi bi-cart" aria-hidden="true"></i>
+                                    Оформить заказ
+                                </a>
+                            </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+        {% else %}
+        <div class="cart-empty" style="text-align:center; padding: 50px 0;">
+            <h2>Ваша корзина пуста</h2>
+            <p style="margin: 20px 0; color: #777;">Добавьте товары, чтобы оформить заказ.</p>
+            <a href="{% url 'main:catalog' %}" class="button-catalog">Перейти в каталог</a>
+        </div>
+        {% endif %}
+
+    </div>
+</section>
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+
+    // --- 1. КНОПКИ ПЛЮС / МИНУС ---
+    function changeQuantity(id, action) {
+        const itemBlock = document.getElementById(`cart-item-${id}`);
+        const input = itemBlock.querySelector('.quantity-input');
+        let newQty = parseInt(input.value);
+        
+        if (action === 'plus') newQty++;
+        if (action === 'minus') newQty--;
+        if (newQty < 1) return;
+
+        const formData = new FormData();
+        formData.append('quantity', newQty);
+        formData.append('update', 'True');
+
+        fetch(`/cart/add/${id}/`, {
+            method: 'POST',
+            headers: {'X-CSRFToken': csrfToken},
+            body: formData
+        })
+        .then(r => r.json())
+        .then(data => {
+            if (data.status === 'ok') {
+                input.value = newQty;
+                document.getElementById(`total-price-${id}`).textContent = data.product_total + ' ₴';
+                const badge = document.querySelector('.cart-badge');
+                if (badge) badge.textContent = data.cart_total_items;
+                document.getElementById('cart-total-price').textContent = data.total_price + ' ₴';
+            }
+        });
+    }
+
+    document.querySelectorAll('.plus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, 'plus'); }));
+    document.querySelectorAll('.minus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, 'minus'); }));
+
+    // --- 2. УДАЛЕНИЕ (КРЕСТИК) ---
+    document.querySelectorAll('.remove-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const id = this.dataset.id;
+            fetch(`/cart/remove/${id}/`, {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    document.getElementById(`cart-item-${id}`).remove();
+                    const badge = document.querySelector('.cart-badge');
+                    if (badge) badge.textContent = data.cart_total_items;
+                    document.getElementById('cart-total-price').textContent = data.total_price + ' ₴';
+                    if (data.cart_total_items === 0) window.location.reload();
+                }
+            });
+        });
+    });
+
+    // --- 3. ОЧИСТИТЬ КОРЗИНУ ---
+    const clearBtn = document.getElementById('clear-cart-btn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', function() {
+            if (!confirm('Вы уверены, что хотите полностью очистить корзину?')) return;
+            fetch('/cart/clear/', {
+                method: 'POST',
+                headers: {'X-CSRFToken': csrfToken}
+            })
+            .then(r => r.json())
+            .then(data => {
+                if (data.status === 'ok') window.location.reload();
+            });
+        });
+    }
+});
+</script>
+{% endblock %}

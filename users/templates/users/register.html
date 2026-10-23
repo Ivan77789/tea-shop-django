@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Регистрация — Чайный Мир{% endblock %}
+
+{% block content %}
+<main class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+
+    <div class="auth-card">
+        <a href="{% url 'main:index' %}" class="auth-logo" aria-label="На главную">
+            <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+        </a>
+
+        <h1 class="auth-title">Регистрация</h1>
+        <p class="auth-subtitle">
+            Создайте аккаунт, чтобы оформлять заказы,<br>
+            сохранять избранное и получать скидки.
+        </p>
+
+        <form class="auth-form" method="post">
+            {% csrf_token %}
+            
+            {% if form.errors %}
+                <div style="color: red; font-size: 13px; margin-bottom: 10px;">
+                    Пожалуйста, исправьте ошибки ниже.
+                </div>
+            {% endif %}
+
+            <div class="form-field">
+                <label>Логин</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-person" aria-hidden="true"></i>
+                    {{ form.username }}
+                </div>
+                {% if form.username.errors %}<span style="color:red; font-size:12px;">{{ form.username.errors.0 }}</span>{% endif %}
+            </div>
+
+            <div class="form-field">
+                <label>Имя</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-person" aria-hidden="true"></i>
+                    {{ form.first_name }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label>Email</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                    {{ form.email }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label>Пароль</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-lock" aria-hidden="true"></i>
+                    {{ form.password1 }}
+                </div>
+            </div>
+
+            <div class="form-field">
+                <label>Подтвердите пароль</label>
+                <div class="input-icon-wrap">
+                    <i class="bi bi-lock" aria-hidden="true"></i>
+                    {{ form.password2 }}
+                </div>
+                {% if form.password2.errors %}<span style="color:red; font-size:12px;">{{ form.password2.errors.0 }}</span>{% endif %}
+            </div>
+
+            <button type="submit" class="btn-auth">Зарегистрироваться</button>
+        </form>
+
+        <div class="auth-divider">
+            <span>Уже есть аккаунт?</span>
+        </div>
+        <a href="{% url 'users:login' %}" class="auth-register-link">Войти</a>
+    </div>
+</main>
+{% endblock %}
