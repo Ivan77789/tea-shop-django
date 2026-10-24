@@ -1,4 +1,7 @@
+from django.db import transaction
+
 from django.shortcuts import redirect, render
+
 from cart.cart import Cart
 from .forms import OrderCreateForm
 from .models import OrderItem
@@ -13,21 +16,26 @@ def order_create(request):
     if request.method == 'POST':
         form = OrderCreateForm(request.POST)
         if form.is_valid():
-            order = form.save(commit=False)
-            if request.user.is_authenticated:
-                order.user = request.user
-            order.save()
+            items = list(cart)
+            if not items:
+                return redirect('main:catalog')
+
+            with transaction.atomic():
+                order = form.save(commit=False)
+                if request.user.is_authenticated:
+                    order.user = request.user
+                order.save()
+
+                for item in items:
+                    OrderItem.objects.create(
+                        order=order,
+                        product=item['product'],
+                        product_name=item['product'].name,
+                        price=item['price'],
+                        quantity=item['quantity']
+                    )
             
-            # Переносим корзину в БД
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item['product'],
-                    price=item['price'],
-                    quantity=item['quantity']
-                )
-            
-            cart.clear() # Очищаем сессию
+            cart.clear()
             return render(request, 'orders/order_created.html', {'order': order})
             
     else:

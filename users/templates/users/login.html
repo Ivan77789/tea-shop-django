@@ -22,7 +22,7 @@
             {% csrf_token %}
             
             {% if form.errors %}
-                <p style="color: red; font-size: 13px; margin-bottom: 10px;">Неверный логин или пароль</p>
+                <p class="form-error-summary">Неверный логин или пароль</p>
             {% endif %}
 
             <div class="form-field">

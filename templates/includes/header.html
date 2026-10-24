@@ -36,11 +36,14 @@
                 
                 {% if user.is_authenticated %}
                     <!-- Если вошел: показываем иконку профиля, ведущую в кабинет, и ссылку выхода -->
-                    <a href="{% url 'users:account' %}" aria-label="Личный кабинет" style="display: flex; align-items: center; gap: 5px;">
+                    <a href="{% url 'users:account' %}" aria-label="Личный кабинет" class="header-user-link">
                         <img src="{% static 'icons/person.svg' %}" alt="Профиль">
-                        <span style="font-size: 13px; font-weight: 600;">{{ user.username }}</span>
+                        <span class="header-user-name">{{ user.username }}</span>
                     </a>
-                    <a href="{% url 'users:logout' %}" style="font-size: 13px; color: #d9534f;">Выйти</a>
+                    <form method="post" action="{% url 'users:logout' %}">
+                        {% csrf_token %}
+                        <button type="submit" class="header-logout-button">Выйти</button>
+                    </form>
                 {% else %}
                     <!-- Если не вошел: ведем на страницу входа -->
                     <a href="{% url 'users:login' %}" aria-label="Войти">

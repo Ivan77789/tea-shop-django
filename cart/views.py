@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.views.decorators.http import require_POST
 
 from main.models import Product
@@ -16,11 +16,12 @@ def cart_detail(request):
 def cart_add(request, product_id):
     """AJAX: Добавление товара"""
     cart = Cart(request)
-    product = get_object_or_404(Product, id=product_id)
-    quantity = int(request.POST.get('quantity', 1))
-    update_quantity = request.POST.get('update') == 'True'
-    
-    cart.add(product=product, quantity=quantity, update_quantity=update_quantity)
+    product = get_object_or_404(Product, id=product_id, available=True)
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+        cart.add(product=product, quantity=quantity, update_quantity=request.POST.get('update') == 'True')
+    except (TypeError, ValueError) as error:
+        return JsonResponse({'status': 'error', 'message': str(error)}, status=400)
     
     return JsonResponse({
         'status': 'ok',

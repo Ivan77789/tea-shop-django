@@ -31,10 +31,13 @@
                     </a>
                 </nav>
 
-                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
-                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
-                    Выйти
-                </a>
+                <form method="post" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="account-menu-item account-menu-logout account-menu-logout-button">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        Выйти
+                    </button>
+                </form>
             </aside>
 
             <!-- КОНТЕНТ -->
@@ -44,9 +47,9 @@
                     <p class="account-subtitle">Здесь вы сможете сохранять адреса для быстрого оформления заказов.</p>
                 </div>
                 
-                <div style="background: #fff; padding: 30px; border-radius: 12px; text-align: center;">
-                    <p style="color: #777;">У вас пока нет сохраненных адресов.</p>
-                    <button class="button-catalog" style="margin-top: 20px;" onclick="alert('Функция добавления адресов в разработке!')">Добавить адрес</button>
+                <div class="address-empty-card">
+                    <p class="address-empty-message">У вас пока нет сохраненных адресов.</p>
+                    <button class="button-catalog address-add-button" onclick="alert('Функция добавления адресов в разработке!')">Добавить адрес</button>
                 </div>
             </div>
 

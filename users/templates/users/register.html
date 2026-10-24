@@ -22,7 +22,7 @@
             {% csrf_token %}
             
             {% if form.errors %}
-                <div style="color: red; font-size: 13px; margin-bottom: 10px;">
+                <div class="form-error-summary">
                     Пожалуйста, исправьте ошибки ниже.
                 </div>
             {% endif %}
@@ -33,7 +33,7 @@
                     <i class="bi bi-person" aria-hidden="true"></i>
                     {{ form.username }}
                 </div>
-                {% if form.username.errors %}<span style="color:red; font-size:12px;">{{ form.username.errors.0 }}</span>{% endif %}
+                {% if form.username.errors %}<span class="form-error">{{ form.username.errors.0 }}</span>{% endif %}
             </div>
 
             <div class="form-field">
@@ -66,7 +66,7 @@
                     <i class="bi bi-lock" aria-hidden="true"></i>
                     {{ form.password2 }}
                 </div>
-                {% if form.password2.errors %}<span style="color:red; font-size:12px;">{{ form.password2.errors.0 }}</span>{% endif %}
+                {% if form.password2.errors %}<span class="form-error">{{ form.password2.errors.0 }}</span>{% endif %}
             </div>
 
             <button type="submit" class="btn-auth">Зарегистрироваться</button>

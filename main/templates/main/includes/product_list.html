@@ -5,7 +5,7 @@
     <div class="product-card">
         <div class="product-card-image">
             <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <button type="button" class="favorite-btn" aria-label="В избранное">
+            <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
                 <i class="bi bi-heart" aria-hidden="true"></i>
             </button>
         </div>
@@ -14,7 +14,8 @@
                 <h3 class="product-title">{{ product.name }}</h3>
             </a>
         </div>
-        <p class="product-description">{{ product.weight }} г.</p>
+        <p class="product-description">{{ product.description|striptags|truncatewords:16 }}</p>
+        {% if product.weight %}<p class="product-card-weight">{{ product.weight }} г</p>{% endif %}
         <p class="product-price">
             {{ product.price }} <span class="product-price-currency">₴</span>
         </p>

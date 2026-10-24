@@ -79,7 +79,7 @@
                     </div>
 
                     <div class="feature-natur">
-                        <i class="bi bi-leaf" style="transform: scaleX(-1);"></i>
+                        <i class="bi bi-leaf icon--flipped"></i>
                         <div>
                             <span>Натуральный продукт</span>
                             <p>Без добавок<br>и ароматизаторов</p>
@@ -110,7 +110,7 @@
                         </div>
 
                             <div class="button-bay">
-                                <a href="{% url 'orders:order_create' %}" class="btn-cart" style="text-decoration:none; display:flex; justify-content:center; align-items:center;">
+                                <a href="{% url 'orders:order_create' %}" class="btn-cart cart-checkout-link">
                                     <i class="bi bi-cart" aria-hidden="true"></i>
                                     Оформить заказ
                                 </a>
@@ -121,9 +121,9 @@
 
         </div>
         {% else %}
-        <div class="cart-empty" style="text-align:center; padding: 50px 0;">
+        <div class="cart-empty cart-empty-state">
             <h2>Ваша корзина пуста</h2>
-            <p style="margin: 20px 0; color: #777;">Добавьте товары, чтобы оформить заказ.</p>
+            <p class="cart-empty-state__description">Добавьте товары, чтобы оформить заказ.</p>
             <a href="{% url 'main:catalog' %}" class="button-catalog">Перейти в каталог</a>
         </div>
         {% endif %}

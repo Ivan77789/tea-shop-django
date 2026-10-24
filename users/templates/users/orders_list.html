@@ -31,10 +31,13 @@
                     </a>
                 </nav>
 
-                <a href="{% url 'users:logout' %}" class="account-menu-item account-menu-logout">
-                    <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
-                    Выйти
-                </a>
+                <form method="post" action="{% url 'users:logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="account-menu-item account-menu-logout account-menu-logout-button">
+                        <i class="bi bi-box-arrow-right" aria-hidden="true"></i>
+                        Выйти
+                    </button>
+                </form>
             </aside>
 
             <!-- КОНТЕНТ -->
@@ -44,14 +47,16 @@
                     <p class="account-subtitle">История ваших покупок.</p>
                 </div>
 
-                <div class="account-orders-list" style="margin-top: 30px;">
+                <div class="account-orders-list account-orders-list--spaced">
                     {% for order in orders %}
                     <div class="account-order">
                         <!-- Фото первого товара из заказа -->
-                        {% if order.items.first %}
+                        {% if order.items.first and order.items.first.product %}
                             <img src="{{ order.items.first.product.image.url }}" alt="Товар" class="account-order-img">
+                        {% elif order.items.first %}
+                            <div class="account-order-img account-order-img--empty"></div>
                         {% else %}
-                            <div class="account-order-img" style="background: #eee;"></div>
+                            <div class="account-order-img account-order-img--empty"></div>
                         {% endif %}
 
                         <div class="account-order-info">
@@ -67,8 +72,8 @@
                         </div>
                     </div>
                     {% empty %}
-                    <div style="text-align: center; padding: 50px 0;">
-                        <p style="color: #777; margin-bottom: 20px;">Вы пока не сделали ни одного заказа.</p>
+                    <div class="account-empty-state">
+                        <p class="account-empty-message">Вы пока не сделали ни одного заказа.</p>
                         <a href="{% url 'main:catalog' %}" class="button-catalog">Перейти в каталог</a>
                     </div>
                     {% endfor %}

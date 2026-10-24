@@ -1,3 +1,5 @@
+from decimal import Decimal, InvalidOperation
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
@@ -33,10 +35,13 @@ def get_filtered_products(request):
 
     try:
         if price_min:
-            products = products.filter(price__gte=int(price_min))
+            products = products.filter(price__gte=Decimal(price_min))
+    except (InvalidOperation, TypeError, ValueError):
+        pass
+    try:
         if price_max:
-            products = products.filter(price__lte=int(price_max))
-    except (ValueError, TypeError):
+            products = products.filter(price__lte=Decimal(price_max))
+    except (InvalidOperation, TypeError, ValueError):
         pass
 
     sort = request.GET.get('sort')
