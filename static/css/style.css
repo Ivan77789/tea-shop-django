@@ -334,6 +334,18 @@ h6 {
     align-items: flex-start;
 }
 
+.product-card .product-name a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+
+.product-card .product-name a:focus-visible {
+    outline: 2px solid #4a5d3a;
+    outline-offset: 3px;
+    border-radius: 2px;
+}
+
 .product-title {
     font-size: 16px;
     font-weight: 600;
@@ -394,8 +406,21 @@ h6 {
    КНОПКА «В ИЗБРАННОЕ» — на карточках товаров
    ============================================================ */
 
+.product-grid .product-card {
+    position: relative;
+}
+
+.product-grid .product-card-image {
+    position: static;
+}
+
 .product-card-image {
-    position: relative;                 /* точка отсчёта для сердечка */
+    position: relative;
+}
+
+.product-grid .product-card-image .favorite-btn {
+    top: 8px;
+    right: 8px;
 }
 
 
@@ -958,14 +983,6 @@ h6 {
     margin-bottom: 16px;
 }
 
-.product-short-desc {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #555;
-    margin-bottom: 24px;
-}
-
-
 /* ============================================================
    4. ПОКУПКА — цена, счётчик, кнопка
    ============================================================ */
@@ -983,7 +1000,7 @@ h6 {
     margin-bottom: 20px;
 }
 
-.product-price {
+.product-price-block .product-price {
     font-family: 'Playfair Display', serif;
     font-size: 32px;
     font-weight: 700;
@@ -1905,6 +1922,7 @@ h6 {
 }
 
 .about-feature i {
+    align-self: flex-start;
     font-size: 28px;
     color: #4a5d3a;
     margin-bottom: 4px;
@@ -3531,7 +3549,7 @@ a.contacts-item-value:hover {
     }
 
     /* Сердечко — меньше */
-    .favorite-btn {
+    .product-grid .product-card-image .favorite-btn {
         width: 28px;
         height: 28px;
         font-size: 12px;
@@ -4228,38 +4246,12 @@ a.contacts-item-value:hover {
     font-weight: 600;
 }
 
-.header-icons > form {
-    display: flex;
-    align-items: center;
-    flex: 0 0 auto;
-    margin: 0;
-}
-
-.header-logout-button,
 .account-menu-logout-button {
     border: 0;
     background: transparent;
     cursor: pointer;
     font: inherit;
     appearance: none;
-}
-
-.header-logout-button {
-    display: inline-flex;
-    align-items: center;
-    padding: 0;
-    border-radius: 0;
-    box-shadow: none;
-    color: #d9534f;
-    font-size: 13px;
-    line-height: 1;
-    white-space: nowrap;
-}
-
-.header-logout-button:focus-visible {
-    outline: none;
-    text-decoration: underline;
-    text-underline-offset: 4px;
 }
 
 .account-menu-logout-button {

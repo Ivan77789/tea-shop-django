@@ -74,8 +74,11 @@
                                 <h3 class="product-title">{{ product.name }}</h3>
                             </a>
                         </div>
-                        <p class="product-description">{{ product.weight }} г</p>
-                        <p class="product-price">{{ product.price }} ₴</p>
+                        <p class="product-description">{{ product.description|striptags|truncatechars:160 }}</p>
+                        {% if product.weight %}<p class="product-card-weight">{{ product.weight }} г</p>{% endif %}
+                        <p class="product-price">
+                            {{ product.price }} <span class="product-price-currency">₴</span>
+                        </p>
                         <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}">
                             <i class="bi bi-cart" aria-hidden="true"></i>
                             В корзину

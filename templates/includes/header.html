@@ -35,15 +35,11 @@
                 </a>
                 
                 {% if user.is_authenticated %}
-                    <!-- Если вошел: показываем иконку профиля, ведущую в кабинет, и ссылку выхода -->
+                    <!-- Профиль пользователя ведет в личный кабинет -->
                     <a href="{% url 'users:account' %}" aria-label="Личный кабинет" class="header-user-link">
                         <img src="{% static 'icons/person.svg' %}" alt="Профиль">
                         <span class="header-user-name">{{ user.username }}</span>
                     </a>
-                    <form method="post" action="{% url 'users:logout' %}">
-                        {% csrf_token %}
-                        <button type="submit" class="header-logout-button">Выйти</button>
-                    </form>
                 {% else %}
                     <!-- Если не вошел: ведем на страницу входа -->
                     <a href="{% url 'users:login' %}" aria-label="Войти">
