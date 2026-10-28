@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Подтверждение email — Чайный Мир{% endblock %}
+
+{% block content %}
+<main class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+    <section class="auth-card" aria-labelledby="email-confirmation-title">
+        <h1 class="auth-title" id="email-confirmation-title">Подтверждение email</h1>
+        {% if purpose == 'change' %}
+            <p class="auth-subtitle">Подтвердите новый адрес, чтобы сохранить его в профиле.</p>
+        {% else %}
+            <p class="auth-subtitle">Подтвердите адрес, чтобы активировать аккаунт.</p>
+        {% endif %}
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            <button type="submit" class="btn-auth">Подтвердить email</button>
+        </form>
+    </section>
+</main>
+{% endblock %}

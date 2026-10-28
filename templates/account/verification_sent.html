@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Подтверждение email — Чай из Китая{% endblock %}
+
+{% block content %}
+<section class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+    <div class="auth-card">
+        <a href="{% url 'main:index' %}" class="auth-logo" aria-label="На главную">
+            <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+        </a>
+        <h1 class="auth-title">Проверьте почту</h1>
+        <p class="auth-subtitle">
+            Мы отправили письмо со ссылкой для подтверждения адреса. Перейдите по ней, чтобы завершить регистрацию.
+        </p>
+        <p class="auth-subtitle">
+            Если письма нет во входящих, проверьте папку «Спам».
+        </p>
+        <a href="{% url 'users:login' %}" class="auth-register-link">Вернуться ко входу</a>
+    </div>
+</section>
+{% endblock %}

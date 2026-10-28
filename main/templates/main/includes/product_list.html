@@ -24,6 +24,10 @@
             </button>
     </div>
     {% empty %}
-    <p>Товары пока не добавлены.</p>
+    {% if search_query %}
+        <p class="catalog-empty-state">По запросу «{{ search_query }}» ничего не найдено. Попробуйте изменить запрос.</p>
+    {% else %}
+        <p class="catalog-empty-state">Товары пока не добавлены.</p>
+    {% endif %}
     {% endfor %}
 </div>

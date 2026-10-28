@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Вход — Чайный Мир{% endblock %}
 
@@ -13,6 +14,11 @@
         </a>
 
         <h1 class="auth-title">Вход в аккаунт</h1>
+        {% if messages %}
+            {% for message in messages %}
+                <p class="auth-subtitle" role="status">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
         <p class="auth-subtitle">
             Войдите, чтобы получить доступ к своим<br>
             заказам, бонусам и персональным предложениям.
@@ -43,6 +49,16 @@
 
             <button type="submit" class="btn-auth">Войти</button>
         </form>
+
+        <!-- РАЗДЕЛИТЕЛЬ -->
+        <div class="auth-divider">
+            <span>или</span>
+        </div>
+
+        <!-- КНОПКА GOOGLE -->
+        <a href="{% provider_login_url 'google' %}" class="btn-auth" style="display: flex; align-items: center; justify-content: center; gap: 10px; background-color: #ffffff; color: #2b2b2b; border: 1px solid rgba(0,0,0,0.12); text-decoration: none; margin-bottom: 24px;">
+            <i class="bi bi-google" style="color: #db4437;"></i> Продолжить с Google
+        </a>
 
         <div class="auth-divider">
             <span>Нет аккаунта?</span>

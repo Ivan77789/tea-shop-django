@@ -1,7 +1,7 @@
 from django import forms
-from django.core.exceptions import ValidationError
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 from .models import Profile
 
@@ -52,13 +52,22 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 class UserUpdateForm(forms.ModelForm):
+    email = forms.EmailField(
+        label='Email',
+        widget=forms.EmailInput(attrs={'class': 'form-input input-with-icon', 'placeholder': 'example@mail.com'}),
+    )
+
     class Meta:
         model = User
-        fields = ['first_name', 'email'] # ТОЛЬКО поля из модели User
+        fields = ['first_name']
         widgets = {
             'first_name': forms.TextInput(attrs={'class': 'form-input input-with-icon', 'placeholder': 'Имя'}),
-            'email': forms.EmailInput(attrs={'class': 'form-input input-with-icon', 'placeholder': 'example@mail.com'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk:
+            self.fields['email'].initial = self.instance.email
 
     def clean_email(self):
         email = self.cleaned_data['email']

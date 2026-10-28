@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Подтверждение email — Чай из Китая{% endblock %}
+
+{% block content %}
+<section class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+    <div class="auth-card">
+        <a href="{% url 'main:index' %}" class="auth-logo" aria-label="На главную">
+            <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+        </a>
+        <h1 class="auth-title">Подтверждение email</h1>
+
+        {% if confirmation %}
+            {% if can_confirm %}
+                <p class="auth-subtitle">Подтвердите адрес электронной почты, чтобы завершить регистрацию.</p>
+                <form method="post" action="{% url 'account_confirm_email' confirmation.key %}" class="auth-form">
+                    {% csrf_token %}
+                    {{ redirect_field }}
+                    <button type="submit" class="btn-auth">Подтвердить email</button>
+                </form>
+            {% else %}
+                <p class="auth-subtitle">Этот email уже подтверждён для другого аккаунта.</p>
+                <a href="{% url 'users:login' %}" class="auth-register-link">Перейти ко входу</a>
+            {% endif %}
+        {% else %}
+            <p class="auth-subtitle">Ссылка подтверждения недействительна или срок её действия истёк.</p>
+            <a href="{% url 'users:login' %}" class="auth-register-link">Вернуться ко входу</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

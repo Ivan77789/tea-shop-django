@@ -20,7 +20,7 @@
                 <ul class="filter-list">
                     <!-- Все товары -->
                     <li>
-                        <a href="{% url 'main:catalog' %}"
+                        <a href="{% url 'main:catalog' %}{% if search_query %}?q={{ search_query|urlencode }}{% endif %}"
                            class="filter-link {% if not request.GET.category %}filter-link--active{% endif %}">
                             <span>Все товары</span>
                             <span class="filter-count">{{ total_count }}</span>
@@ -31,7 +31,7 @@
                     {% for category in categories %}
                         {% if category.products.count > 0 %}
                         <li>
-                            <a href="?category={{ category.slug }}"
+                            <a href="?category={{ category.slug }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}"
                                class="filter-link {% if request.GET.category == category.slug %}filter-link--active{% endif %}">
                                 <span>{{ category.name }}</span>
                                 <span class="filter-count">{{ category.products.count }}</span>
@@ -42,6 +42,8 @@
                 </ul>
 
                 <form method="get" action="{% url 'main:catalog' %}" class="catalog-filters-form">
+                    {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
+                    {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
                     <div class="filter-price">
                         <p class="filter-title">Цена</p>
 
@@ -76,8 +78,13 @@
             <!-- ПРАВАЯ КОЛОНКА: ТОВАРЫ -->
             <div class="catalog-products">
                 <div class="catalog-title">
-                    <h1>Каталог чая</h1>
-                    <p>Натуральный китайский чай напрямую от проверенных поставщиков</p>
+                    {% if search_query %}
+                        <h1>Результаты поиска</h1>
+                        <p id="catalog-result-count">По запросу «{{ search_query }}» найдено товаров: {{ page_obj.paginator.count }}</p>
+                    {% else %}
+                        <h1>Каталог чая</h1>
+                        <p id="catalog-result-count">Натуральный китайский чай напрямую от проверенных поставщиков</p>
+                    {% endif %}
                 </div>
 
                 <div id="catalog-results">
@@ -142,6 +149,12 @@
             const data = await response.json();
             document.getElementById('catalog-results').innerHTML = data.products_html;
             document.getElementById('pagination-container').innerHTML = data.pagination_html;
+            const resultCount = document.getElementById('catalog-result-count');
+            if (resultCount) {
+                resultCount.textContent = data.search_query
+                    ? `По запросу «${data.search_query}» найдено товаров: ${data.result_count}`
+                    : `Найдено товаров: ${data.result_count}`;
+            }
             history.pushState({}, '', `?${urlParams}`);
         } catch (error) {
             console.error('Ошибка:', error);

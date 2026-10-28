@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load static %}
+{% load socialaccount %}
 
 {% block title %}Регистрация — Чайный Мир{% endblock %}
 
@@ -24,6 +25,7 @@
             {% if form.errors %}
                 <div class="form-error-summary">
                     Пожалуйста, исправьте ошибки ниже.
+                    {% for error in form.non_field_errors %}<p>{{ error }}</p>{% endfor %}
                 </div>
             {% endif %}
 
@@ -33,7 +35,7 @@
                     <i class="bi bi-person" aria-hidden="true"></i>
                     {{ form.username }}
                 </div>
-                {% if form.username.errors %}<span class="form-error">{{ form.username.errors.0 }}</span>{% endif %}
+                {% for error in form.username.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
             <div class="form-field">
@@ -42,6 +44,7 @@
                     <i class="bi bi-person" aria-hidden="true"></i>
                     {{ form.first_name }}
                 </div>
+                {% for error in form.first_name.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
             <div class="form-field">
@@ -50,6 +53,7 @@
                     <i class="bi bi-envelope" aria-hidden="true"></i>
                     {{ form.email }}
                 </div>
+                {% for error in form.email.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
             <div class="form-field">
@@ -58,6 +62,7 @@
                     <i class="bi bi-lock" aria-hidden="true"></i>
                     {{ form.password1 }}
                 </div>
+                {% for error in form.password1.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
             <div class="form-field">
@@ -66,11 +71,23 @@
                     <i class="bi bi-lock" aria-hidden="true"></i>
                     {{ form.password2 }}
                 </div>
-                {% if form.password2.errors %}<span class="form-error">{{ form.password2.errors.0 }}</span>{% endif %}
+                {% for error in form.password2.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
             <button type="submit" class="btn-auth">Зарегистрироваться</button>
         </form>
+
+                <!-- РАЗДЕЛИТЕЛЬ -->
+        <div class="auth-divider">
+            <span>или</span>
+        </div>
+
+        <!-- КНОПКА GOOGLE -->
+        <a href="{% provider_login_url 'google' %}" class="btn-auth" style="display: flex; align-items: center; justify-content: center; gap: 10px; background-color: #ffffff; color: #2b2b2b; border: 1px solid rgba(0,0,0,0.12); text-decoration: none; margin-bottom: 24px;">
+            <i class="bi bi-google" style="color: #db4437;"></i> Продолжить с Google
+        </a>
+
+
 
         <div class="auth-divider">
             <span>Уже есть аккаунт?</span>

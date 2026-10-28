@@ -17,6 +17,12 @@ class Profile(models.Model):
     # Адрес, который подставляется по умолчанию в оформлении заказа.
     default_city = models.CharField(max_length=100, blank=True, verbose_name='Город')
     default_address = models.CharField(max_length=250, blank=True, verbose_name='Адрес')
+    pending_email = models.EmailField(blank=True, verbose_name='Неподтверждённый email')
+    email_verification_sent_at = models.DateTimeField(
+        null=True,
+        blank=True,
+        verbose_name='Время отправки письма подтверждения',
+    )
 
     def __str__(self):
         return f'Профиль {self.user.username}'

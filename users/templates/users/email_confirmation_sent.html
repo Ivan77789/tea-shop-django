@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Подтверждение email — Чайный Мир{% endblock %}
+
+{% block content %}
+<main class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+    <section class="auth-card" aria-labelledby="email-confirmation-title">
+        <h1 class="auth-title" id="email-confirmation-title">Проверьте почту</h1>
+        <p class="auth-subtitle">Мы отправили письмо со ссылкой подтверждения на {{ email }}. Ссылка действует 3 дня.</p>
+        <form method="post" action="{% url 'users:resend_verification' %}" class="auth-form">
+            {% csrf_token %}
+            <input type="hidden" name="email" value="{{ email }}">
+            <button type="submit" class="btn-auth">Отправить письмо повторно</button>
+        </form>
+        <a href="{% url 'users:login' %}" class="auth-register-link">Вернуться ко входу</a>
+    </section>
+</main>
+{% endblock %}

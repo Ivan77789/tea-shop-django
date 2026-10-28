@@ -1,0 +1,42 @@
+[
+{
+  "model": "main.category",
+  "pk": 1,
+  "fields": {
+    "name": "Зелёный чай",
+    "slug": "zelyonyj-chaj"
+  }
+},
+{
+  "model": "main.category",
+  "pk": 2,
+  "fields": {
+    "name": "Чёрный чай",
+    "slug": "chyornyj-chaj"
+  }
+},
+{
+  "model": "main.category",
+  "pk": 3,
+  "fields": {
+    "name": "Улун",
+    "slug": "ulun"
+  }
+},
+{
+  "model": "main.category",
+  "pk": 4,
+  "fields": {
+    "name": "Пуэр",
+    "slug": "puer"
+  }
+},
+{
+  "model": "main.category",
+  "pk": 5,
+  "fields": {
+    "name": "Белый чай",
+    "slug": "belyj-chaj"
+  }
+}
+]

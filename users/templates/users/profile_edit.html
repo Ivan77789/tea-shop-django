@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-{% load static %}
+{% load static socialaccount %}
 
 {% block title %}Мои данные — Чайный Мир{% endblock %}
 
@@ -53,6 +53,16 @@
                             {{ message }}
                         </div>
                     {% endfor %}
+                {% endif %}
+                {% if profile.pending_email %}
+                    <p class="profile-edit__notice" role="status">
+                        Ожидает подтверждения: {{ profile.pending_email }}. Текущий адрес останется активным до подтверждения.
+                    </p>
+                {% endif %}
+                {% if google_connected %}
+                    <p class="profile-edit__notice" role="status">Google подключён к этому аккаунту.</p>
+                {% else %}
+                    <a class="btn-auth" href="{% provider_login_url 'google' process='connect' %}">Подключить Google к аккаунту</a>
                 {% endif %}
 
                 <!-- ОДНА ФОРМА ДЛЯ ВСЕГО -->

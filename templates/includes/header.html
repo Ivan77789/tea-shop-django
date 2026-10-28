@@ -29,20 +29,34 @@
                 </a>
             </nav>
 
-                       <div class="header-icons">
-                <a href="#">
-                    <img src="{% static 'icons/search.svg' %}" alt="Поиск">
-                </a>
+            <div class="header-icons">
+                <details class="header-search">
+                    <summary class="header-search-toggle" aria-label="Открыть поиск">
+                        <img src="{% static 'icons/search.svg' %}" alt="">
+                    </summary>
+                    <form action="{% url 'main:catalog' %}" method="get" class="header-search-form" role="search">
+                        <label class="visually-hidden" for="site-search">Поиск по товарам</label>
+                        <input type="search" name="q" id="site-search" maxlength="100"
+                               value="{% if request.GET.q %}{{ request.GET.q }}{% endif %}"
+                               placeholder="Найти чай" required>
+                        <button type="submit">Найти</button>
+                    </form>
+                </details>
                 
                 {% if user.is_authenticated %}
                     <!-- Профиль пользователя ведет в личный кабинет -->
                     <a href="{% url 'users:account' %}" aria-label="Личный кабинет" class="header-user-link">
-                        <img src="{% static 'icons/person.svg' %}" alt="Профиль">
-                        <span class="header-user-name">{{ user.username }}</span>
+                        <span class="header-user-avatar" aria-hidden="true">
+                            {% if user.profile.avatar %}
+                                <img src="{{ user.profile.avatar.url }}" alt="" class="header-user-avatar__image">
+                            {% else %}
+                                <img src="{% static 'icons/person.svg' %}" alt="" class="header-user-avatar__image header-user-avatar__image--default">
+                            {% endif %}
+                        </span>
                     </a>
                 {% else %}
                     <!-- Если не вошел: ведем на страницу входа -->
-                    <a href="{% url 'users:login' %}" aria-label="Войти">
+                    <a href="{% url 'users:login' %}" aria-label="Войти" class="header-user-link">
                         <img src="{% static 'icons/person.svg' %}" alt="Профиль">
                     </a>
                 {% endif %}

@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.db import models
 
@@ -121,3 +122,29 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f'{self.user.username} - {self.product.name}'    
+
+
+class SiteVisit(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='site_visits',
+        verbose_name='Пользователь',
+    )
+    ip_address = models.GenericIPAddressField(null=True, blank=True, verbose_name='IP-адрес')
+    user_agent = models.TextField(blank=True, verbose_name='Браузер и устройство')
+    path = models.CharField(max_length=500, verbose_name='Страница')
+    method = models.CharField(max_length=10, verbose_name='Метод запроса')
+    status_code = models.PositiveSmallIntegerField(verbose_name='Код ответа')
+    visited_at = models.DateTimeField(auto_now_add=True, db_index=True, verbose_name='Время посещения')
+
+    class Meta:
+        ordering = ['-visited_at']
+        verbose_name = 'Посещение сайта'
+        verbose_name_plural = 'Посещения сайта'
+
+    def __str__(self):
+        visitor = self.user.username if self.user_id else 'Аноним'
+        return f'{visitor}: {self.path} ({self.visited_at:%Y-%m-%d %H:%M})'

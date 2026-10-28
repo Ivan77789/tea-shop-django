@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, ContactMessage, ExtraAttribute, Product, ProductImage
+from .models import Category, ContactMessage, ExtraAttribute, Product, ProductImage, SiteVisit
 
 
 @admin.register(Category)
@@ -42,4 +42,26 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(ContactMessage)
 class ContactMessageAdmin(admin.ModelAdmin):
-    list_display = ['name', 'email', 'created', 'is_processed']    
+    list_display = ['name', 'email', 'created', 'is_processed']
+
+
+@admin.register(SiteVisit)
+class SiteVisitAdmin(admin.ModelAdmin):
+    list_display = ['visited_at', 'visitor_name', 'ip_address', 'path', 'device', 'status_code']
+    list_filter = ['visited_at', 'status_code', 'method']
+    search_fields = ['user__username', 'ip_address', 'path', 'user_agent']
+    readonly_fields = [
+        'user', 'ip_address', 'user_agent', 'path', 'method', 'status_code', 'visited_at'
+    ]
+    ordering = ['-visited_at']
+
+    @admin.display(description='Пользователь')
+    def visitor_name(self, obj):
+        return obj.user.username if obj.user_id else 'Аноним'
+
+    @admin.display(description='Устройство / браузер')
+    def device(self, obj):
+        return obj.user_agent[:80]
+
+    def has_add_permission(self, request):
+        return False

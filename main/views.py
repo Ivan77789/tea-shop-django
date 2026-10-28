@@ -1,8 +1,10 @@
+import re
 from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
@@ -25,6 +27,16 @@ def index(request):
 def get_filtered_products(request):
     """Общая логика фильтрации — для обоих вьюх."""
     products = Product.objects.filter(available=True)
+
+    search_query = request.GET.get('q', '').strip()[:100]
+    for word in search_query.split():
+        search_pattern = re.escape(word)
+        products = products.filter(
+            Q(name__iregex=search_pattern)
+            | Q(description__iregex=search_pattern)
+            | Q(category__name__iregex=search_pattern)
+            | Q(weight__iregex=search_pattern)
+        )
 
     category_slug = request.GET.get('category')
     if category_slug:
@@ -58,6 +70,7 @@ def get_filtered_products(request):
 def catalog(request):
     """Полная страница — первая загрузка."""
     products = get_filtered_products(request)
+    search_query = request.GET.get('q', '').strip()[:100]
     categories = Category.objects.all()
     total_count = Product.objects.filter(available=True).count()
 
@@ -71,6 +84,7 @@ def catalog(request):
         'categories': categories,
         'total_count': total_count,
         'page_obj': page_obj,  #  ПЕРЕДАЕМ для кнопок пагинации
+        'search_query': search_query,
     }
 
     return render(request, 'main/catalog.html', context)
@@ -78,6 +92,7 @@ def catalog(request):
 
 def catalog_ajax(request):
     products = get_filtered_products(request)
+    search_query = request.GET.get('q', '').strip()[:100]
     
     # Пагинация
     paginator = Paginator(products, 8)
@@ -85,13 +100,19 @@ def catalog_ajax(request):
     page_obj = paginator.get_page(page_number)
     
     # Рендерим два HTML-куска отдельно
-    products_html = render_to_string('main/includes/product_list.html', {'products': page_obj}, request=request)
+    products_html = render_to_string(
+        'main/includes/product_list.html',
+        {'products': page_obj, 'search_query': search_query},
+        request=request,
+    )
     pagination_html = render_to_string('main/includes/pagination.html', {'page_obj': page_obj}, request=request)
     
     # Возвращаем их в JSON
     return JsonResponse({
         'products_html': products_html,
-        'pagination_html': pagination_html
+        'pagination_html': pagination_html,
+        'result_count': paginator.count,
+        'search_query': search_query,
     })
 
 

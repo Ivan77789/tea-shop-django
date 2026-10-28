@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Вход через Google — Чайный Мир{% endblock %}
+
+{% block content %}
+<main class="auth-main">
+    <img src="{% static 'img/login.jpg' %}" alt="" class="auth-bg-img">
+
+    <div class="auth-card">
+        <a href="{% url 'main:index' %}" class="auth-logo" aria-label="На главную">
+            <img src="{% static 'icons/tea-leaf.png' %}" alt="">
+        </a>
+
+        <h1 class="auth-title">Вход через Google</h1>
+        
+        <p class="auth-subtitle" style="margin-bottom: 30px;">
+            Вы собираетесь войти, используя стороннюю учетную запись из Google.
+        </p>
+
+        <!-- Форма от allauth для кнопки "Продолжить" -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-auth" style="width: 100%; margin-top: 10px;">Продолжить</button>
+        </form>
+
+        <div class="auth-divider">
+            <span>или</span>
+        </div>
+        
+        <a href="{% url 'users:login' %}" class="auth-register-link">Вернуться к обычному входу</a>
+    </div>
+</main>
+{% endblock %}
