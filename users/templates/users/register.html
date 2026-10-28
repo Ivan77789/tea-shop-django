@@ -21,6 +21,10 @@
 
         <form class="auth-form" method="post">
             {% csrf_token %}
+
+            {% if not turnstile_site_key %}
+                <p class="form-error-summary" role="status">Проверка безопасности не настроена; регистрация временно недоступна.</p>
+            {% endif %}
             
             {% if form.errors %}
                 <div class="form-error-summary">
@@ -74,6 +78,10 @@
                 {% for error in form.password2.errors %}<span class="form-error">{{ error }}</span>{% endfor %}
             </div>
 
+            {% if turnstile_site_key %}
+                <div class="cf-turnstile turnstile-widget" data-sitekey="{{ turnstile_site_key }}" data-action="register" data-theme="light"></div>
+            {% endif %}
+            {% include "includes/privacy_form_notice.html" %}
             <button type="submit" class="btn-auth">Зарегистрироваться</button>
         </form>
 
@@ -95,4 +103,8 @@
         <a href="{% url 'users:login' %}" class="auth-register-link">Войти</a>
     </div>
 </main>
+{% endblock %}
+
+{% block extra_js %}
+    {% if turnstile_site_key %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
 {% endblock %}

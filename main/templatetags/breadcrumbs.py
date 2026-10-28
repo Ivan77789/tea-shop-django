@@ -58,6 +58,7 @@ def breadcrumbs(context):
             page_names = {
                 "about": "О нас",
                 "contacts": "Контакты",
+                "privacy_policy": "Конфиденциальность",
                 "favorites": "Избранное",
             }
             page_name = page_names.get(route_name)

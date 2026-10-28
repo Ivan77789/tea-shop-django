@@ -134,6 +134,10 @@ def about(request):
     return render(request, 'main/about.html')
 
 
+def privacy_policy(request):
+    return render(request, 'main/privacy_policy.html')
+
+
 
 def contacts(request):
     if request.method == 'POST':

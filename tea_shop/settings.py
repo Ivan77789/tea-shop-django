@@ -84,6 +84,7 @@ AXES_LOCKOUT_PARAMETERS = ['ip_address']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -94,13 +95,19 @@ MIDDLEWARE = [
 
     'allauth.account.middleware.AccountMiddleware',
     'axes.middleware.AxesMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
+
+TURNSTILE_SITE_KEY = os.getenv('TURNSTILE_SITE_KEY', '').strip()
+TURNSTILE_SECRET_KEY = os.getenv('TURNSTILE_SECRET_KEY', '').strip()
+TURNSTILE_ENABLED = bool(TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY)
 
 ROOT_URLCONF = 'tea_shop.urls'
 
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
+        # Google verifies the email address it returns. Allow that verified
+        # address to authenticate an existing local account and link Google.
+        'EMAIL_AUTHENTICATION': True,
         'APP': {
             'client_id': os.getenv('GOOGLE_CLIENT_ID'),
             'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
@@ -113,11 +120,11 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-# Не подключаем существующий аккаунт только по совпадению email из Google.
+# Email-аутентификация разрешена только для Google через настройку провайдера выше.
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = False
 
-# Google можно подключить вручную из профиля после входа в локальный аккаунт.
-SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = False
+# Автоматически сохраняем связь Google с найденным локальным аккаунтом.
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
 
 EMAIL_BACKEND = os.getenv(
     'DJANGO_EMAIL_BACKEND',

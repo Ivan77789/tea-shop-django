@@ -1,10 +1,11 @@
 import logging
 from datetime import timedelta
 
+from allauth.account.models import EmailAddress
 from allauth.socialaccount.models import SocialAccount
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import login as auth_login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView
@@ -76,13 +77,20 @@ class CustomLoginView(LoginView):
     authentication_form = CustomAuthenticationForm
     redirect_authenticated_user = True # Если уже вошел - на главную
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['turnstile_site_key'] = (
+            settings.TURNSTILE_SITE_KEY if settings.TURNSTILE_ENABLED else ''
+        )
+        return context
+
 # Регистрация
 def register(request):
     if request.user.is_authenticated:
         return redirect('main:index')
 
     if request.method == 'POST':
-        form = CustomUserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST, request=request)
         if form.is_valid():
             user = form.save(commit=False)
             user.is_active = False
@@ -107,9 +115,12 @@ def register(request):
                     'purpose': 'signup',
                 })
     else:
-        form = CustomUserCreationForm()
+        form = CustomUserCreationForm(request=request)
 
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'users/register.html', {
+        'form': form,
+        'turnstile_site_key': settings.TURNSTILE_SITE_KEY if settings.TURNSTILE_ENABLED else '',
+    })
 
 
 @require_http_methods(['GET', 'POST'])
@@ -125,14 +136,30 @@ def verify_email(request, token):
     if user is None:
         return _confirmation_error(request)
 
-    if request.method == 'POST':
-        if not user.is_active:
-            user.is_active = True
-            user.save(update_fields=['is_active'])
-        messages.success(request, 'Email подтверждён. Теперь вы можете войти.')
-        return redirect('users:login')
-
-    return render(request, 'users/confirm_email.html', {'purpose': 'signup'})
+    # The signed confirmation link itself is the user's confirmation action.
+    # Confirm on its GET request and take the new user straight to their account.
+    if not user.is_active:
+        user.is_active = True
+        user.save(update_fields=['is_active'])
+    email_address, _ = EmailAddress.objects.get_or_create(
+        user=user,
+        email=user.email,
+        defaults={'verified': True, 'primary': True},
+    )
+    EmailAddress.objects.filter(user=user, primary=True).exclude(
+        pk=email_address.pk
+    ).update(primary=False)
+    if not email_address.verified or not email_address.primary:
+        email_address.verified = True
+        email_address.primary = True
+        email_address.save(update_fields=['verified', 'primary'])
+    auth_login(
+        request,
+        user,
+        backend='django.contrib.auth.backends.ModelBackend',
+    )
+    messages.success(request, 'Email подтверждён. Вы вошли в аккаунт.')
+    return redirect('users:account')
 
 
 @require_http_methods(['GET', 'POST'])

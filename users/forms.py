@@ -4,10 +4,31 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 
 from .models import Profile
+from .turnstile import verify_turnstile_token
+
+
+class TurnstileProtectedFormMixin:
+    turnstile_action = None
+
+    def __init__(self, *args, request=None, **kwargs):
+        super().__init__(*args, **kwargs)
+        # AuthenticationForm initializes ``self.request`` itself. Since this
+        # mixin consumes the keyword argument, restore it after the parent form
+        # initialization (registration forms do not use AuthenticationForm).
+        self.request = request
+
+    def clean(self):
+        verify_turnstile_token(
+            self.data.get('cf-turnstile-response'),
+            self.request,
+            self.turnstile_action,
+        )
+        return super().clean()
 
 
 # Форма регистрации
-class CustomUserCreationForm(UserCreationForm):
+class CustomUserCreationForm(TurnstileProtectedFormMixin, UserCreationForm):
+    turnstile_action = 'register'
     email = forms.EmailField(required=True, widget=forms.EmailInput(attrs={'class': 'form-input input-with-icon', 'placeholder': 'example@mail.com'}))
     first_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-input input-with-icon', 'placeholder': 'Введите ваше имя'}))
 
@@ -29,7 +50,9 @@ class CustomUserCreationForm(UserCreationForm):
         self.fields['password2'].widget.attrs.update({'class': 'form-input input-with-icon', 'placeholder': 'Повторите пароль'})
 
 # Форма входа
-class CustomAuthenticationForm(AuthenticationForm):
+class CustomAuthenticationForm(TurnstileProtectedFormMixin, AuthenticationForm):
+    turnstile_action = 'login'
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].widget.attrs.update({'class': 'form-input input-with-icon', 'placeholder': 'Ваш логин или email'})
