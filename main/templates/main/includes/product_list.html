@@ -15,12 +15,13 @@
             </a>
         </div>
         <p class="product-description">{{ product.description|striptags|truncatechars:160 }}</p>
-        {% if product.weight %}<p class="product-card-weight">{{ product.weight }} г</p>{% endif %}
+        {% if product.sale_unit == 'gram' %}<small class="product-price-unit">за {{ product.default_order_weight }} г</small>{% endif %}
         <p class="product-price">
-            {{ product.price }} <span class="product-price-currency">₴</span>
+            {% if product.default_discount_percent %}<del class="product-price-regular">{{ product.default_order_regular_price }}</del><span class="product-card-discount">−{{ product.default_discount_percent }}%</span>{% endif %}
+            {{ product.default_order_price }} <span class="product-price-currency">₴</span>
         </p>
-            <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}">
-                <i class="bi bi-cart" aria-hidden="true"></i> В корзину
+            <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}" data-default-quantity="1" data-sale-mode="{{ product.default_sale_mode }}"{% if not product.can_order %} disabled{% endif %}>
+                <i class="bi bi-cart" aria-hidden="true"></i> {% if not product.can_order %}Нет в наличии{% else %}В корзину{% endif %}
             </button>
     </div>
     {% empty %}

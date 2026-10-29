@@ -15,6 +15,7 @@
         
         <form method="post" action="{% url 'orders:order_create' %}">
             {% csrf_token %}
+            {% if form.non_field_errors %}<div class="form-errors" role="alert">{{ form.non_field_errors }}</div>{% endif %}
             <div class="order-layout">
                 
                 <!-- ЛЕВАЯ КОЛОНКА: ФОРМА -->
@@ -115,8 +116,8 @@
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                             <div class="order-summary-info">
                                 <p class="order-summary-name">{{ item.product.name }}</p>
-                                <p class="order-summary-desc">{{ item.product.weight }} г</p>
-                                <p class="order-summary-quantity">Кол-во: {{ item.quantity }} шт.</p>
+                                <p class="order-summary-desc">{% if item.sale_mode == 'cake' %}<del>{{ item.regular_price }} ₴</del> {% endif %}{{ item.price }} ₴ {{ item.price_unit_label }}{% if item.sale_mode == 'cake' %} · скидка {{ item.discount_percent }}%{% endif %}</p>
+                                <p class="order-summary-quantity">Количество: {{ item.display_quantity }}</p>
                             </div>
                             <p class="order-summary-price">{{ item.total_price }} ₴</p>
                         </div>
@@ -128,6 +129,13 @@
                             <span>Товары ({{ cart|length }})</span>
                             <span>{{ cart.get_total_price }} ₴</span>
                         </div>
+
+                        {% if cart.get_total_discount %}
+                        <div class="order-summary-row">
+                            <span>Скидка на целые блины</span>
+                            <span>−{{ cart.get_total_discount }} ₴</span>
+                        </div>
+                        {% endif %}
 
                         <div class="order-summary-row">
                             <span>Доставка</span>

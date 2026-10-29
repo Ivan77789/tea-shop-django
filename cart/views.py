@@ -19,7 +19,15 @@ def cart_add(request, product_id):
     product = get_object_or_404(Product, id=product_id, available=True)
     try:
         quantity = int(request.POST.get('quantity', 1))
-        cart.add(product=product, quantity=quantity, update_quantity=request.POST.get('update') == 'True')
+        sale_mode = request.POST.get('sale_mode') or product.default_sale_mode
+        if sale_mode == 'gram':
+            sale_mode = 'gram-50'
+        cart.add(
+            product=product,
+            quantity=quantity,
+            sale_mode=sale_mode,
+            update_quantity=request.POST.get('update') == 'True',
+        )
     except (TypeError, ValueError) as error:
         return JsonResponse({'status': 'error', 'message': str(error)}, status=400)
     
@@ -27,7 +35,9 @@ def cart_add(request, product_id):
         'status': 'ok',
         'cart_total_items': len(cart),
         'total_price': str(cart.get_total_price()),
-        'product_total': str(cart.cart[str(product_id)]['quantity'] * product.price)
+        'total_discount': str(cart.get_total_discount()),
+        'product_total': str(cart.get_product_total(product_id, sale_mode)),
+        'sale_mode': sale_mode,
     })
 
 @require_POST
@@ -35,12 +45,14 @@ def cart_remove(request, product_id):
     """AJAX: Удаление товара"""
     cart = Cart(request)
     product = get_object_or_404(Product, id=product_id)
-    cart.remove(product)
+    sale_mode = request.POST.get('sale_mode') or product.default_sale_mode
+    cart.remove(product, sale_mode)
     
     return JsonResponse({
         'status': 'ok',
         'cart_total_items': len(cart),
-        'total_price': str(cart.get_total_price())
+        'total_price': str(cart.get_total_price()),
+        'total_discount': str(cart.get_total_discount()),
     })
 
 

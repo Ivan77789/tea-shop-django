@@ -24,7 +24,7 @@ class ExtraAttributeInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'available', 'created']
+    list_display = ['name', 'price', 'sale_unit', 'stock_quantity', 'whole_cake_stock', 'available', 'created']
     list_filter = ['available', 'category']
     prepopulated_fields = {'slug': ('name',)}
     inlines = [ProductImageInline, ExtraAttributeInline]
@@ -32,7 +32,16 @@ class ProductAdmin(admin.ModelAdmin):
 # Группируем поля в админке
     fieldsets = (
         ('Основная информация', {
-            'fields': ('category', 'name', 'slug', 'description', 'price', 'weight', 'image', 'available')
+            'fields': ('category', 'name', 'slug', 'description', 'price', 'weight', 'sale_unit', 'stock_quantity', 'image', 'available'),
+            'description': 'Для товара на развес цена задаётся за 50 г, остаток — в граммах. Для поштучного товара цена и остаток задаются за штуку. Пустой остаток отключает складской учёт; 0 означает, что товара нет в наличии.',
+        }),
+        ('Целый чайный блин', {
+            'fields': ('whole_cake_weight_grams', 'whole_cake_stock', 'whole_cake_discount_percent'),
+            'description': 'Заполните вес и количество целых блинов, чтобы показать покупателю покупку целого блина. Скидка применяется к цене за весь блин, рассчитанной из цены за 50 г.',
+        }),
+        ('Скидки на развес', {
+            'fields': ('discount_8g_percent', 'discount_25g_percent', 'discount_50g_percent', 'discount_100g_percent'),
+            'description': 'Скидка применяется к цене выбранной фасовки. У каждого размера свой процент.',
         }),
         ('Характеристики', {
             'fields': ('attr_type', 'attr_origin', 'attr_temperature', 'attr_time'),

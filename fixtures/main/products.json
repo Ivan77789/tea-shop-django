@@ -1,20 +1,309 @@
 [
 {
   "model": "main.product",
-  "pk": 11,
+  "pk": 1,
   "fields": {
-    "category": 4,
-    "name": "Менку Шентай «Шэн из экосадов Менку»",
-    "slug": "menku-shentaj-shen-z-ekosadiv-menku",
-    "description": "Выдержанный шэн пуэр Менку Шентай 2010 года. На упаковке указан вес 880 г. Прессованный блин можно хранить и разламывать на порции для заваривания. Год, производитель и вес приведены по маркировке упаковки.\r\n\r\nДля проливного заваривания возьмите 5–7 г на гайвань и используйте воду температурой 90–100 °C. Начните с коротких проливов и увеличивайте время по вкусу.",
+    "category": 1,
+    "name": "Менку Шентай «Шэн из экосадов Менку», 2010",
+    "slug": "menku-shentaj-shen-z-ekosadiv-menku-2010",
+    "description": "Выдержанный шэн пуэр Менку Шентай 2010 года. На упаковке указан вес 880 г. Прессованный блин можно хранить и разламывать на порции для заваривания. Год, производитель и вес приведены по маркировке упаковки.\n\nДля проливного заваривания возьмите 5–7 г на гайвань и используйте воду температурой 90–100 °C. Начните с коротких проливов и увеличивайте время по вкусу.",
     "price": "934.00",
     "weight": "880",
+    "sale_unit": "gram",
+    "stock_quantity": 130,
+    "whole_cake_weight_grams": 880,
+    "whole_cake_stock": 4,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/Менку_Шентай_Шен_з_екосадів_Менку_2010.png",
     "available": true,
-    "created": "2026-10-23T16:32:18.225Z",
+    "created": "2026-10-28T11:18:24.936Z",
     "attr_type": "Пуэр",
     "attr_origin": "Китай, Юньнань",
     "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 2,
+  "fields": {
+    "category": 1,
+    "name": "Смола шу пуэра",
+    "slug": "smola-shu-puera",
+    "description": "Порционный формат шу пуэра в виде плотной чайной пасты. Небольшую порцию удобно растворить в горячей воде дома или в дороге. На упаковке указано, что продукт изготовлен из сырья древних чайных деревьев.\n\nДля приготовления добавьте порцию в чашку или чайник и залейте горячей водой. Количество воды и насыщенность настоя регулируйте по вкусу. Состав и способ заваривания перед продажей сверьте с маркировкой поставщика.",
+    "price": "320.00",
+    "weight": "",
+    "sale_unit": "piece",
+    "stock_quantity": 13,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/smola-shu-puera/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:24.954Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 3,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр Иу Гуафэн Чжай",
+    "slug": "shu-puer-yiwu-guafeng-zhai",
+    "description": "Прессованный шу пуэр из серии Иу Гуафэн Чжай. На упаковке указан вес 357 г. Формат блина удобно хранить, делить на порции и заваривать проливами. Шу пуэр подойдёт тем, кто предпочитает тёмный настой и мягкий, согревающий характер чая.\n\nДля проливного заваривания возьмите около 5–7 г на небольшую гайвань, промойте листья горячей водой и заваривайте короткими проливами. Температуру воды подбирайте в диапазоне 90–100 °C.",
+    "price": "890.00",
+    "weight": "357",
+    "sale_unit": "gram",
+    "stock_quantity": 273,
+    "whole_cake_weight_grams": 357,
+    "whole_cake_stock": 11,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:24.964Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 4,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр «Блестящее процветание»",
+    "slug": "shu-puer-blestyashchee-protsvetanie",
+    "description": "Прессованный шу пуэр «Блестящее процветание» от чайной фабрики Мэнхай. На упаковке указаны Юньнань и вес 357 г. Плотный блин удобно разделить на порции для неспешного домашнего чаепития или подарка.\n\nЗаваривайте горячей водой температурой 90–100 °C. Для гайвани начните с 5–7 г чая и коротких проливов, постепенно увеличивая время настаивания.",
+    "price": "760.00",
+    "weight": "357",
+    "sale_unit": "gram",
+    "stock_quantity": 223,
+    "whole_cake_weight_grams": 357,
+    "whole_cake_stock": 11,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:24.974Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 5,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр «Впечатление от Иу»",
+    "slug": "shu-puer-vpechatlenie-yiwu",
+    "description": "Шу пуэр «Впечатление от Иу» — прессованный чай в блине весом 357 г. Название и оформление упаковки отсылают к чайной традиции Иу. Блин можно разламывать на небольшие порции и заваривать несколько раз, постепенно меняя крепость настоя.\n\nРекомендуем начать с 5–7 г на гайвань и воды температурой 90–100 °C. Для первого пролива достаточно нескольких секунд.",
+    "price": "820.00",
+    "weight": "357",
+    "sale_unit": "gram",
+    "stock_quantity": 94,
+    "whole_cake_weight_grams": 357,
+    "whole_cake_stock": 8,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:24.985Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 6,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр «Снежная гора»",
+    "slug": "shu-puer-snezhnaya-gora",
+    "description": "Шу пуэр «Снежная гора» от Фухай — компактный прессованный блин весом 100 г, указанным на упаковке. Небольшой формат подходит для знакомства с чаем или для того, чтобы взять его с собой.\n\nЗаваривайте водой температурой 90–100 °C. Для чайника или гайвани используйте 5–7 г и короткие проливы; при настаивании в кружке уменьшите количество чая и подберите время по вкусу.",
+    "price": "390.00",
+    "weight": "100",
+    "sale_unit": "gram",
+    "stock_quantity": 0,
+    "whole_cake_weight_grams": 100,
+    "whole_cake_stock": 21,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-snezhnaya-gora/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:24.991Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 7,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр Менку «Му Е Чунь»",
+    "slug": "shu-puer-mengku-muye-chun",
+    "description": "Прессованный шу пуэр Менку «Му Е Чунь». На упаковке указан вес 400 г. Крупный блин удобно хранить и отламывать от него порции для ежедневного заваривания. Подойдёт для чаепития проливами или в чайнике.\n\nИспользуйте воду температурой 90–100 °C. Начните с 5–7 г на небольшую посуду и коротких проливов, регулируя крепость количеством листа и временем.",
+    "price": "790.00",
+    "weight": "400",
+    "sale_unit": "gram",
+    "stock_quantity": 350,
+    "whole_cake_weight_grams": 400,
+    "whole_cake_stock": 6,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-mengku-muye-chun/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:25.001Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 8,
+  "fields": {
+    "category": 1,
+    "name": "Шу пуэр Мэнхай «Первозданный вкус древних деревьев», 2017",
+    "slug": "shu-puer-menghai-drevnie-derevya-2017",
+    "description": "Шу пуэр Мэнхай «Первозданный вкус древних деревьев», 2017 года. На упаковке указан вес 357 г. Прессованный блин удобно хранить и заваривать порциями. Год и название приведены по маркировке исходной упаковки.\n\nДля проливного заваривания возьмите 5–7 г на гайвань, используйте воду температурой 90–100 °C и начинайте с коротких проливов.",
+    "price": "950.00",
+    "weight": "357",
+    "sale_unit": "gram",
+    "stock_quantity": 72,
+    "whole_cake_weight_grams": 357,
+    "whole_cake_stock": 4,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_01.png",
+    "available": true,
+    "created": "2026-10-28T11:18:25.006Z",
+    "attr_type": "Пуэр",
+    "attr_origin": "Китай, Юньнань",
+    "attr_temperature": "90–100°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 9,
+  "fields": {
+    "category": 2,
+    "name": "Жасминовый глаз Феникса",
+    "slug": "zhasminovyy-glaz-feniksa",
+    "description": "Зелёный чай с жасмином в виде аккуратно скрученных листочков. Во время заваривания листья постепенно раскрываются, а настой наполняется лёгким цветочным ароматом. Подойдёт для спокойного чаепития и для тех, кто любит нежные жасминовые ноты.\n\nЗаваривайте водой температурой 70–80 °C. Начните с 2–3 г на 200 мл и настаивайте около 1–2 минут; следующие заваривания можно немного продлить.",
+    "price": "390.00",
+    "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 800,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_01.jpg",
+    "available": true,
+    "created": "2026-10-28T11:18:25.046Z",
+    "attr_type": "Зеленый чай",
+    "attr_origin": "",
+    "attr_temperature": "70–80°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 10,
+  "fields": {
+    "category": 2,
+    "name": "Жасминовый Би Ло Чунь",
+    "slug": "zhasminovyy-bi-lo-chun",
+    "description": "Зелёный чай Би Ло Чунь с жасминовым ароматом. Небольшие скрученные листочки дают светлый настой с мягким травяным вкусом и цветочным оттенком. Чай удобно заваривать небольшими порциями, чтобы подобрать крепость под свой вкус.\n\nИспользуйте воду температурой 70–80 °C и 2–3 г чая на чашку. Первое настаивание обычно занимает 1–2 минуты.",
+    "price": "420.00",
+    "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 3350,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_01.jpg",
+    "available": true,
+    "created": "2026-10-28T11:18:25.046Z",
+    "attr_type": "Зеленый чай",
+    "attr_origin": "",
+    "attr_temperature": "70–80°C",
+    "attr_time": "1–3 минуты"
+  }
+},
+{
+  "model": "main.product",
+  "pk": 11,
+  "fields": {
+    "category": 2,
+    "name": "Мао Фэн Хуаншань «Ворсистые пики»",
+    "slug": "mao-feng-huangshan",
+    "description": "Мао Фэн Хуаншань — зелёный чай с длинными тонкими листочками и почками. Название «Ворсистые пики» отражает внешний вид чайного листа. Лёгкий настой подойдёт для утреннего чаепития и нескольких последовательных завариваний.\n\nЗаваривайте при 70–80 °C: примерно 2–3 г на 200 мл воды, около 1–2 минут. Не используйте крутой кипяток, чтобы сохранить деликатный вкус зелёного чая.",
+    "price": "440.00",
+    "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 1400,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
+    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_01.jpg",
+    "available": true,
+    "created": "2026-10-28T11:18:25.058Z",
+    "attr_type": "Зеленый чай",
+    "attr_origin": "",
+    "attr_temperature": "70–80°C",
     "attr_time": "1–3 минуты"
   }
 },
@@ -22,205 +311,24 @@
   "model": "main.product",
   "pk": 12,
   "fields": {
-    "category": 4,
-    "name": "Смола шу пуэра",
-    "slug": "smola-shu-puera",
-    "description": "Порционный формат шу пуэра в виде плотной чайной пасты. Небольшую порцию удобно растворить в горячей воде дома или в дороге. На упаковке указано, что продукт изготовлен из сырья древних чайных деревьев.\r\n\r\nДля приготовления добавьте порцию в чашку или чайник и залейте горячей водой. Количество воды и насыщенность настоя регулируйте по вкусу. Состав и способ заваривания перед продажей сверьте с маркировкой поставщика.",
-    "price": "320.00",
-    "weight": "100",
-    "image": "products/smola-shu-puera-01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 13,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр Иу Гуафэн Чжай",
-    "slug": "shu-puer-yiwu-guafeng-zhai",
-    "description": "Прессованный шу пуэр из серии Иу Гуафэн Чжай. На упаковке указан вес 357 г. Формат блина удобно хранить, делить на порции и заваривать проливами. Шу пуэр подойдёт тем, кто предпочитает тёмный настой и мягкий, согревающий характер чая.\n\nДля проливного заваривания возьмите около 5–7 г на небольшую гайвань, промойте листья горячей водой и заваривайте короткими проливами. Температуру воды подбирайте в диапазоне 90–100 °C.",
-    "price": "890.00",
-    "weight": "357",
-    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 14,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр «Блестящее процветание»",
-    "slug": "shu-puer-blestyashchee-protsvetanie",
-    "description": "Прессованный шу пуэр «Блестящее процветание» от чайной фабрики Мэнхай. На упаковке указаны Юньнань и вес 357 г. Плотный блин удобно разделить на порции для неспешного домашнего чаепития или подарка.\n\nЗаваривайте горячей водой температурой 90–100 °C. Для гайвани начните с 5–7 г чая и коротких проливов, постепенно увеличивая время настаивания.",
-    "price": "760.00",
-    "weight": "357",
-    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 15,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр «Впечатление от Иу»",
-    "slug": "shu-puer-vpechatlenie-yiwu",
-    "description": "Шу пуэр «Впечатление от Иу» — прессованный чай в блине весом 357 г. Название и оформление упаковки отсылают к чайной традиции Иу. Блин можно разламывать на небольшие порции и заваривать несколько раз, постепенно меняя крепость настоя.\n\nРекомендуем начать с 5–7 г на гайвань и воды температурой 90–100 °C. Для первого пролива достаточно нескольких секунд.",
-    "price": "820.00",
-    "weight": "357",
-    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 16,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр «Снежная гора»",
-    "slug": "shu-puer-snezhnaya-gora",
-    "description": "Шу пуэр «Снежная гора» от Фухай — компактный прессованный блин весом 100 г, указанным на упаковке. Небольшой формат подходит для знакомства с чаем или для того, чтобы взять его с собой.\n\nЗаваривайте водой температурой 90–100 °C. Для чайника или гайвани используйте 5–7 г и короткие проливы; при настаивании в кружке уменьшите количество чая и подберите время по вкусу.",
-    "price": "390.00",
-    "weight": "100",
-    "image": "products/puer/shu-puer-snezhnaya-gora/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 17,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр Менку «Му Е Чунь»",
-    "slug": "shu-puer-mengku-muye-chun",
-    "description": "Прессованный шу пуэр Менку «Му Е Чунь». На упаковке указан вес 400 г. Крупный блин удобно хранить и отламывать от него порции для ежедневного заваривания. Подойдёт для чаепития проливами или в чайнике.\n\nИспользуйте воду температурой 90–100 °C. Начните с 5–7 г на небольшую посуду и коротких проливов, регулируя крепость количеством листа и временем.",
-    "price": "790.00",
-    "weight": "400",
-    "image": "products/puer/shu-puer-mengku-muye-chun/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.120Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 18,
-  "fields": {
-    "category": 4,
-    "name": "Шу пуэр Мэнхай «Первозданный вкус древних деревьев»",
-    "slug": "shu-puer-menghai-drevnie-derevya",
-    "description": "Шу пуэр Мэнхай «Первозданный вкус древних деревьев», 2017 года. На упаковке указан вес 357 г. Прессованный блин удобно хранить и заваривать порциями. Год и название приведены по маркировке исходной упаковки.\r\n\r\nДля проливного заваривания возьмите 5–7 г на гайвань, используйте воду температурой 90–100 °C и начинайте с коротких проливов.",
-    "price": "950.00",
-    "weight": "357",
-    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_01.png",
-    "available": true,
-    "created": "2026-10-24T10:48:38.137Z",
-    "attr_type": "Пуэр",
-    "attr_origin": "Китай, Юньнань",
-    "attr_temperature": "90–100°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 19,
-  "fields": {
-    "category": 1,
-    "name": "Жасминовый глаз Феникса",
-    "slug": "zhasminovyy-glaz-feniksa",
-    "description": "Зелёный чай с жасмином в виде аккуратно скрученных листочков. Во время заваривания листья постепенно раскрываются, а настой наполняется лёгким цветочным ароматом. Подойдёт для спокойного чаепития и для тех, кто любит нежные жасминовые ноты.\n\nЗаваривайте водой температурой 70–80 °C. Начните с 2–3 г на 200 мл и настаивайте около 1–2 минут; следующие заваривания можно немного продлить.",
-    "price": "390.00",
-    "weight": "",
-    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_01.jpg",
-    "available": true,
-    "created": "2026-10-24T15:47:58.108Z",
-    "attr_type": "Зеленый чай",
-    "attr_origin": "",
-    "attr_temperature": "70–80°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 20,
-  "fields": {
-    "category": 1,
-    "name": "Жасминовый Би Ло Чунь",
-    "slug": "zhasminovyy-bi-lo-chun",
-    "description": "Зелёный чай Би Ло Чунь с жасминовым ароматом. Небольшие скрученные листочки дают светлый настой с мягким травяным вкусом и цветочным оттенком. Чай удобно заваривать небольшими порциями, чтобы подобрать крепость под свой вкус.\n\nИспользуйте воду температурой 70–80 °C и 2–3 г чая на чашку. Первое настаивание обычно занимает 1–2 минуты.",
-    "price": "420.00",
-    "weight": "",
-    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_01.jpg",
-    "available": true,
-    "created": "2026-10-24T15:47:58.114Z",
-    "attr_type": "Зеленый чай",
-    "attr_origin": "",
-    "attr_temperature": "70–80°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 21,
-  "fields": {
-    "category": 1,
-    "name": "Мао Фэн Хуаншань «Ворсистые пики»",
-    "slug": "mao-feng-huangshan",
-    "description": "Мао Фэн Хуаншань — зелёный чай с длинными тонкими листочками и почками. Название «Ворсистые пики» отражает внешний вид чайного листа. Лёгкий настой подойдёт для утреннего чаепития и нескольких последовательных завариваний.\n\nЗаваривайте при 70–80 °C: примерно 2–3 г на 200 мл воды, около 1–2 минут. Не используйте крутой кипяток, чтобы сохранить деликатный вкус зелёного чая.",
-    "price": "440.00",
-    "weight": "",
-    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_01.jpg",
-    "available": true,
-    "created": "2026-10-24T15:47:58.117Z",
-    "attr_type": "Зеленый чай",
-    "attr_origin": "",
-    "attr_temperature": "70–80°C",
-    "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.product",
-  "pk": 22,
-  "fields": {
-    "category": 1,
+    "category": 2,
     "name": "Лунцзин из Мэйцзяу",
     "slug": "meijiawu-longjing",
     "description": "Лунцзин из района Мэйцзяу в провинции Чжэцзян. Для этого зелёного чая характерны плоские листья и мягкий, свежий настой. Его можно пить отдельно или подавать к лёгкой еде; вкус лучше раскрывается при умеренной температуре воды.\n\nВозьмите 2–3 г на чашку, залейте водой температурой 70–80 °C и настаивайте 1–2 минуты. При необходимости регулируйте крепость временем заваривания.",
     "price": "480.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 1250,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/zelyonyj-chaj/meijiawu-longjing/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.058Z",
     "attr_type": "Зеленый чай",
     "attr_origin": "Китай, Чжэцзян",
     "attr_temperature": "70–80°C",
@@ -229,17 +337,26 @@
 },
 {
   "model": "main.product",
-  "pk": 23,
+  "pk": 13,
   "fields": {
-    "category": 1,
+    "category": 2,
     "name": "Зелёный чай «Нефритовая улитка»",
     "slug": "nefritovaya-ulitka",
     "description": "Зелёный чай «Нефритовая улитка» получил название благодаря форме скрученных листочков. При заваривании они раскрываются и дают чистый светлый настой. Подойдёт тем, кто предпочитает свежий зелёный чай без сложного способа приготовления.\n\nЗаваривайте 2–3 г чая водой температурой 70–80 °C в течение 1–2 минут. Лист можно заварить повторно, немного увеличив время.",
     "price": "360.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 4100,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/zelyonyj-chaj/nefritovaya-ulitka/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.076Z",
     "attr_type": "Зеленый чай",
     "attr_origin": "",
     "attr_temperature": "70–80°C",
@@ -248,17 +365,26 @@
 },
 {
   "model": "main.product",
-  "pk": 24,
+  "pk": 14,
   "fields": {
-    "category": 1,
+    "category": 2,
     "name": "Синьян Мао Цзянь «Ворсистые лезвия»",
     "slug": "xinyang-mao-jian",
     "description": "Синьян Мао Цзянь — зелёный чай с тонкими продолговатыми листочками и почками. Название «Ворсистые лезвия» описывает форму чайного листа. Настой получается лёгким и свежим; чай хорошо подходит для неспешного чаепития в течение дня.\n\nЗаваривайте при 70–80 °C, используя 2–3 г на 200 мл. Начните с 1–2 минут и подберите крепость по вкусу.",
     "price": "410.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 5950,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/zelyonyj-chaj/xinyang-mao-jian/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.083Z",
     "attr_type": "Зеленый чай",
     "attr_origin": "",
     "attr_temperature": "70–80°C",
@@ -267,17 +393,26 @@
 },
 {
   "model": "main.product",
-  "pk": 25,
+  "pk": 15,
   "fields": {
-    "category": 1,
+    "category": 2,
     "name": "Тай Пин Хоу Куй",
     "slug": "taiping-hou-kui",
     "description": "Тай Пин Хоу Куй — узнаваемый зелёный чай с крупными длинными листьями. Для заваривания удобно использовать высокий прозрачный стакан или просторный чайник, чтобы листу хватило места раскрыться. Напиток подойдёт тем, кто любит чистый вкус листового зелёного чая.\n\nИспользуйте воду температурой 70–80 °C. На чашку достаточно 2–3 г; настаивайте около 2 минут и при желании доливайте воду повторно.",
     "price": "520.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 5000,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/zelyonyj-chaj/taiping-hou-kui/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.083Z",
     "attr_type": "Зеленый чай",
     "attr_origin": "",
     "attr_temperature": "70–80°C",
@@ -286,17 +421,26 @@
 },
 {
   "model": "main.product",
-  "pk": 26,
+  "pk": 16,
   "fields": {
-    "category": 1,
+    "category": 2,
     "name": "Юй Чжу «Нефритовый столб»",
     "slug": "yu-zhu-nefritovyy-stolb",
     "description": "Юй Чжу «Нефритовый столб» — зелёный чай с длинными продолговатыми листьями. Листья постепенно раскрываются в воде и дают лёгкий настой. Это удобный вариант для повседневного чаепития, когда хочется заварить листовой чай без сложных аксессуаров.\n\nЗалейте 2–3 г чая водой температурой 70–80 °C и настаивайте 1–2 минуты. Время можно увеличить, если предпочитаете более насыщенный вкус.",
     "price": "380.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 2400,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/zelyonyj-chaj/yu-zhu-nefritovyy-stolb/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.095Z",
     "attr_type": "Зеленый чай",
     "attr_origin": "",
     "attr_temperature": "70–80°C",
@@ -305,7 +449,7 @@
 },
 {
   "model": "main.product",
-  "pk": 27,
+  "pk": 17,
   "fields": {
     "category": 3,
     "name": "Габа Юньнань Бай Ча",
@@ -313,9 +457,18 @@
     "description": "Чай Габа из Юньнани. В названии и оформлении упаковки также указано «Бай Ча»; точный вид сырья и характеристики партии следует сверить с информацией поставщика. Прессованный формат удобно хранить и отламывать на небольшие порции.\n\nДля проливного заваривания начните с 5–7 г на гайвань и воды температурой 90–100 °C. Первые проливы делайте короткими, постепенно увеличивая время.",
     "price": "560.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 800,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/gaba-yunnan-bai-cha/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.120Z",
+    "created": "2026-10-28T11:18:25.104Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Юньнань",
     "attr_temperature": "90–100°C",
@@ -324,7 +477,7 @@
 },
 {
   "model": "main.product",
-  "pk": 28,
+  "pk": 18,
   "fields": {
     "category": 3,
     "name": "Жоу Гуй Ню Лань Кэн",
@@ -332,9 +485,18 @@
     "description": "Уишаньский улун Жоу Гуй из Ню Лань Кэн. Сухой чай удобно заваривать проливами: так можно наблюдать, как меняется настой от заваривания к завариванию. Подойдёт для знакомства с уишаньскими улунами и внимательного чаепития.\n\nИспользуйте 5–7 г на небольшую гайвань и воду температурой 90–100 °C. Начните с короткого пролива, дальше регулируйте время по вкусу.",
     "price": "620.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 1850,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/zhou-gui-niu-lan-keng/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.136Z",
+    "created": "2026-10-28T11:18:25.110Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -343,7 +505,7 @@
 },
 {
   "model": "main.product",
-  "pk": 29,
+  "pk": 19,
   "fields": {
     "category": 3,
     "name": "Те Гуань Инь из Аньси",
@@ -351,9 +513,18 @@
     "description": "Те Гуань Инь из уезда Аньси провинции Фуцзянь. Улуны этого сорта обычно заваривают несколькими короткими проливами, чтобы постепенно раскрыть аромат скрученного листа. Чай подойдёт для повседневного чаепития дома или в офисе.\n\nВозьмите 5–7 г на гайвань, залейте водой температурой 90–100 °C и начинайте с коротких проливов.",
     "price": "420.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 3500,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/tie-guan-yin-anxi/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.136Z",
+    "created": "2026-10-28T11:18:25.112Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -362,7 +533,7 @@
 },
 {
   "model": "main.product",
-  "pk": 30,
+  "pk": 20,
   "fields": {
     "category": 3,
     "name": "Те Гуань Инь Цин Сян «Чистый аромат»",
@@ -370,9 +541,18 @@
     "description": "Те Гуань Инь Цин Сян — улун с лёгким стилем обработки, который часто выбирают за свежий цветочный аромат. Скрученный лист удобно заваривать в гайвани или небольшом чайнике несколькими проливами.\n\nИспользуйте 5–7 г на посуду объёмом около 100–150 мл. Вода — 90–100 °C; первый пролив короткий, последующие можно постепенно увеличивать.",
     "price": "450.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 4850,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/tie-guan-yin-qing-xiang/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.136Z",
+    "created": "2026-10-28T11:18:25.124Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -381,7 +561,7 @@
 },
 {
   "model": "main.product",
-  "pk": 31,
+  "pk": 21,
   "fields": {
     "category": 3,
     "name": "У Сань Ди Шуй Сянь",
@@ -389,9 +569,18 @@
     "description": "У Сань Ди Шуй Сянь — улун, название которого связано с сортом Шуй Сянь и традицией уишаньского чая. Подходит для заваривания проливами: порцию листа можно заваривать повторно, меняя крепость и время настаивания.\n\nДля гайвани возьмите 5–7 г и используйте воду температурой 90–100 °C. Начните с коротких проливов.",
     "price": "480.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 3500,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/wu-san-di-shui-xian/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.136Z",
+    "created": "2026-10-28T11:18:25.131Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -400,7 +589,7 @@
 },
 {
   "model": "main.product",
-  "pk": 32,
+  "pk": 22,
   "fields": {
     "category": 3,
     "name": "Уишаньский улун Жоу Гуй «Корица с гор Уишань»",
@@ -408,9 +597,18 @@
     "description": "Жоу Гуй — уишаньский улун, название сорта переводят как «корица». Плотный скрученный лист рассчитан на заваривание горячей водой и несколько коротких проливов. Чай удобно раскрывать в гайвани или небольшом глиняном чайнике.\n\nИспользуйте 5–7 г на 100–150 мл воды температурой 90–100 °C. Начните с коротких проливов и постепенно увеличивайте время.",
     "price": "590.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 5700,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/wuyi-rou-gui/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.136Z",
+    "created": "2026-10-28T11:18:25.137Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -419,7 +617,7 @@
 },
 {
   "model": "main.product",
-  "pk": 33,
+  "pk": 23,
   "fields": {
     "category": 3,
     "name": "Ху Сяо Янь Жоу Гуй",
@@ -427,9 +625,18 @@
     "description": "Уишаньский улун Жоу Гуй из серии Ху Сяо Янь. Его можно заваривать проливами и возвращаться к листу несколько раз в течение чаепития. Формат подходит тем, кто любит крепкие улуны и хочет самостоятельно регулировать насыщенность настоя.\n\nВозьмите 5–7 г на гайвань, залейте водой 90–100 °C и начинайте с короткого пролива. Следующие заваривания можно постепенно увеличивать.",
     "price": "540.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 3250,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/hu-xiao-yan-rou-gui/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.152Z",
+    "created": "2026-10-28T11:18:25.142Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -438,7 +645,7 @@
 },
 {
   "model": "main.product",
-  "pk": 34,
+  "pk": 24,
   "fields": {
     "category": 3,
     "name": "Янь Цзи Кэ Жоу Гуй",
@@ -446,9 +653,18 @@
     "description": "Жоу Гуй Янь Цзи Кэ — уишаньский улун в индивидуальной упаковке. Такой формат удобно хранить и брать с собой. Заваривание проливами помогает подобрать крепость напитка и получить несколько чашек из одной порции листа.\n\nИспользуйте воду температурой 90–100 °C и около 5–7 г на гайвань. Первый пролив сделайте коротким, следующие — по вкусу.",
     "price": "520.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 3150,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/ulun/yan-zhi-ke-rou-gui/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.153Z",
+    "created": "2026-10-28T11:18:25.149Z",
     "attr_type": "Улун",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
@@ -457,17 +673,26 @@
 },
 {
   "model": "main.product",
-  "pk": 35,
+  "pk": 25,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Хэй ча «Золотые цветы»",
     "slug": "zolotye-tsvety",
     "description": "Китайский тёмный чай хэй ча «Золотые цветы» в подарочной коробке. Название относится к характерному оформлению и традиции этого вида чая. Перед покупкой сверьте состав, массу и условия хранения с маркировкой конкретной упаковки.\n\nЗаваривайте водой температурой 90–100 °C. Начните с 4–5 г на чайник и настаивайте 2–3 минуты либо используйте короткие проливы.",
     "price": "590.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 2700,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/zolotye-tsvety/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.153Z",
+    "created": "2026-10-28T11:18:25.157Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -476,17 +701,26 @@
 },
 {
   "model": "main.product",
-  "pk": 36,
+  "pk": 26,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Лю Бао «Ганьао Юнь», Сань Хэ, 2013",
     "slug": "liubao-gangao-yun-2013",
     "description": "Лю Бао «Ганьао Юнь» от Сань Хэ, 2013 года. Название, производитель и год указаны по упаковке. Тёмный чай Лю Бао удобно заваривать проливами или настаивать в чайнике; лист можно заваривать повторно.\n\nИспользуйте воду температурой 90–100 °C. Для чайника начните с 4–5 г на 250 мл и настаивайте 2–3 минуты.",
     "price": "680.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 5050,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/liubao-gangao-yun-2013/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.153Z",
+    "created": "2026-10-28T11:18:25.165Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -495,17 +729,26 @@
 },
 {
   "model": "main.product",
-  "pk": 37,
+  "pk": 27,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Тянь Фу Ча",
     "slug": "tian-fu-cha",
     "description": "Тянь Фу Ча — китайский тёмный чай в компактном формате. Подойдёт для знакомства с хэй ча и повседневного чаепития. Перед продажей сверьте тип сырья и массу упаковки с данными поставщика.\n\nЗаваривайте водой температурой 90–100 °C. Начните с 4–5 г на 250 мл и настаивайте 2–3 минуты; крепость регулируйте по вкусу.",
     "price": "420.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 1450,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/tian-fu-cha/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.153Z",
+    "created": "2026-10-28T11:18:25.172Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -514,17 +757,26 @@
 },
 {
   "model": "main.product",
-  "pk": 38,
+  "pk": 28,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Хэй ча Фужуншань из Аньхуа, 2017",
     "slug": "fuzhunshan-anhua-heicha-2017",
     "description": "Тёмный чай хэй ча из Аньхуа, Фужуншань, 2017 года. Год и название приведены по маркировке упаковки. Прессованный формат подходит для хранения и порционного заваривания; чай можно готовить в чайнике или проливами.\n\nДля чайника используйте около 4–5 г на 250 мл воды температурой 90–100 °C. Настаивайте 2–3 минуты или подберите время по вкусу.",
     "price": "720.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 5450,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/fuzhunshan-anhua-heicha-2017/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.153Z",
+    "created": "2026-10-28T11:18:25.176Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -533,17 +785,26 @@
 },
 {
   "model": "main.product",
-  "pk": 39,
+  "pk": 29,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Лю Бао «Шесть холмов», высший сорт",
     "slug": "liubao-shest-holmov",
     "description": "Тёмный чай Лю Бао «Шесть холмов» высшего сорта. Название и сорт указаны по упаковке. Лист можно заваривать несколько раз, а крепость настоя регулировать количеством чая и длительностью пролива.\n\nЗаваривайте водой температурой 90–100 °C. Для чайника начните с 4–5 г на 250 мл и настаивайте 2–3 минуты.",
     "price": "640.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 4500,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/liubao-shest-holmov/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.169Z",
+    "created": "2026-10-28T11:18:25.185Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -552,36 +813,54 @@
 },
 {
   "model": "main.product",
-  "pk": 40,
+  "pk": 30,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Лю Бао «Наследие 1701»",
     "slug": "liubao-nasledie-1701",
-    "description": "Лю Бао «Наследие 1701» — китайский тёмный чай в фирменной упаковке. Обозначение 1701 сохранено по названию продукта и не трактуется как год производства. Чай подойдёт для заваривания в чайнике и короткими проливами.\r\n\r\nИспользуйте 4–5 г на 250 мл воды температурой 90–100 °C. Начните с настаивания 2–3 минуты и скорректируйте крепость по вкусу.",
+    "description": "Лю Бао «Наследие 1701» — китайский тёмный чай в фирменной упаковке. Обозначение 1701 сохранено по названию продукта и не трактуется как год производства. Чай подойдёт для заваривания в чайнике и короткими проливами.\n\nИспользуйте 4–5 г на 250 мл воды температурой 90–100 °C. Начните с настаивания 2–3 минуты и скорректируйте крепость по вкусу.",
     "price": "690.00",
-    "weight": "50",
+    "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 500,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/liubao-nasledie-1701/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.170Z",
+    "created": "2026-10-28T11:18:25.189Z",
     "attr_type": "Чёрный чай",
-    "attr_origin": "Китай, Юньнань",
+    "attr_origin": "",
     "attr_temperature": "90–100°C",
     "attr_time": "1–3 минуты"
   }
 },
 {
   "model": "main.product",
-  "pk": 41,
+  "pk": 31,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Хэй ча «Фу Чжуань», 2019",
     "slug": "heicha-fuzhuan-2019",
     "description": "Хэй ча «Фу Чжуань» 2019 года — прессованный тёмный чай. Год указан по названию исходной папки; перед продажей подтвердите его по упаковке. Плотный формат удобно хранить и отламывать небольшими порциями.\n\nЗаваривайте водой температурой 90–100 °C. Для чайника возьмите 4–5 г на 250 мл и настаивайте 2–3 минуты либо используйте короткие проливы.",
     "price": "780.00",
     "weight": "",
+    "sale_unit": "gram",
+    "stock_quantity": 1750,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/heicha-fuzhuan-2019/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.170Z",
+    "created": "2026-10-28T11:18:25.195Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "",
     "attr_temperature": "90–100°C",
@@ -590,1119 +869,30 @@
 },
 {
   "model": "main.product",
-  "pk": 42,
+  "pk": 32,
   "fields": {
-    "category": 2,
+    "category": 4,
     "name": "Юй Пинь Фу Ча",
     "slug": "yupin-fu-cha",
     "description": "Юй Пинь Фу Ча — китайский тёмный чай в упаковке. Его можно заваривать проливами или настаивать в чайнике. Подойдёт для знакомства с категорией фу ча; точные сведения о сырье и массе партии смотрите на упаковке.\r\n\r\nИспользуйте воду температурой 90–100 °C и начните с 4–5 г на 250 мл. Время настаивания — около 2–3 минут.",
     "price": "460.00",
-    "weight": "100",
+    "weight": "",
+    "sale_unit": "piece",
+    "stock_quantity": 344,
+    "whole_cake_weight_grams": null,
+    "whole_cake_stock": 0,
+    "whole_cake_discount_percent": 21,
+    "discount_8g_percent": 3,
+    "discount_25g_percent": 6,
+    "discount_50g_percent": 10,
+    "discount_100g_percent": 15,
     "image": "products/chyornyj-chaj/yupin-fu-cha/image_01.jpg",
     "available": true,
-    "created": "2026-10-24T15:47:58.170Z",
+    "created": "2026-10-28T11:18:25.203Z",
     "attr_type": "Чёрный чай",
     "attr_origin": "Китай, Фуцзянь",
     "attr_temperature": "90–100°C",
     "attr_time": "1–3 минуты"
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 4,
-  "fields": {
-    "product": 11,
-    "image": "products/Менку_Шентай_Шен_з_екосадів_Ме1.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 5,
-  "fields": {
-    "product": 11,
-    "image": "products/Знімок_екрана_2026-10-23_192825.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 6,
-  "fields": {
-    "product": 11,
-    "image": "products/Менку_Шентай_Шен_з_екосадів_Менку3.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 7,
-  "fields": {
-    "product": 11,
-    "image": "products/Менку_Шентай_Шен_з_екосадів_Менку_2010.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 8,
-  "fields": {
-    "product": 12,
-    "image": "products/puer/smola-shu-puera/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 9,
-  "fields": {
-    "product": 12,
-    "image": "products/puer/smola-shu-puera/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 10,
-  "fields": {
-    "product": 12,
-    "image": "products/puer/smola-shu-puera/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 11,
-  "fields": {
-    "product": 12,
-    "image": "products/puer/smola-shu-puera/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 12,
-  "fields": {
-    "product": 13,
-    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 13,
-  "fields": {
-    "product": 13,
-    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 14,
-  "fields": {
-    "product": 13,
-    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 15,
-  "fields": {
-    "product": 13,
-    "image": "products/puer/shu-puer-yiwu-guafeng-zhai/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 16,
-  "fields": {
-    "product": 14,
-    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 17,
-  "fields": {
-    "product": 14,
-    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 18,
-  "fields": {
-    "product": 14,
-    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 19,
-  "fields": {
-    "product": 14,
-    "image": "products/puer/shu-puer-blestyashchee-protsvetanie/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 20,
-  "fields": {
-    "product": 15,
-    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 21,
-  "fields": {
-    "product": 15,
-    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 22,
-  "fields": {
-    "product": 15,
-    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 23,
-  "fields": {
-    "product": 15,
-    "image": "products/puer/shu-puer-vpechatlenie-yiwu/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 24,
-  "fields": {
-    "product": 16,
-    "image": "products/puer/shu-puer-snezhnaya-gora/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 25,
-  "fields": {
-    "product": 16,
-    "image": "products/puer/shu-puer-snezhnaya-gora/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 26,
-  "fields": {
-    "product": 16,
-    "image": "products/puer/shu-puer-snezhnaya-gora/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 27,
-  "fields": {
-    "product": 16,
-    "image": "products/puer/shu-puer-snezhnaya-gora/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 28,
-  "fields": {
-    "product": 17,
-    "image": "products/puer/shu-puer-mengku-muye-chun/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 29,
-  "fields": {
-    "product": 17,
-    "image": "products/puer/shu-puer-mengku-muye-chun/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 30,
-  "fields": {
-    "product": 17,
-    "image": "products/puer/shu-puer-mengku-muye-chun/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 31,
-  "fields": {
-    "product": 17,
-    "image": "products/puer/shu-puer-mengku-muye-chun/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 32,
-  "fields": {
-    "product": 18,
-    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_01.png",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 33,
-  "fields": {
-    "product": 18,
-    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_02.png",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 34,
-  "fields": {
-    "product": 18,
-    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_03.png",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 35,
-  "fields": {
-    "product": 18,
-    "image": "products/puer/shu-puer-menghai-drevnie-derevya-2017/image_04.png",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 37,
-  "fields": {
-    "product": 19,
-    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 38,
-  "fields": {
-    "product": 19,
-    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 39,
-  "fields": {
-    "product": 19,
-    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 40,
-  "fields": {
-    "product": 19,
-    "image": "products/zelyonyj-chaj/zhasminovyy-glaz-feniksa/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 41,
-  "fields": {
-    "product": 20,
-    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 42,
-  "fields": {
-    "product": 20,
-    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 43,
-  "fields": {
-    "product": 20,
-    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 44,
-  "fields": {
-    "product": 20,
-    "image": "products/zelyonyj-chaj/zhasminovyy-bi-lo-chun/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 45,
-  "fields": {
-    "product": 21,
-    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 46,
-  "fields": {
-    "product": 21,
-    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 47,
-  "fields": {
-    "product": 21,
-    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 48,
-  "fields": {
-    "product": 21,
-    "image": "products/zelyonyj-chaj/mao-feng-huangshan/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 49,
-  "fields": {
-    "product": 22,
-    "image": "products/zelyonyj-chaj/meijiawu-longjing/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 50,
-  "fields": {
-    "product": 22,
-    "image": "products/zelyonyj-chaj/meijiawu-longjing/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 51,
-  "fields": {
-    "product": 22,
-    "image": "products/zelyonyj-chaj/meijiawu-longjing/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 52,
-  "fields": {
-    "product": 22,
-    "image": "products/zelyonyj-chaj/meijiawu-longjing/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 53,
-  "fields": {
-    "product": 23,
-    "image": "products/zelyonyj-chaj/nefritovaya-ulitka/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 54,
-  "fields": {
-    "product": 23,
-    "image": "products/zelyonyj-chaj/nefritovaya-ulitka/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 55,
-  "fields": {
-    "product": 23,
-    "image": "products/zelyonyj-chaj/nefritovaya-ulitka/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 56,
-  "fields": {
-    "product": 23,
-    "image": "products/zelyonyj-chaj/nefritovaya-ulitka/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 57,
-  "fields": {
-    "product": 24,
-    "image": "products/zelyonyj-chaj/xinyang-mao-jian/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 58,
-  "fields": {
-    "product": 24,
-    "image": "products/zelyonyj-chaj/xinyang-mao-jian/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 59,
-  "fields": {
-    "product": 24,
-    "image": "products/zelyonyj-chaj/xinyang-mao-jian/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 60,
-  "fields": {
-    "product": 24,
-    "image": "products/zelyonyj-chaj/xinyang-mao-jian/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 61,
-  "fields": {
-    "product": 25,
-    "image": "products/zelyonyj-chaj/taiping-hou-kui/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 62,
-  "fields": {
-    "product": 25,
-    "image": "products/zelyonyj-chaj/taiping-hou-kui/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 63,
-  "fields": {
-    "product": 25,
-    "image": "products/zelyonyj-chaj/taiping-hou-kui/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 64,
-  "fields": {
-    "product": 25,
-    "image": "products/zelyonyj-chaj/taiping-hou-kui/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 65,
-  "fields": {
-    "product": 26,
-    "image": "products/zelyonyj-chaj/yu-zhu-nefritovyy-stolb/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 66,
-  "fields": {
-    "product": 26,
-    "image": "products/zelyonyj-chaj/yu-zhu-nefritovyy-stolb/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 67,
-  "fields": {
-    "product": 26,
-    "image": "products/zelyonyj-chaj/yu-zhu-nefritovyy-stolb/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 68,
-  "fields": {
-    "product": 26,
-    "image": "products/zelyonyj-chaj/yu-zhu-nefritovyy-stolb/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 69,
-  "fields": {
-    "product": 27,
-    "image": "products/ulun/gaba-yunnan-bai-cha/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 70,
-  "fields": {
-    "product": 27,
-    "image": "products/ulun/gaba-yunnan-bai-cha/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 71,
-  "fields": {
-    "product": 27,
-    "image": "products/ulun/gaba-yunnan-bai-cha/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 72,
-  "fields": {
-    "product": 27,
-    "image": "products/ulun/gaba-yunnan-bai-cha/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 73,
-  "fields": {
-    "product": 28,
-    "image": "products/ulun/zhou-gui-niu-lan-keng/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 74,
-  "fields": {
-    "product": 28,
-    "image": "products/ulun/zhou-gui-niu-lan-keng/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 75,
-  "fields": {
-    "product": 28,
-    "image": "products/ulun/zhou-gui-niu-lan-keng/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 76,
-  "fields": {
-    "product": 28,
-    "image": "products/ulun/zhou-gui-niu-lan-keng/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 77,
-  "fields": {
-    "product": 29,
-    "image": "products/ulun/tie-guan-yin-anxi/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 78,
-  "fields": {
-    "product": 29,
-    "image": "products/ulun/tie-guan-yin-anxi/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 79,
-  "fields": {
-    "product": 29,
-    "image": "products/ulun/tie-guan-yin-anxi/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 80,
-  "fields": {
-    "product": 29,
-    "image": "products/ulun/tie-guan-yin-anxi/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 81,
-  "fields": {
-    "product": 30,
-    "image": "products/ulun/tie-guan-yin-qing-xiang/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 82,
-  "fields": {
-    "product": 30,
-    "image": "products/ulun/tie-guan-yin-qing-xiang/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 83,
-  "fields": {
-    "product": 30,
-    "image": "products/ulun/tie-guan-yin-qing-xiang/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 84,
-  "fields": {
-    "product": 30,
-    "image": "products/ulun/tie-guan-yin-qing-xiang/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 85,
-  "fields": {
-    "product": 31,
-    "image": "products/ulun/wu-san-di-shui-xian/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 86,
-  "fields": {
-    "product": 31,
-    "image": "products/ulun/wu-san-di-shui-xian/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 87,
-  "fields": {
-    "product": 31,
-    "image": "products/ulun/wu-san-di-shui-xian/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 88,
-  "fields": {
-    "product": 31,
-    "image": "products/ulun/wu-san-di-shui-xian/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 89,
-  "fields": {
-    "product": 32,
-    "image": "products/ulun/wuyi-rou-gui/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 90,
-  "fields": {
-    "product": 32,
-    "image": "products/ulun/wuyi-rou-gui/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 91,
-  "fields": {
-    "product": 32,
-    "image": "products/ulun/wuyi-rou-gui/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 92,
-  "fields": {
-    "product": 32,
-    "image": "products/ulun/wuyi-rou-gui/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 93,
-  "fields": {
-    "product": 33,
-    "image": "products/ulun/hu-xiao-yan-rou-gui/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 94,
-  "fields": {
-    "product": 33,
-    "image": "products/ulun/hu-xiao-yan-rou-gui/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 95,
-  "fields": {
-    "product": 33,
-    "image": "products/ulun/hu-xiao-yan-rou-gui/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 96,
-  "fields": {
-    "product": 33,
-    "image": "products/ulun/hu-xiao-yan-rou-gui/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 97,
-  "fields": {
-    "product": 34,
-    "image": "products/ulun/yan-zhi-ke-rou-gui/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 98,
-  "fields": {
-    "product": 34,
-    "image": "products/ulun/yan-zhi-ke-rou-gui/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 99,
-  "fields": {
-    "product": 34,
-    "image": "products/ulun/yan-zhi-ke-rou-gui/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 100,
-  "fields": {
-    "product": 34,
-    "image": "products/ulun/yan-zhi-ke-rou-gui/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 101,
-  "fields": {
-    "product": 35,
-    "image": "products/chyornyj-chaj/zolotye-tsvety/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 102,
-  "fields": {
-    "product": 35,
-    "image": "products/chyornyj-chaj/zolotye-tsvety/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 103,
-  "fields": {
-    "product": 35,
-    "image": "products/chyornyj-chaj/zolotye-tsvety/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 104,
-  "fields": {
-    "product": 35,
-    "image": "products/chyornyj-chaj/zolotye-tsvety/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 105,
-  "fields": {
-    "product": 36,
-    "image": "products/chyornyj-chaj/liubao-gangao-yun-2013/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 106,
-  "fields": {
-    "product": 36,
-    "image": "products/chyornyj-chaj/liubao-gangao-yun-2013/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 107,
-  "fields": {
-    "product": 36,
-    "image": "products/chyornyj-chaj/liubao-gangao-yun-2013/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 108,
-  "fields": {
-    "product": 36,
-    "image": "products/chyornyj-chaj/liubao-gangao-yun-2013/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 109,
-  "fields": {
-    "product": 37,
-    "image": "products/chyornyj-chaj/tian-fu-cha/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 110,
-  "fields": {
-    "product": 38,
-    "image": "products/chyornyj-chaj/fuzhunshan-anhua-heicha-2017/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 111,
-  "fields": {
-    "product": 38,
-    "image": "products/chyornyj-chaj/fuzhunshan-anhua-heicha-2017/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 112,
-  "fields": {
-    "product": 38,
-    "image": "products/chyornyj-chaj/fuzhunshan-anhua-heicha-2017/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 113,
-  "fields": {
-    "product": 38,
-    "image": "products/chyornyj-chaj/fuzhunshan-anhua-heicha-2017/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 114,
-  "fields": {
-    "product": 39,
-    "image": "products/chyornyj-chaj/liubao-shest-holmov/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 115,
-  "fields": {
-    "product": 39,
-    "image": "products/chyornyj-chaj/liubao-shest-holmov/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 116,
-  "fields": {
-    "product": 39,
-    "image": "products/chyornyj-chaj/liubao-shest-holmov/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 117,
-  "fields": {
-    "product": 39,
-    "image": "products/chyornyj-chaj/liubao-shest-holmov/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 118,
-  "fields": {
-    "product": 40,
-    "image": "products/chyornyj-chaj/liubao-nasledie-1701/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 119,
-  "fields": {
-    "product": 40,
-    "image": "products/chyornyj-chaj/liubao-nasledie-1701/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 120,
-  "fields": {
-    "product": 40,
-    "image": "products/chyornyj-chaj/liubao-nasledie-1701/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 121,
-  "fields": {
-    "product": 40,
-    "image": "products/chyornyj-chaj/liubao-nasledie-1701/image_04.jpg",
-    "order": 3
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 122,
-  "fields": {
-    "product": 41,
-    "image": "products/chyornyj-chaj/heicha-fuzhuan-2019/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 123,
-  "fields": {
-    "product": 41,
-    "image": "products/chyornyj-chaj/heicha-fuzhuan-2019/image_02.jpg",
-    "order": 1
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 124,
-  "fields": {
-    "product": 41,
-    "image": "products/chyornyj-chaj/heicha-fuzhuan-2019/image_03.jpg",
-    "order": 2
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 125,
-  "fields": {
-    "product": 42,
-    "image": "products/chyornyj-chaj/yupin-fu-cha/image_01.jpg",
-    "order": 0
-  }
-},
-{
-  "model": "main.productimage",
-  "pk": 126,
-  "fields": {
-    "product": 42,
-    "image": "products/chyornyj-chaj/yupin-fu-cha/image_02.jpg",
-    "order": 1
   }
 }
 ]

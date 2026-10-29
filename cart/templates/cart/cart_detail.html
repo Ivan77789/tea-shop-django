@@ -28,27 +28,28 @@
                     </div>
 
                     {% for item in cart %}
-                    <div class="cart-item" id="cart-item-{{ item.product.id }}">
+                    <div class="cart-item" id="cart-item-{{ item.dom_id }}">
                         
                         <div class="cart-item-info">
                             <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
                             <div>
                                 <p class="cart-item-title">{{ item.product.name }}</p>
-                                <p class="cart-item-desc">{{ item.product.weight }} г</p>
+                                <p class="cart-item-desc">Цена {% if item.sale_mode == 'cake' %}<del>{{ item.regular_price }} ₴</del> {% endif %}{{ item.price }} ₴ {{ item.price_unit_label }}{% if item.sale_mode == 'cake' %} · скидка {{ item.discount_percent }}%{% endif %}</p>
                             </div>
                         </div>
     
-                        <p class="cart-item-price">{{ item.price }} ₴</p>
+                        <p class="cart-item-price">{% if item.sale_mode == 'cake' %}<del>{{ item.regular_price }} ₴</del><br>{% endif %}{{ item.price }} ₴ <small>{{ item.price_unit_label }}</small></p>
     
-                        <div class="quantity quantity--small">
-                            <button type="button" class="quantity-btn minus" data-id="{{ item.product.id }}">−</button>
-                            <input type="number" class="quantity-input" value="{{ item.quantity }}" readonly>
-                            <button type="button" class="quantity-btn plus" data-id="{{ item.product.id }}">+</button>
+                        <div class="quantity quantity--small" data-step="{{ item.step }}" data-dom-id="{{ item.dom_id }}">
+                            <button type="button" class="quantity-btn minus" data-id="{{ item.product.id }}" data-sale-mode="{{ item.sale_mode }}" data-dom-id="{{ item.dom_id }}">−</button>
+                            <input type="number" class="quantity-input" value="{{ item.quantity }}" readonly aria-label="Количество, {{ item.unit_label }}">
+                            <span class="quantity-unit">{{ item.unit_label }}</span>
+                            <button type="button" class="quantity-btn plus" data-id="{{ item.product.id }}" data-sale-mode="{{ item.sale_mode }}" data-dom-id="{{ item.dom_id }}">+</button>
                         </div>
     
-                        <p class="cart-item-total" id="total-price-{{ item.product.id }}">{{ item.total_price }} ₴</p>
+                        <p class="cart-item-total" id="total-price-{{ item.dom_id }}">{{ item.total_price }} ₴</p>
     
-                        <button type="button" class="cart-item-remove remove-btn" data-id="{{ item.product.id }}" aria-label="Удалить">
+                        <button type="button" class="cart-item-remove remove-btn" data-id="{{ item.product.id }}" data-sale-mode="{{ item.sale_mode }}" data-dom-id="{{ item.dom_id }}" aria-label="Удалить">
                             <i class="bi bi-x-lg" aria-hidden="true"></i>
                         </button>
                     </div>
@@ -95,13 +96,13 @@
                     
                     <div class="cart-product-info">
                         <div class="cart-info-2">
-                            <p>Товары ({{ cart|length }} шт.)</p>
+                            <p>Товаров в корзине ({{ cart|length }})</p>
                             <p>{{ cart.get_total_price }} ₴</p>
                         </div>
 
                         <div class="cart-discount">
                             <p>Скидка</p>
-                            <p>0 ₴</p>
+                            <p id="cart-total-discount">{{ cart.get_total_discount }} ₴</p>
                         </div>
 
                         <div class="summary-total">
@@ -139,54 +140,68 @@ document.addEventListener('DOMContentLoaded', function() {
     const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
 
     // --- 1. КНОПКИ ПЛЮС / МИНУС ---
-    function changeQuantity(id, action) {
-        const itemBlock = document.getElementById(`cart-item-${id}`);
+    function changeQuantity(id, saleMode, domId, action) {
+        const itemBlock = document.getElementById(`cart-item-${domId}`);
         const input = itemBlock.querySelector('.quantity-input');
-        let newQty = parseInt(input.value);
+        let newQty = parseInt(input.value, 10);
+        const step = parseInt(itemBlock.querySelector('.quantity').dataset.step, 10) || 1;
         
-        if (action === 'plus') newQty++;
-        if (action === 'minus') newQty--;
-        if (newQty < 1) return;
+        if (action === 'plus') newQty += step;
+        if (action === 'minus') newQty -= step;
+        if (newQty < step) return;
 
         const formData = new FormData();
         formData.append('quantity', newQty);
         formData.append('update', 'True');
+        formData.append('sale_mode', saleMode);
 
         fetch(`/cart/add/${id}/`, {
             method: 'POST',
             headers: {'X-CSRFToken': csrfToken},
             body: formData
         })
-        .then(r => r.json())
+        .then(async r => {
+            const data = await r.json();
+            if (!r.ok) throw new Error(data.message || 'Не удалось изменить количество.');
+            return data;
+        })
         .then(data => {
             if (data.status === 'ok') {
                 input.value = newQty;
-                document.getElementById(`total-price-${id}`).textContent = data.product_total + ' ₴';
+                document.getElementById(`total-price-${domId}`).textContent = data.product_total + ' ₴';
                 const badge = document.querySelector('.cart-badge');
                 if (badge) badge.textContent = data.cart_total_items;
                 document.getElementById('cart-total-price').textContent = data.total_price + ' ₴';
+                document.getElementById('cart-total-discount').textContent = data.total_discount + ' ₴';
             }
-        });
+        })
+        .catch(error => window.alert(error.message));
     }
 
-    document.querySelectorAll('.plus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, 'plus'); }));
-    document.querySelectorAll('.minus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, 'minus'); }));
+    document.querySelectorAll('.plus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, this.dataset.saleMode, this.dataset.domId, 'plus'); }));
+    document.querySelectorAll('.minus').forEach(btn => btn.addEventListener('click', function() { changeQuantity(this.dataset.id, this.dataset.saleMode, this.dataset.domId, 'minus'); }));
 
     // --- 2. УДАЛЕНИЕ (КРЕСТИК) ---
     document.querySelectorAll('.remove-btn').forEach(btn => {
         btn.addEventListener('click', function() {
             const id = this.dataset.id;
+            const saleMode = this.dataset.saleMode;
+            const domId = this.dataset.domId;
+            const formData = new FormData();
+            formData.append('sale_mode', saleMode);
             fetch(`/cart/remove/${id}/`, {
                 method: 'POST',
-                headers: {'X-CSRFToken': csrfToken}
+                headers: {'X-CSRFToken': csrfToken},
+                body: formData
             })
             .then(r => r.json())
             .then(data => {
                 if (data.status === 'ok') {
-                    document.getElementById(`cart-item-${id}`).remove();
+                    document.getElementById(`cart-item-${domId}`).remove();
                     const badge = document.querySelector('.cart-badge');
                     if (badge) badge.textContent = data.cart_total_items;
                     document.getElementById('cart-total-price').textContent = data.total_price + ' ₴';
+                    document.getElementById('cart-total-discount').textContent = data.total_discount + ' ₴';
                     if (data.cart_total_items === 0) window.location.reload();
                 }
             });

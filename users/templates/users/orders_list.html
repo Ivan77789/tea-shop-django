@@ -61,7 +61,7 @@
 
                         <div class="account-order-info">
                             <p class="account-order-name">Заказ №{{ order.id }}</p>
-                            <p class="account-order-desc">Товаров: {{ order.items.count }} шт.</p>
+                            <p class="account-order-desc">Товарных позиций: {{ order.items.count }}</p>
                             <p class="account-order-num">Дата: {{ order.created|date:"d.m.Y H:i" }}</p>
                         </div>
                         

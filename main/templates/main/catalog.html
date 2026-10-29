@@ -196,9 +196,13 @@
                     'X-CSRFToken': token,
                     'Content-Type': 'application/x-www-form-urlencoded'
                 },
-                body: 'quantity=1'
+                body: `quantity=${btn.dataset.defaultQuantity || 1}&sale_mode=${encodeURIComponent(btn.dataset.saleMode || 'piece')}`
             })
-            .then(r => r.json())
+            .then(async r => {
+                const data = await r.json();
+                if (!r.ok) throw new Error(data.message || 'Не удалось добавить товар.');
+                return data;
+            })
             .then(data => {
                 if (data.status === 'ok') {
                     const badge = document.querySelector('.cart-badge');
@@ -212,12 +216,9 @@
                 }
             })
             .catch(error => {
-                console.error('Ошибка добавления:', error);
-                btn.innerHTML = 'Ошибка';
-                setTimeout(() => {
-                    btn.innerHTML = originalHtml;
-                    btn.disabled = false;
-                }, 1500);
+                window.alert(error.message);
+                btn.innerHTML = originalHtml;
+                btn.disabled = false;
             });
         }
     });
