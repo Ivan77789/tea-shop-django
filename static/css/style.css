@@ -854,41 +854,7 @@ h6 {
 
 
 
-@media (max-width: 768px) {
-    /* Делаем колонки футера в один столбик */
-    .footer-columns {
-        grid-template-columns: 1fr;
-        gap: 32px;
-        text-align: center;
-    }
 
-    /* Выравниваем все блоки по центру */
-    .footer-col-left,
-    .footer-col,
-    .footer-col-right {
-        align-items: center;
-    }
-
-    /* Логотип и заголовок в левой колонке тоже центрируем */
-    .footer-brand {
-        justify-content: center;
-        margin-left: 0;
-    }
-
-    .footer-header {
-        margin-left: 0;
-    }
-
-    /* Меню делаем по центру */
-    .footer-menu {
-        align-items: center;
-    }
-
-    /* Соцсети по центру */
-    .footer-social {
-        justify-content: center;
-    }
-}
 
 
 /* ============================================================
@@ -5914,6 +5880,45 @@ html, body {
     /* Кнопка "Очистить корзину" на всю ширину */
     .cart-clear-2 {
         width: 100%;
+        justify-content: center;
+    }
+}
+
+
+/* ============================================================
+   ФУТЕР НА МОБИЛЬНЫХ — ИСПРАВЛЕНИЕ
+   ============================================================ */
+@media (max-width: 768px) {
+    .footer-columns {
+        display: flex; /* Используем flex вместо grid для надежности */
+        flex-direction: column;
+        gap: 30px;
+        text-align: center;
+    }
+
+    .footer-col-left,
+    .footer-col,
+    .footer-col-right {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .footer-brand {
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .footer-header {
+        margin-left: 0;
+    }
+
+    .footer-menu {
+        align-items: center;
+    }
+
+    .footer-social {
         justify-content: center;
     }
 }
