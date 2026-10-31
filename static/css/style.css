@@ -854,6 +854,43 @@ h6 {
 
 
 
+@media (max-width: 768px) {
+    /* Делаем колонки футера в один столбик */
+    .footer-columns {
+        grid-template-columns: 1fr;
+        gap: 32px;
+        text-align: center;
+    }
+
+    /* Выравниваем все блоки по центру */
+    .footer-col-left,
+    .footer-col,
+    .footer-col-right {
+        align-items: center;
+    }
+
+    /* Логотип и заголовок в левой колонке тоже центрируем */
+    .footer-brand {
+        justify-content: center;
+        margin-left: 0;
+    }
+
+    .footer-header {
+        margin-left: 0;
+    }
+
+    /* Меню делаем по центру */
+    .footer-menu {
+        align-items: center;
+    }
+
+    /* Соцсети по центру */
+    .footer-social {
+        justify-content: center;
+    }
+}
+
+
 /* ============================================================
    КАТАЛОГ — catalog.html
    СОДЕРЖАНИЕ:
@@ -5833,5 +5870,50 @@ a.contacts-item-value:hover {
     .profile-edit__subscription-label {
         align-items: flex-start;
         gap: 16px;
+    }
+}
+
+/* ============================================================
+   ИСПРАВЛЕНИЕ ГОРИЗОНТАЛЬНОЙ ПРОКРУТКИ НА МОБИЛЬНЫХ
+   ============================================================ */
+
+/* 1. Запрещаем сайту быть шире экрана */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden; /* Отключает горизонтальную прокрутку */
+}
+
+/* 2. Защищаем корзину от растягивания */
+.cart-layout, 
+.cart-block-1, 
+.cart-item {
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+/* 3. На телефонах делаем корзину еще компактнее */
+@media (max-width: 576px) {
+    /* Отключаем лишние отступы внутри карточки товара в корзине */
+    .cart-item {
+        padding: 12px;
+    }
+    
+    /* Уменьшаем картинку в корзине, если она слишком большая */
+    .cart-item-info img {
+        width: 50px;
+        height: 50px;
+    }
+
+    /* Текст описания не должен вылезать за края */
+    .cart-item-desc, 
+    .cart-item-title {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Кнопка "Очистить корзину" на всю ширину */
+    .cart-clear-2 {
+        width: 100%;
+        justify-content: center;
     }
 }

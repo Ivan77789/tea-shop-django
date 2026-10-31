@@ -42,6 +42,12 @@ ALLOWED_HOSTS = [
 if not DEBUG and not ALLOWED_HOSTS:
     raise ImproperlyConfigured('Set DJANGO_ALLOWED_HOSTS when DEBUG is disabled.')
 
+# Доверяем CSRF-запросам с нашего HTTPS-домена
+CSRF_TRUSTED_ORIGINS = [
+    'https://taa-shop.shop',
+    'https://www.taa-shop.shop',
+]
+
 
 # Application definition
 
