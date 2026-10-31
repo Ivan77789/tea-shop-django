@@ -48,6 +48,12 @@ CSRF_TRUSTED_ORIGINS = [
     'https://www.taa-shop.shop',
 ]
 
+# Говорим Django, что сайт работает по HTTPS (только на сервере)
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = os.getenv('ACCOUNT_DEFAULT_HTTP_PROTOCOL', 'http')
+
+# Говорим Django доверять заголовку от Nginx, что запрос пришел по HTTPS
+if os.getenv('SECURE_PROXY_SSL_HEADER', 'false').lower() in {'1', 'true', 'yes'}:
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # Application definition
 
