@@ -5966,34 +5966,33 @@ html, body {
    УЛУЧШЕНИЕ ЧИТАЕМОСТИ ТЕКСТА НА ФОНЕ КАРТИНКИ (КОНТАКТЫ)
    ============================================================ */
 
-/* 1. Делаем затемнение поверх картинки более плотным */
+/* 1. Легкое затемнение, чтобы картинка была видна, но текст читался */
 .contacts-hero::before {
     content: '';
     position: absolute;
     inset: 0;
-    /* Используем темный градиент, чтобы текст читался на любом фоне */
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2));
+    background: rgba(0, 0, 0, 0.4); /* 40% затемнения — картинка видна, текст контрастный */
     z-index: 1;
 }
 
-/* 2. Делаем текст белым и добавляем тень для надежности */
+/* 2. Белый текст с тенью для надежности */
+.contacts-hero-content {
+    position: relative;
+    z-index: 2; /* Текст поверх затемнения */
+}
+
 .contacts-hero-content h1,
 .contacts-hero-content .contacts-hero-lead,
 .contacts-hero-content .breadcrumbs,
 .contacts-hero-content .breadcrumbs a,
 .contacts-hero-content .breadcrumbs span {
-    color: #ffffff !important; /* Белый текст */
-    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8); /* Тень для контраста */
+    color: #ffffff !important;
+    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.9); /* Тень для контраста */
 }
 
-/* 3. На мобильных делаем затемнение еще сильнее (чтобы точно было видно) */
+/* 3. Мобильная версия (чуть сильнее затемнение) */
 @media (max-width: 768px) {
     .contacts-hero::before {
-        background: rgba(0, 0, 0, 0.55); /* Сплошное затемнение на телефонах */
-    }
-    
-    .contacts-hero-content {
-        position: relative;
-        z-index: 2; /* Текст поверх затемнения */
+        background: rgba(0, 0, 0, 0.5); /* 50% — золотая середина */
     }
 }
