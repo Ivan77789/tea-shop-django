@@ -5922,3 +5922,42 @@ html, body {
         justify-content: center;
     }
 }
+
+/* ============================================================
+   ИСПРАВЛЕНИЕ КНОПОК + И - В КОРЗИНЕ НА МОБИЛЬНЫХ
+   ============================================================ */
+@media (max-width: 768px) {
+    /* Возвращаем кнопкам горизонтальное расположение */
+    .quantity--small {
+        flex-direction: row !important; /* Ставим в ряд */
+        align-items: center !important;
+        border: 1px solid rgba(0, 0, 0, 0.12) !important; /* Возвращаем общую рамку */
+        border-radius: 6px !important;
+        width: fit-content;
+        padding: 0 !important;
+    }
+
+    /* Убираем надпись "Количество:", которая ломает вид */
+    .quantity--small::before {
+        content: none !important;
+    }
+
+    /* Делаем кнопки и инпут аккуратными */
+    .quantity--small .quantity-btn {
+        width: 32px;
+        height: 32px;
+        border: none !important; /* Убираем старые рамки */
+    }
+
+    .quantity--small .quantity-input {
+        width: 30px;
+        height: 32px;
+        border: none !important;
+    }
+    
+    /* Сбрасываем старые стили границ для первой и последней кнопки */
+    .quantity--small .quantity-btn:first-of-type,
+    .quantity--small .quantity-btn:last-of-type {
+        border: none !important;
+    }
+}
