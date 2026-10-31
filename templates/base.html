@@ -13,6 +13,16 @@
     {% block extra_css %}{% endblock %}     
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.2/font/bootstrap-icons.min.css">
+
+    {% if GOOGLE_ANALYTICS_ID %}
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS_ID }}"></script>
+        <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ GOOGLE_ANALYTICS_ID }}');
+        </script>
+    {% endif %}
 </head>
 
 <body>
@@ -26,6 +36,9 @@
 
     {% include "includes/footer.html" %}
     {% block extra_js %}{% endblock %}
+    {% include "includes/cookie_consent.html" %}
+    {% include "includes/newsletter_popup.html" %}
 </body>
 
 </html>
+

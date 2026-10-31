@@ -21,7 +21,7 @@ class OrderItemInline(admin.TabularInline):
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
     # Какие колонки показывать в общем списке заказов
-    list_display = ['id', 'user', 'first_name', 'last_name', 'email', 'phone', 'city', 'status', 'created']
+    list_display = ['id', 'user', 'first_name', 'last_name', 'email', 'promo_code', 'status', 'created']
     
     # Фильтры справа
     list_filter = ['status', 'created']
@@ -43,10 +43,13 @@ class OrderAdmin(admin.ModelAdmin):
         ('Статус', {
             'fields': ('status', 'created'),
         }),
+        ('Скидка на первый заказ', {
+            'fields': ('promo_code', 'promo_discount_amount'),
+        }),
     )
     
     # Поля, которые нельзя редактировать (только читать)
-    readonly_fields = ['created']
+    readonly_fields = ['created', 'promo_code', 'promo_discount_amount']
 
     def _restore_stock(self, order):
         for item in order.items.filter(stock_deducted=True):
@@ -56,8 +59,30 @@ class OrderAdmin(admin.ModelAdmin):
                     if item.unit == OrderItem.UNIT_CAKE:
                         product.whole_cake_stock += item.quantity
                         product.save(update_fields=['whole_cake_stock'])
+                    elif item.unit == OrderItem.UNIT_TRIAL:
+                        product.loose_pack_stock += item.stock_units_deducted or item.quantity
+                        product.save(update_fields=['loose_pack_stock'])
+                    elif item.unit == OrderItem.UNIT_BOX:
+                        deducted = item.stock_units_deducted
+                        packs_per_box = max(product.box_pack_count, 1)
+                        # Older orders stored sachets deducted; newer ones store boxes.
+                        if not deducted:
+                            deducted = item.quantity * packs_per_box
+                        if packs_per_box > 1 and deducted == item.quantity * packs_per_box:
+                            boxes, loose_packs = divmod(deducted, packs_per_box)
+                            product.stock_quantity = (product.stock_quantity or 0) + boxes
+                            product.loose_pack_stock += loose_packs
+                            product.save(update_fields=['stock_quantity', 'loose_pack_stock'])
+                        else:
+                            product.stock_quantity = (product.stock_quantity or 0) + item.quantity
+                            product.save(update_fields=['stock_quantity'])
                     else:
-                        product.stock_quantity = (product.stock_quantity or 0) + item.quantity
+                        units_to_restore = item.stock_units_deducted
+                        if not units_to_restore:
+                            units_to_restore = item.quantity * product.box_pack_count if item.unit in (
+                                OrderItem.UNIT_BOX, OrderItem.UNIT_PIECE
+                            ) else item.quantity
+                        product.stock_quantity = (product.stock_quantity or 0) + units_to_restore
                         product.save(update_fields=['stock_quantity'])
             item.stock_deducted = False
             item.save(update_fields=['stock_deducted'])

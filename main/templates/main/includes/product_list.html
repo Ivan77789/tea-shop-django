@@ -1,34 +1,36 @@
-{% load static %}
-
 <div class="product-grid">
     {% for product in products %}
-    <div class="product-card">
-        <div class="product-card-image">
-            <img src="{{ product.image.url }}" alt="{{ product.name }}">
-            <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
-                <i class="bi bi-heart" aria-hidden="true"></i>
-            </button>
-        </div>
-        <div class="product-name">
-            <a href="{% url 'main:product_detail' product.slug %}">
-                <h3 class="product-title">{{ product.name }}</h3>
-            </a>
-        </div>
-        <p class="product-description">{{ product.description|striptags|truncatechars:160 }}</p>
-        {% if product.sale_unit == 'gram' %}<small class="product-price-unit">за {{ product.default_order_weight }} г</small>{% endif %}
-        <p class="product-price">
-            {% if product.default_discount_percent %}<del class="product-price-regular">{{ product.default_order_regular_price }}</del><span class="product-card-discount">−{{ product.default_discount_percent }}%</span>{% endif %}
-            {{ product.default_order_price }} <span class="product-price-currency">₴</span>
-        </p>
+        <div class="product-card">
+            <div class="product-card-image">
+                {% if product.display_image_url %}
+                    <img src="{{ product.display_image_url }}" alt="{{ product.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                {% else %}
+                    <div class="image-placeholder" role="img" aria-label="Фото товара отсутствует">Фото скоро появится</div>
+                {% endif %}
+                {% include 'main/includes/product_badges.html' with product=product %}
+                <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
+                    <i class="bi bi-heart" aria-hidden="true"></i>
+                </button>
+            </div>
+            <div class="product-name">
+                <a href="{% url 'main:product_detail' product.slug %}">
+                    <h3 class="product-title">{{ product.name }}</h3>
+                </a>
+            </div>
+            <p class="product-description">{{ product.description|striptags|truncatechars:160 }}</p>
+            <div class="product-card-meta">
+                {% if product.sale_unit == 'gram' %}<small class="product-price-unit">{{ product.default_order_weight }} г</small>{% elif product.sale_unit == 'portion' %}<small class="product-price-unit">{% if product.slug == 'smola-shu-puera' %}{{ product.portion_weight_grams }} г{% else %}коробка, {{ product.portion_weight_grams }} г{% endif %}</small>{% elif product.sale_unit == 'piece' and product.box_pack_count > 1 %}<small class="product-price-unit">Коробка</small>{% else %}<small class="product-price-unit">&nbsp;</small>{% endif %}
+                <small class="product-id">ID: {{ product.id }}</small>
+            </div>
+            <p class="product-price">
+                {% if product.default_discount_percent %}<del class="product-price-regular">{{ product.default_order_regular_price }}</del><span class="product-card-discount">−{{ product.default_discount_percent }}%</span>{% endif %}
+                {{ product.default_order_price }} <span class="product-price-currency">₴</span>
+            </p>
             <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}" data-default-quantity="1" data-sale-mode="{{ product.default_sale_mode }}"{% if not product.can_order %} disabled{% endif %}>
                 <i class="bi bi-cart" aria-hidden="true"></i> {% if not product.can_order %}Нет в наличии{% else %}В корзину{% endif %}
             </button>
-    </div>
+        </div>
     {% empty %}
-    {% if search_query %}
-        <p class="catalog-empty-state">По запросу «{{ search_query }}» ничего не найдено. Попробуйте изменить запрос.</p>
-    {% else %}
-        <p class="catalog-empty-state">Товары пока не добавлены.</p>
-    {% endif %}
+        <p>Товары не найдены.</p>
     {% endfor %}
 </div>

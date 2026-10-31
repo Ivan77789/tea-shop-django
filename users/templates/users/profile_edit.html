@@ -62,7 +62,9 @@
                 {% if google_connected %}
                     <p class="profile-edit__notice" role="status">Google подключён к этому аккаунту.</p>
                 {% else %}
-                    <a class="btn-auth" href="{% provider_login_url 'google' process='connect' %}">Подключить Google к аккаунту</a>
+                    <div class="profile-edit__google-connect">
+                        <a class="btn-auth" href="{% provider_login_url 'google' process='connect' %}">Подключить Google к аккаунту</a>
+                    </div>
                 {% endif %}
 
                 <!-- ОДНА ФОРМА ДЛЯ ВСЕГО -->

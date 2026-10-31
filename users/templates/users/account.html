@@ -106,7 +106,11 @@
                         <div class="account-order">
                             <!-- Берем картинку первого товара из заказа (если есть) -->
                             {% if order.items.first %}
-                                <img src="{{ order.items.first.product.image.url }}" alt="{{ order.items.first.product.name }}" class="account-order-img">
+                                {% if order.items.first.product.display_image_url %}
+                                    <img src="{{ order.items.first.product.display_image_url }}" alt="{{ order.items.first.product.name }}" class="account-order-img" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                                {% else %}
+                                    <span class="image-placeholder">Фото скоро появится</span>
+                                {% endif %}
                             {% else %}
                                 <div class="account-order-img account-order-img--empty"></div>
                             {% endif %}

@@ -1,58 +1,17 @@
-{# 1. ГЛАВНАЯ ПРОВЕРКА: если страниц больше одной #}
-{# has_other_pages возвращает True, если всего страниц > 1. #}
-{# Если у тебя 5 товаров (а лимит 8), страниц будет 1. Тогда весь блок скроется. #}
-{% if page_obj.has_other_pages %}
-    <nav class="pagination" aria-label="Страницы каталога">
-        
-        {# 2. КНОПКА "НАЗАД" (СТРЕЛКА ВЛЕВО) #}
-        {# has_previous = True, если текущая страница не первая. #}
-        {% if page_obj.has_previous %}
-            {# Генерируем ссылку: #}
-            {# ?page= — ставим номер предыдущей страницы #}
-            {# {% for ... %} — перебираем ВСЕ текущие параметры фильтра (категория, цена, сортировка) #}
-            {# {% if key != 'page' %} — пропускаем старый номер страницы, чтобы он не дублировался в URL #}
-            {# &{{ key }}={{ value }} — добавляем фильтры к ссылке (например, &category=green-tea) #}
-            <a href="?page={{ page_obj.previous_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="pagination-arrow">
-                <i class="bi bi-arrow-left"></i>
-            </a>
+{% if page_obj and page_obj.paginator.num_pages > 1 %}
+<nav class="pagination" aria-label="Пагинация каталога">
+    {% if page_obj.has_previous %}
+        <a class="pagination-arrow" href="?{% if query_params %}{{ query_params }}&amp;{% endif %}page={{ page_obj.previous_page_number }}" aria-label="Предыдущая страница">‹</a>
+    {% endif %}
+    {% for number in page_obj.paginator.page_range %}
+        {% if number == page_obj.number %}
+            <span class="pagination-page pagination-page--active" aria-current="page">{{ number }}</span>
         {% else %}
-            {# Если мы на первой странице, кнопка "Назад" неактивна. #}
-            {# Мы выводим span вместо ссылки, чтобы кнопка не кликалась. #}
-            <span class="pagination-arrow disabled"><i class="bi bi-arrow-left"></i></span>
+            <a class="pagination-page" href="?{% if query_params %}{{ query_params }}&amp;{% endif %}page={{ number }}">{{ number }}</a>
         {% endif %}
-
-
-        {# 3. НОМЕРА СТРАНИЦ (1, 2, 3...) #}
-        {# paginator.page_range возвращает список всех номеров: [1, 2, 3, 4, 5] #}
-        {% for num in page_obj.paginator.page_range %}
-            
-            {# 3.1. Если номер совпадает с текущей страницей (например, 2) #}
-            {% if page_obj.number == num %}
-                {# Показываем активную кнопку (зелёную). Это просто span, кликать не нужно. #}
-                <span class="pagination-page pagination-page--active">{{ num }}</span>
-            
-            {# 3.2. Показываем страницы "вокруг" текущей (текущая -3 и текущая +3) #}
-            {# add:'-3' и add:'3' — это фильтры Django, они прибавляют/отнимают числа. #}
-            {# Это нужно, чтобы не выводить 50 кнопок, если у тебя 50 страниц. #}
-            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
-                {# Выводим кликабельную ссылку на эту страницу. Собираем URL так же, как и для "Назад". #}
-                <a href="?page={{ num }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="pagination-page">{{ num }}</a>
-            {% endif %}
-            
-        {% endfor %}
-
-
-        {# 4. КНОПКА "ВПЕРЕД" (СТРЕЛКА ВПРАВО) #}
-        {# has_next = True, если есть страницы после текущей. #}
-        {% if page_obj.has_next %}
-            {# Логика ссылки такая же, но берем номер следующей страницы (next_page_number). #}
-            <a href="?page={{ page_obj.next_page_number }}{% for key, value in request.GET.items %}{% if key != 'page' %}&{{ key }}={{ value }}{% endif %}{% endfor %}" class="pagination-arrow">
-                <i class="bi bi-arrow-right"></i>
-            </a>
-        {% else %}
-            {# Если это последняя страница, кнопка неактивна. #}
-            <span class="pagination-arrow disabled"><i class="bi bi-arrow-right"></i></span>
-        {% endif %}
-
-    </nav>
+    {% endfor %}
+    {% if page_obj.has_next %}
+        <a class="pagination-arrow" href="?{% if query_params %}{{ query_params }}&amp;{% endif %}page={{ page_obj.next_page_number }}" aria-label="Следующая страница">›</a>
+    {% endif %}
+</nav>
 {% endif %}

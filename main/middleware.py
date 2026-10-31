@@ -17,6 +17,7 @@ class SiteVisitLoggingMiddleware:
             request.method in {'GET', 'HEAD'}
             and not request.path.startswith(self.EXCLUDED_PREFIXES)
             and request.path not in self.EXCLUDED_PATHS
+            and request.COOKIES.get('tea_cookie_consent') == 'all'
         ):
             user = getattr(request, 'user', None)
             if not getattr(user, 'is_authenticated', False):

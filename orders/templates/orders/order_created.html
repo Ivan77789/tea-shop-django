@@ -8,6 +8,9 @@
         <h1 class="order-confirmation__title">Спасибо за заказ!</h1>
         <p class="order-confirmation__message">Ваш заказ <strong>№{{ order.id }}</strong> успешно принят.</p>
         <p class="order-confirmation__phone">Мы свяжемся с вами по телефону <strong>{{ order.phone }}</strong> для подтверждения.</p>
+        {% if order.promo_discount_amount %}
+        <p class="order-confirmation__message">Промокод <strong>{{ order.promo_code }}</strong> применён. Скидка: <strong>{{ order.promo_discount_amount }} ₴</strong>. Итого за товары: <strong>{{ order.get_total_cost }} ₴</strong>.</p>
+        {% endif %}
         
         <a href="{% url 'main:catalog' %}" class="button-catalog order-confirmation__link">
             Вернуться в каталог

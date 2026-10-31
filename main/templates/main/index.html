@@ -34,7 +34,12 @@
                 {% for product in products %}
                     <div class="product-card">
                         <div class="product-card-image">
-                            <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                            {% if product.display_image_url %}
+                                <img src="{{ product.display_image_url }}" alt="{{ product.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                            {% else %}
+                                <div class="image-placeholder" role="img" aria-label="Фото товара отсутствует">Фото скоро появится</div>
+                            {% endif %}
+                            {% include 'main/includes/product_badges.html' with product=product %}
                             
                             <!-- Добавили data-id, чтобы сердечко знало, какой товар брать -->
                             <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
@@ -47,7 +52,10 @@
                             </a>
                         </div>
                         <p class="product-description">{{ product.description|striptags|truncatechars:160 }}</p>
-                        {% if product.sale_unit == 'gram' %}<small class="product-price-unit">за {{ product.default_order_weight }} г</small>{% endif %}
+                        <div class="product-card-meta">
+                            {% if product.sale_unit == 'gram' %}<small class="product-price-unit">{{ product.default_order_weight }} г</small>{% elif product.sale_unit == 'portion' %}<small class="product-price-unit">{% if product.slug == 'smola-shu-puera' %}{{ product.portion_weight_grams }} г{% else %}коробка, {{ product.portion_weight_grams }} г{% endif %}</small>{% elif product.sale_unit == 'piece' and product.box_pack_count > 1 %}<small class="product-price-unit">Коробка</small>{% else %}<small class="product-price-unit">&nbsp;</small>{% endif %}
+                            <small class="product-id">ID: {{ product.id }}</small>
+                        </div>
                         <p class="product-price">
                             {% if product.default_discount_percent %}<del class="product-price-regular">{{ product.default_order_regular_price }}</del><span class="product-card-discount">−{{ product.default_discount_percent }}%</span>{% endif %}
                             {{ product.default_order_price }} <span class="product-price-currency">₴</span>

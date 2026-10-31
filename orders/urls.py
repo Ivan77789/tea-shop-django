@@ -6,4 +6,5 @@ app_name = 'orders'
 
 urlpatterns = [
     path('create/', views.order_create, name='order_create'),
+    path('promo/validate/', views.promo_validate, name='promo_validate'),
 ]

@@ -17,19 +17,21 @@
                 <div class="product-gallery">
 
                     <div class="gallery-thumbs">
-                        {% for image in product.images.all %}
+                        {% for image_url in product.display_gallery_urls %}
                             <button>
-                                <img src="{{ image.image.url }}" alt="{{ product.name }}">
+                                <img src="{{ image_url }}" alt="{{ product.name }}" onerror="this.onerror=null;this.closest('button').remove();">
                             </button>
                         {% empty %}
-                            <button>
-                                <img src="{{ product.image.url }}" alt="{{ product.name }}">
-                            </button>
+                            <span class="image-placeholder">Фото скоро появится</span>
                         {% endfor %}
                     </div>
 
                     <div class="gallery-main">
-                        <img src="{{ product.image.url }}" alt="{{ product.name }}">
+                        {% if product.display_image_url %}
+                            <img src="{{ product.display_image_url }}" alt="{{ product.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                        {% else %}
+                            <div class="image-placeholder" role="img" aria-label="Фото товара отсутствует">Фото скоро появится</div>
+                        {% endif %}
                         <button type="button" class="favorite-btn" data-id="{{ product.id }}" aria-label="В избранное">
                             <i class="bi bi-heart" aria-hidden="true"></i>
                         </button>
@@ -38,50 +40,133 @@
                 </div>
                 <div class="product-info">
 
-                    <p class="product-category">{{ product.category.name }}</p>
+                    <p class="product-category"><img class="product-category-leaf" src="{% static 'icons/tea-leaf-green.png' %}" alt="" aria-hidden="true">{{ product.category.name }}</p>
                     <h1>{{ product.name }}</h1>
+                    <small class="product-id product-id--detail">ID: {{ product.id }}</small>
 
                     <div class="product-purchase">
+                        
+                        <!-- СЦЕНАРИЙ 1: Развесной чай (граммы) -->
                         {% if product.sale_unit == 'gram' %}
                         <div class="purchase-options" role="group" aria-label="Формат покупки">
-                            <button type="button" class="purchase-option{% if product.default_order_weight == 8 %} active{% endif %}" data-sale-mode="gram-8" data-weight="8" data-quantity="1" data-discount="{{ product.discount_8g_percent }}"{% if product.stock_quantity is not None and product.stock_quantity < 8 %} disabled{% endif %}>8 г</button>
-                            <button type="button" class="purchase-option{% if product.default_order_weight == 25 %} active{% endif %}" data-sale-mode="gram-25" data-weight="25" data-quantity="1" data-discount="{{ product.discount_25g_percent }}"{% if product.stock_quantity is not None and product.stock_quantity < 25 %} disabled{% endif %}>25 г</button>
-                            <button type="button" class="purchase-option{% if product.default_order_weight == 50 %} active{% endif %}" data-sale-mode="gram-50" data-weight="50" data-quantity="1" data-discount="{{ product.discount_50g_percent }}"{% if product.stock_quantity is not None and product.stock_quantity < 50 %} disabled{% endif %}>50 г</button>
-                            <button type="button" class="purchase-option{% if product.default_order_weight == 100 %} active{% endif %}" data-sale-mode="gram-100" data-weight="100" data-quantity="1" data-discount="{{ product.discount_100g_percent }}"{% if product.stock_quantity is not None and product.stock_quantity < 100 %} disabled{% endif %}>100 г</button>
+                            <button type="button" class="purchase-option{% if product.default_order_weight == 8 %} active{% endif %}" data-sale-mode="gram-8" data-weight="8" data-quantity="1" data-discount="{{ product.discount_8g_percent }}"{% if not product.can_sell_8g %} disabled{% endif %}>8 г</button>
+                            <button type="button" class="purchase-option{% if product.default_order_weight == 25 %} active{% endif %}" data-sale-mode="gram-25" data-weight="25" data-quantity="1" data-discount="{{ product.discount_25g_percent }}"{% if not product.can_sell_25g %} disabled{% endif %}>25 г</button>
+                            <button type="button" class="purchase-option{% if product.default_order_weight == 50 %} active{% endif %}" data-sale-mode="gram-50" data-weight="50" data-quantity="1" data-discount="{{ product.discount_50g_percent }}"{% if not product.can_sell_50g %} disabled{% endif %}>50 г</button>
+                            <button type="button" class="purchase-option{% if product.default_order_weight == 100 %} active{% endif %}" data-sale-mode="gram-100" data-weight="100" data-quantity="1" data-discount="{{ product.discount_100g_percent }}"{% if not product.can_sell_100g %} disabled{% endif %}>100 г</button>
+                            
                             {% if product.whole_cake_weight_grams %}
                             <button type="button" class="purchase-option purchase-option--cake{% if not product.loose_can_order and product.whole_cake_available %} active{% endif %}" data-sale-mode="cake" data-quantity="1" data-weight="{{ product.whole_cake_weight_grams }}" data-stock="{{ product.whole_cake_stock }}" data-discount="{{ product.whole_cake_discount_percent }}"{% if not product.whole_cake_available %} disabled{% endif %}>Целый блин, {{ product.whole_cake_weight_grams }} г</button>
                             {% endif %}
                         </div>
                         {% endif %}
+
+                        {% if product.sale_unit == 'portion' %}
+                        <div class="purchase-options" role="group" aria-label="Формат покупки">
+                            <button type="button" class="purchase-option active" data-sale-mode="portion" data-quantity="1" data-weight="{{ product.portion_weight_grams }} г" data-stock="{% if product.portion_stock_available is None %}-1{% else %}{{ product.portion_stock_available }}{% endif %}"{% if not product.portion_weight_grams or product.portion_stock_available == 0 %} disabled{% endif %}>
+                                {% if product.slug == 'smola-shu-puera' %}{{ product.portion_weight_grams }} г{% else %}Коробка, {{ product.portion_weight_grams }} г{% endif %}
+                            </button>
+                        </div>
+                        {% endif %}
+
+                        <!-- СЦЕНАРИЙ 2: Поштучный товар (Коробки, упаковки) -->
+                        {% if product.sale_unit == 'piece' %}
+                        <div class="purchase-options" role="group" aria-label="Формат покупки">
+                            <!-- Кнопка Упаковка -->
+                            <button type="button" class="purchase-option{% if product.stock_quantity is None or product.box_stock_available > 0 %} active{% endif %}" 
+                                    data-sale-mode="piece-box" 
+                                    data-quantity="1" 
+                                    data-weight="{{ product.weight }}"
+                                    data-pack-count="{{ product.box_pack_count }}"
+                                    data-stock="{% if product.stock_quantity is None %}-1{% else %}{{ product.box_stock_available }}{% endif %}"
+                                    {% if product.stock_quantity is not None and product.box_stock_available < 1 %}disabled{% endif %}>
+                                {% if product.box_pack_count > 1 %}Коробка — {{ product.box_pack_count }} шт.{% else %}упаковка{% if product.weight %}, {{ product.weight }}{% endif %}{% endif %}
+                            </button>
+                            
+                            <!-- Кнопка Пробник (показывается, если задана цена или остаток) -->
+                            {% if product.trial_price is not None %}
+                            <button type="button" class="purchase-option{% if product.box_stock_available < 1 and product.trial_can_order %} active{% endif %}" 
+                                    data-sale-mode="piece-trial" 
+                                    data-quantity="1" 
+                                    data-weight="пробник"
+                                    data-stock="{% if product.trial_stock_available is None %}-1{% else %}{{ product.trial_stock_available }}{% endif %}"
+                                    {% if not product.trial_can_order %}disabled{% endif %}>
+                                пробник
+                            </button>
+                            {% endif %}
+                        </div>
+                        {% endif %}
+
                         <div class="product-price-block">
+                            <div class="product-price-summary">
                             <p class="product-price" id="selected-product-price-wrap">
                                 <span class="cake-discount" id="selected-product-discount" hidden></span>
                                 <span class="cake-regular-price" id="selected-product-regular-price" hidden></span>
-                                <span id="selected-product-price" data-base-price="{{ product.price|unlocalize }}" data-cake-price="{{ product.whole_cake_price|unlocalize }}" data-cake-regular-price="{{ product.whole_cake_regular_price|unlocalize }}" data-sale-unit="{{ product.sale_unit }}" aria-live="polite">{{ product.default_order_price }}</span>
+                                
+                                <!-- data-атрибуты для цен -->
+                                <span id="selected-product-price" 
+                                      data-base-price="{{ product.price|unlocalize }}" 
+                                      data-trial-price="{{ product.trial_price|unlocalize }}" 
+                                      data-cake-price="{{ product.whole_cake_price|unlocalize }}" 
+                                      data-cake-regular-price="{{ product.whole_cake_regular_price|unlocalize }}" 
+                                      data-sale-unit="{{ product.sale_unit }}"
+                                      data-product-slug="{{ product.slug }}"
+                                      data-product-discount="{{ product.discount_percent }}"
+                                      data-box-label="{% if product.box_pack_count > 1 %}коробка{% else %}упаковка{% endif %}"
+                                      aria-live="polite">{{ product.default_order_price }}</span>
+                                      
                                 <span class="product-price-currency">₴</span>
                             </p>
-                            <small class="product-price-unit" id="selected-product-price-caption">{% if product.sale_unit == 'gram' %}за {{ product.default_order_weight }} г{% else %}за шт.{% endif %}</small>
-                            {% if product.stock_quantity is not None or product.whole_cake_weight_grams %}
-                                <p class="product-stock" id="product-stock-label">{% if product.loose_can_order %}В наличии{% elif product.whole_cake_available %}Доступен целый блин{% else %}Нет в наличии{% endif %}</p>
+                            <small class="product-price-unit" id="selected-product-price-caption">{% if product.sale_unit == 'gram' %}{{ product.default_order_weight }} г{% elif product.sale_unit == 'portion' %}{% if product.slug == 'smola-shu-puera' %}{{ product.portion_weight_grams }} г{% else %}за коробку, {{ product.portion_weight_grams }} г{% endif %}{% elif product.box_stock_available < 1 and product.trial_can_order %}за пробник{% elif product.box_pack_count > 1 %}Коробка{% else %}за упаковку{% endif %}</small>
+                            <span id="product-stock-label" class="product-stock-pill{% if not product.can_order %} is-unavailable{% endif %}">
+                            {% if product.can_order %}<span class="product-stock-check" aria-hidden="true">✔</span> В наличии{% else %}Нет в наличии{% endif %}
+                            </span>
+                            </div>
+                            
+                            <!-- Артикул (выводится, если задан) -->
+                            {% if product.sku %}
+                                <p class="product-sku" style="color: #71827e; font-size: 14px; margin-top: 5px;">Артикул: {{ product.sku }}</p>
                             {% endif %}
+
                         </div>
 
                         <div class="product-control">
                             <div class="quantity">
                                 <button type="button" class="quantity-btn minus" aria-label="Уменьшить">−</button>
-                                {% if product.sale_unit == 'gram' %}
-                                <input type="number" class="quantity-input quantity-input--product" value="1" min="1" step="1" max="{% if not product.loose_can_order and product.whole_cake_available %}{{ product.whole_cake_stock }}{% elif product.stock_quantity is not None %}{{ product.stock_quantity|add:'0' }}{% else %}99{% endif %}" data-gram-stock="{% if product.stock_quantity is None %}-1{% else %}{{ product.stock_quantity }}{% endif %}" data-initial-pack-weight="{{ product.default_order_weight }}" aria-label="Количество">
+                                
+                                {% if product.sale_unit == 'portion' %}
+                                <input type="number" class="quantity-input quantity-input--product" value="1" min="1" step="1"
+                                       max="{% if product.portion_stock_available is None %}99{% else %}{{ product.portion_stock_available }}{% endif %}"
+                                       data-portion-stock="{% if product.portion_stock_available is None %}-1{% else %}{{ product.portion_stock_available }}{% endif %}"
+                                       data-portion-weight="{{ product.portion_weight_grams|default:0 }}"
+                                       data-gram-stock="-1" data-cake-stock="-1" data-box-stock="-1" data-trial-stock="-1"
+                                       aria-label="Количество порций">
+                                <span class="quantity-unit" id="product-quantity-unit">{% if product.slug == 'smola-shu-puera' %}{{ product.portion_weight_grams }} г{% else %}коробка, {{ product.portion_weight_grams }} г{% endif %}</span>
+                                {% elif product.sale_unit == 'gram' %}
+                                <input type="number" class="quantity-input quantity-input--product" value="1" min="1" step="1" 
+                                       max="{% if product.available_grams is None %}99{% else %}{{ product.available_grams }}{% endif %}"
+                                       data-gram-stock="{% if product.available_grams is None %}-1{% else %}{{ product.available_grams }}{% endif %}"
+                                       data-cake-stock="{{ product.whole_cake_stock|default:'-1' }}" 
+                                       data-box-stock="-1" 
+                                       data-trial-stock="-1" 
+                                       aria-label="Количество">
                                 <span class="quantity-unit" id="product-quantity-unit">{% if not product.loose_can_order and product.whole_cake_available %}блин{% elif product.sale_unit == 'gram' %}уп.{% else %}шт.{% endif %}</span>
                                 {% else %}
-                                <input type="number" class="quantity-input quantity-input--product" value="1" min="1" step="1" max="{% if product.stock_quantity is not None %}{{ product.stock_quantity }}{% else %}99{% endif %}" data-gram-stock="{% if product.stock_quantity is None %}-1{% else %}{{ product.stock_quantity }}{% endif %}" aria-label="Количество, шт.">
+                                <input type="number" class="quantity-input quantity-input--product" value="1" min="1" step="1" 
+                                       max="{% if product.stock_quantity is not None %}{{ product.box_stock_available }}{% else %}99{% endif %}" 
+                                       data-box-stock="{% if product.stock_quantity is None %}-1{% else %}{{ product.box_stock_available }}{% endif %}" 
+                                       data-trial-stock="{% if product.trial_stock_available is None %}-1{% else %}{{ product.trial_stock_available }}{% endif %}"
+                                       data-gram-stock="-1"
+                                       data-cake-stock="-1"
+                                       aria-label="Количество, шт.">
                                 <span class="quantity-unit" id="product-quantity-unit">шт.</span>
                                 {% endif %}
+                                
                                 <button type="button" class="quantity-btn plus" aria-label="Увеличить">+</button>
                             </div>
 
                             <button type="button" class="product-btn add-to-cart-btn" data-id="{{ product.id }}" data-default-quantity="1" data-sale-mode="{% if not product.loose_can_order and product.whole_cake_available %}cake{% else %}{{ product.default_sale_mode }}{% endif %}"{% if not product.can_order %} disabled{% endif %}>
                                 <i class="bi bi-cart" aria-hidden="true"></i>
-                                {% if not product.loose_can_order %}Нет в наличии{% else %}В корзину{% endif %}
+                                {% if not product.can_order %}Нет в наличии{% else %}В корзину{% endif %}
                             </button>
 
                         </div>
@@ -181,7 +266,12 @@
                 {% for related in related_products %}
                 <div class="product-card">
                     <div class="product-card-image">
-                        <img src="{{ related.image.url }}" alt="{{ related.name }}">
+                        {% if related.display_image_url %}
+                            <img src="{{ related.display_image_url }}" alt="{{ related.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                        {% else %}
+                            <div class="image-placeholder" role="img" aria-label="Фото товара отсутствует">Фото скоро появится</div>
+                        {% endif %}
+                        {% include 'main/includes/product_badges.html' with product=related %}
                         <button type="button" class="favorite-btn" data-id="{{ related.id }}" aria-label="В избранное">
                             <i class="bi bi-heart" aria-hidden="true"></i>
                         </button>
@@ -192,7 +282,10 @@
                         </a>
                     </div>
                     <p class="product-description">{{ related.description|striptags|truncatechars:160 }}</p>
-                    {% if related.sale_unit == 'gram' %}<small class="product-price-unit">за {{ related.default_order_weight }} г</small>{% endif %}
+                    <div class="product-card-meta">
+                        {% if related.sale_unit == 'gram' %}<small class="product-price-unit">{{ related.default_order_weight }} г</small>{% elif related.sale_unit == 'portion' %}<small class="product-price-unit">{% if related.slug == 'smola-shu-puera' %}{{ related.portion_weight_grams }} г{% else %}коробка, {{ related.portion_weight_grams }} г{% endif %}</small>{% elif related.sale_unit == 'piece' and related.box_pack_count > 1 %}<small class="product-price-unit">Коробка</small>{% else %}<small class="product-price-unit">&nbsp;</small>{% endif %}
+                        <small class="product-id">ID: {{ related.id }}</small>
+                    </div>
                     <p class="product-price">
                         {% if related.default_discount_percent %}<del class="product-price-regular">{{ related.default_order_regular_price }}</del><span class="product-card-discount">−{{ related.default_discount_percent }}%</span>{% endif %}
                         {{ related.default_order_price }} <span class="product-price-currency">₴</span>
@@ -216,7 +309,7 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // ============================================
-    // 1. ГАЛЕРЕЯ (переключение миниатюр)
+    // 1. ГАЛЕРЕЯ
     // ============================================
     const thumbs = document.querySelectorAll('.gallery-thumbs button');
     const mainImg = document.querySelector('.gallery-main img');
@@ -229,7 +322,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ============================================
-    // 2. СЧЕТЧИК (плюс / минус)
+    // 2. СЧЕТЧИК И ЦЕНЫ
     // ============================================
     const qtyInput = document.querySelector('.quantity-input');
     const btnMinus = document.querySelector('.quantity-btn.minus');
@@ -261,34 +354,75 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function setPurchaseMode(mode, defaultQuantity) {
         if (!qtyInput || !selectedPrice || !addButton) return;
+        
+        const isBox = mode === 'piece-box';
+        const isTrial = mode === 'piece-trial';
         const isCake = mode === 'cake';
+        const isPortion = mode === 'portion';
         const isGram = mode.startsWith('gram-');
         const packWeight = isGram ? Number(mode.split('-')[1]) : null;
-        const stock = isCake
-            ? Number(document.querySelector('.purchase-option--cake')?.dataset.stock || 0)
-            : Number(qtyInput.dataset.gramStock || 0);
-        const max = isCake
-            ? stock
-            : (isGram ? (stock < 0 ? 99 : Math.floor(stock / packWeight)) : (stock < 0 ? 99 : stock));
+        
+        // Берем остатки из data-атрибутов инпута
+        let stock = 0;
+        if (isCake) {
+            stock = Number(qtyInput.dataset.cakeStock || 0);
+        } else if (isTrial) {
+            stock = Number(qtyInput.dataset.trialStock || 0);
+        } else if (isBox) {
+            stock = Number(qtyInput.dataset.boxStock || 0);
+        } else if (isPortion) {
+            stock = Number(qtyInput.dataset.portionStock || 0);
+        } else if (isGram) {
+            stock = Number(qtyInput.dataset.gramStock || 0);
+        }
+        
+        let max = 1;
+        if (isCake || isTrial) {
+            max = stock; // Для блинов и пробников максимум = остаток
+        } else if (isPortion) {
+            max = stock < 0 ? 99 : stock;
+        } else if (isGram) {
+            max = stock < 0 ? 99 : Math.floor(stock / packWeight);
+        } else if (isBox) {
+            max = stock < 0 ? 99 : stock;
+        }
 
         qtyInput.min = 1;
         qtyInput.step = 1;
         qtyInput.max = max || 1;
         qtyInput.value = Math.max(1, Math.min(defaultQuantity || 1, Number(qtyInput.max)));
-        quantityUnit.textContent = isCake ? 'блин' : (isGram ? `уп. по ${packWeight} г` : 'шт.');
+        
+        if (isCake) {
+            quantityUnit.textContent = 'блин';
+        } else if (isPortion) {
+            quantityUnit.textContent = selectedPrice.dataset.productSlug === 'smola-shu-puera'
+                ? `${qtyInput.dataset.portionWeight} г`
+                : `коробка, ${qtyInput.dataset.portionWeight} г`;
+        } else if (isGram) {
+            quantityUnit.textContent = `уп. по ${packWeight} г`;
+        } else if (isTrial) {
+            quantityUnit.textContent = 'пробник';
+        } else {
+            quantityUnit.textContent = selectedPrice.dataset.boxLabel || 'упаковка';
+        }
+        
         addButton.dataset.saleMode = mode;
         addButton.dataset.defaultQuantity = qtyInput.value;
         addButton.disabled = max < 1;
+        
         addButton.innerHTML = addButton.disabled
             ? 'Нет в наличии'
             : '<i class="bi bi-cart" aria-hidden="true"></i> В корзину';
+            
         syncQuantityButtons();
+        
         if (stockLabel) {
-            stockLabel.textContent = addButton.disabled ? 'Нет в наличии' : (
-                isCake ? `В наличии: ${stock} целых блинов`
-                    : (isGram && stock >= 0 ? `В наличии: ${stock} г` : 'В наличии')
-            );
+            stockLabel.classList.toggle('is-unavailable', addButton.disabled);
+            stockLabel.innerHTML = addButton.disabled
+                ? 'Нет в наличии'
+                : '<span class="product-stock-check" aria-hidden="true">✔</span> В наличии';
         }
+        
         updateSelectedPrice();
     }
 
@@ -299,24 +433,51 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!Number.isInteger(quantity) || quantity < 1) return;
 
         const mode = addButton?.dataset.saleMode || selectedPrice.dataset.saleUnit;
+        
         const isCake = mode === 'cake';
+        const isPortion = mode === 'portion';
         const isGram = mode.startsWith('gram-');
+        const isTrial = mode === 'piece-trial';
+        const isBox = mode === 'piece-box';
+        
         const packWeight = isGram ? Number(mode.split('-')[1]) : null;
         const selectedOption = document.querySelector(`.purchase-option[data-sale-mode="${mode}"]`);
         const discount = isCake
             ? Number(selectedOption?.dataset.discount || 0)
-            : (isGram ? Number(selectedOption?.dataset.discount || 0) : 0);
-        const basePriceCents = Math.round(Number(selectedPrice.dataset.basePrice) * 100);
-        const regularCents = isCake
-            ? Math.round(Number(selectedPrice.dataset.cakeRegularPrice) * 100) * quantity
-            : (isGram ? Math.round(basePriceCents * packWeight * quantity / 50) : basePriceCents * quantity);
-        const totalCents = isCake
-            ? Math.round(Number(selectedPrice.dataset.cakePrice) * 100) * quantity
             : (isGram
-                ? Math.round(basePriceCents * packWeight * quantity * (100 - discount) / 5000)
-                : regularCents);
+                ? Math.max(Number(selectedOption?.dataset.discount || 0), Number(selectedPrice.dataset.productDiscount || 0))
+                : ((isPortion || isBox) ? Number(selectedPrice.dataset.productDiscount || 0) : 0));
+            
+        const basePriceCents = Math.round(Number(selectedPrice.dataset.basePrice) * 100);
+        const trialPriceCents = Math.round(Number(selectedPrice.dataset.trialPrice) * 100);
+        const cakePriceCents = Math.round(Number(selectedPrice.dataset.cakePrice) * 100);
+        const boxLabel = selectedPrice.dataset.boxLabel || 'упаковка';
+        const boxQuantityLabel = boxLabel === 'коробка'
+            ? (quantity === 1 ? 'одну коробку' : `${quantity} ${quantity % 10 >= 2 && quantity % 10 <= 4 && (quantity % 100 < 12 || quantity % 100 > 14) ? 'коробки' : 'коробок'}`)
+            : (quantity === 1 ? 'одну упаковку' : `${quantity} упаковок`);
+        
+        let regularCents = 0;
+        let totalCents = 0;
+
+        if (isCake) {
+            regularCents = Math.round(Number(selectedPrice.dataset.cakeRegularPrice) * 100) * quantity;
+            totalCents = cakePriceCents * quantity;
+        } else if (isGram) {
+            regularCents = Math.round(basePriceCents * packWeight * quantity / 50);
+            totalCents = Math.round(basePriceCents * packWeight * quantity * (100 - discount) / 5000);
+        } else if (isTrial) {
+            regularCents = trialPriceCents * quantity;
+            totalCents = trialPriceCents * quantity;
+        } else if (isPortion) {
+            regularCents = basePriceCents * quantity;
+            totalCents = Math.round(regularCents * (100 - discount) / 100);
+        } else if (isBox) {
+            regularCents = basePriceCents * quantity;
+            totalCents = Math.round(regularCents * (100 - discount) / 100);
+        }
 
         selectedPrice.textContent = formatPrice(totalCents / 100);
+        
         if (regularPrice && discountBadge) {
             regularPrice.hidden = discount <= 0;
             discountBadge.hidden = discount <= 0;
@@ -326,7 +487,15 @@ document.addEventListener('DOMContentLoaded', function() {
         if (selectedPriceCaption) {
             selectedPriceCaption.textContent = isCake
                 ? `за ${quantity} целый блин${quantity > 1 ? 'а' : ''}`
-                : (isGram ? `за ${packWeight * quantity} г` : `за ${quantity} шт.`);
+                : (isGram
+                    ? `за ${packWeight * quantity} г`
+                    : (isPortion
+                        ? (selectedPrice.dataset.productSlug === 'smola-shu-puera'
+                            ? `${qtyInput.dataset.portionWeight} г`
+                            : `за ${quantity} коробк${quantity === 1 ? 'у' : 'и'}, ${qtyInput.dataset.portionWeight} г`)
+                        : (isTrial
+                            ? `за ${quantity} пробник${quantity === 1 ? '' : 'а'}`
+                            : `за ${boxQuantityLabel}`)));
         }
     }
 
@@ -337,9 +506,12 @@ document.addEventListener('DOMContentLoaded', function() {
         setPurchaseMode(option.dataset.saleMode, Number(option.dataset.quantity));
     }));
 
+    // Инициализация при загрузке страницы
     if (addButton?.dataset.saleMode === 'cake') {
         setPurchaseMode('cake', 1);
     } else if (addButton?.dataset.saleMode?.startsWith('gram-')) {
+        setPurchaseMode(addButton.dataset.saleMode, 1);
+    } else if (addButton?.dataset.saleMode?.startsWith('piece-')) {
         setPurchaseMode(addButton.dataset.saleMode, 1);
     } else if (qtyInput) {
         updateSelectedPrice();
@@ -384,7 +556,6 @@ document.addEventListener('DOMContentLoaded', function() {
             const productId = btn.dataset.id;
             const originalHtml = btn.innerHTML;
             
-            // Берем количество (если это страница товара, иначе 1)
             let qty = parseInt(btn.dataset.defaultQuantity || '1', 10);
             if (qtyInput && btn.closest('.product-info')) {
                 qty = qtyInput.value;
@@ -430,7 +601,7 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     // ============================================
-    // 4. ТАБЫ (Описание / Характеристики / Доставка)
+    // 4. ТАБЫ
     // ============================================
     const tabLinks = document.querySelectorAll('.tab-link');
     const tabPanels = document.querySelectorAll('.tab-panel');
@@ -454,7 +625,6 @@ document.addEventListener('click', function(e) {
     const btn = e.target.closest('.favorite-btn');
     if (btn) {
         e.preventDefault();
-        // Если пользователь не вошел — отправляем на страницу логина
         {% if not user.is_authenticated %}
             window.location.href = "{% url 'users:login' %}";
             return;

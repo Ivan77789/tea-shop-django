@@ -32,6 +32,13 @@ class Order(models.Model):
         default=STATUS_PENDING,
         verbose_name='Статус',
     )
+    promo_code = models.CharField(max_length=30, blank=True, default='', verbose_name='Промокод')
+    promo_discount_amount = models.DecimalField(
+        max_digits=9,
+        decimal_places=2,
+        default=0,
+        verbose_name='Скидка по промокоду (грн)',
+    )
     created = models.DateTimeField(auto_now_add=True, verbose_name='Создан')
 
     class Meta:
@@ -42,17 +49,26 @@ class Order(models.Model):
         return f'Заказ {self.id}'
 
     def get_total_cost(self):
-        return sum(item.get_cost() for item in self.items.all())
+        return max(self.get_items_subtotal() - self.promo_discount_amount, Decimal('0.00'))
+
+    def get_items_subtotal(self):
+        return sum((item.get_cost() for item in self.items.all()), Decimal('0.00'))
 
 
 class OrderItem(models.Model):
     UNIT_PIECE = 'piece'
     UNIT_GRAM = 'gram'
     UNIT_CAKE = 'cake'
+    UNIT_TRIAL = 'trial'
+    UNIT_BOX = 'box'
+    UNIT_PORTION = 'portion'
     UNIT_CHOICES = [
         (UNIT_PIECE, 'шт.'),
         (UNIT_GRAM, 'г'),
         (UNIT_CAKE, 'целый блин'),
+        (UNIT_TRIAL, 'пробник'),
+        (UNIT_BOX, 'коробка'),
+        (UNIT_PORTION, 'порция'),
     ]
 
     order = models.ForeignKey(Order, related_name='items', on_delete=models.CASCADE)
@@ -65,6 +81,7 @@ class OrderItem(models.Model):
         default=0, validators=[MaxValueValidator(100)], verbose_name='Скидка, %'
     )
     stock_deducted = models.BooleanField(default=False, verbose_name='Списан со склада')
+    stock_units_deducted = models.PositiveIntegerField(default=0, verbose_name='Списано пакетиков')
 
     def __str__(self):
         return str(self.id)

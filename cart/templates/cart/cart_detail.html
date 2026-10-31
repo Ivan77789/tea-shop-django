@@ -31,7 +31,11 @@
                     <div class="cart-item" id="cart-item-{{ item.dom_id }}">
                         
                         <div class="cart-item-info">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% if item.product.display_image_url %}
+                                <img src="{{ item.product.display_image_url }}" alt="{{ item.product.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                            {% else %}
+                                <span class="image-placeholder">Фото скоро появится</span>
+                            {% endif %}
                             <div>
                                 <p class="cart-item-title">{{ item.product.name }}</p>
                                 <p class="cart-item-desc">Цена {% if item.sale_mode == 'cake' %}<del>{{ item.regular_price }} ₴</del> {% endif %}{{ item.price }} ₴ {{ item.price_unit_label }}{% if item.sale_mode == 'cake' %} · скидка {{ item.discount_percent }}%{% endif %}</p>

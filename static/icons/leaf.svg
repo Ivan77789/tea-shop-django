@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
-  <g fill="none" stroke="#000000" stroke-width="20" stroke-linecap="round" stroke-linejoin="round">
-    <!-- Контур листика -->
-    <path d="M 115 375 C 105 280 120 120 375 75 C 310 270 215 325 145 315" />
-    <!-- Прожилка листика -->
-    <path d="M 125 255 C 190 220 235 185 240 170" />
-  </g>
-</svg>

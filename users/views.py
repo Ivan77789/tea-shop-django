@@ -51,7 +51,7 @@ def _send_confirmation_email(request, *, user, email, purpose):
     )
     send_mail(
         subject,
-        f'Чтобы {action}, откройте ссылку и нажмите кнопку подтверждения:\n\n'
+        f'Чтобы {action}, перейдите по ссылке подтверждения:\n\n'
         f'{confirmation_url}\n\nСсылка действует 3 дня.',
         settings.DEFAULT_FROM_EMAIL,
         [email],
@@ -176,21 +176,34 @@ def confirm_email_change(request, token):
     if profile is None or profile.pending_email.casefold() != str(payload.get('email', '')).casefold():
         return _confirmation_error(request)
 
-    if request.method == 'POST':
-        if User.objects.filter(email__iexact=profile.pending_email).exclude(pk=user.pk).exists():
-            profile.pending_email = ''
-            profile.save(update_fields=['pending_email'])
-            messages.error(request, 'Этот email уже используется другим аккаунтом.')
-            return redirect('users:profile_edit')
-
-        user.email = profile.pending_email
-        user.save(update_fields=['email'])
+    if User.objects.filter(email__iexact=profile.pending_email).exclude(pk=user.pk).exists():
         profile.pending_email = ''
         profile.save(update_fields=['pending_email'])
-        messages.success(request, 'Новый email подтверждён и сохранён.')
+        messages.error(request, 'Этот email уже используется другим аккаунтом.')
         return redirect('users:profile_edit')
 
-    return render(request, 'users/confirm_email.html', {'purpose': 'change'})
+    new_email = profile.pending_email
+    user.email = new_email
+    user.save(update_fields=['email'])
+
+    email_address, _ = EmailAddress.objects.get_or_create(
+        user=user,
+        email=new_email,
+        defaults={'verified': True, 'primary': True},
+    )
+    EmailAddress.objects.filter(user=user, primary=True).exclude(
+        pk=email_address.pk
+    ).update(primary=False)
+    if not email_address.verified or not email_address.primary:
+        email_address.verified = True
+        email_address.primary = True
+        email_address.save(update_fields=['verified', 'primary'])
+
+    profile.pending_email = ''
+    profile.email_verification_sent_at = None
+    profile.save(update_fields=['pending_email', 'email_verification_sent_at'])
+    messages.success(request, 'Новый email подтверждён и сохранён.')
+    return redirect('users:profile_edit')
 
 
 @require_POST

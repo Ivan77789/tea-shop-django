@@ -21,6 +21,7 @@
                     <!-- Все товары -->
                     <li>
                         <a href="{% url 'main:catalog' %}{% if search_query %}?q={{ search_query|urlencode }}{% endif %}"
+                           data-category=""
                            class="filter-link {% if not request.GET.category %}filter-link--active{% endif %}">
                             <span>Все товары</span>
                             <span class="filter-count">{{ total_count }}</span>
@@ -32,6 +33,7 @@
                         {% if category.products.count > 0 %}
                         <li>
                             <a href="?category={{ category.slug }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}"
+                               data-category="{{ category.slug }}"
                                class="filter-link {% if request.GET.category == category.slug %}filter-link--active{% endif %}">
                                 <span>{{ category.name }}</span>
                                 <span class="filter-count">{{ category.products.count }}</span>
@@ -43,7 +45,17 @@
 
                 <form method="get" action="{% url 'main:catalog' %}" class="catalog-filters-form">
                     {% if search_query %}<input type="hidden" name="q" value="{{ search_query }}">{% endif %}
-                    {% if request.GET.category %}<input type="hidden" name="category" value="{{ request.GET.category }}">{% endif %}
+                    <input type="hidden" name="category" value="{{ request.GET.category|default:'' }}">
+                    <div class="filter-promotions" role="group" aria-label="Акционные товары">
+                        <label class="filter-checkbox">
+                            <input type="checkbox" name="only_discount" value="1" {% if request.GET.only_discount == '1' %}checked{% endif %}>
+                            <span>Со скидкой</span>
+                        </label>
+                        <label class="filter-checkbox">
+                            <input type="checkbox" name="only_new" value="1" {% if request.GET.only_new == '1' %}checked{% endif %}>
+                            <span>Новинки</span>
+                        </label>
+                    </div>
                     <div class="filter-price">
                         <p class="filter-title">Цена</p>
 
@@ -56,7 +68,7 @@
                             <label class="price-field">
                                 <span>до</span>
                                 <input type="number" name="price_max" id="price-max" min="0" max="1000"
-                                       value="{{ request.GET.price_max|default:600 }}">
+                                       value="{{ request.GET.price_max|default:900 }}">
                             </label>
                         </div>
 
@@ -138,7 +150,7 @@
     // ============================================
     // 2. AJAX-ФИЛЬТРАЦИЯ
     // ============================================
-    async function loadProducts(urlParams) {
+    async function loadProducts(urlParams, pushHistory = true) {
         if (!urlParams) {
             urlParams = new URLSearchParams(new FormData(filterForm));
             urlParams.delete('page');
@@ -155,7 +167,7 @@
                     ? `По запросу «${data.search_query}» найдено товаров: ${data.result_count}`
                     : `Найдено товаров: ${data.result_count}`;
             }
-            history.pushState({}, '', `?${urlParams}`);
+            if (pushHistory) history.pushState({}, '', `?${urlParams}`);
         } catch (error) {
             console.error('Ошибка:', error);
         }
@@ -163,14 +175,29 @@
 
     if (filterForm) {
         filterForm.addEventListener('submit', function (e) { e.preventDefault(); loadProducts(); });
-        const inputs = filterForm.querySelectorAll('input[type="number"], select');
+        const inputs = filterForm.querySelectorAll('input[type="number"], input[type="checkbox"], select');
         inputs.forEach(input => {
-            input.addEventListener('input', () => {
+            const refresh = () => {
                 clearTimeout(window.filterTimer);
                 window.filterTimer = setTimeout(loadProducts, 500);
-            });
+            };
+            input.addEventListener('input', refresh);
+            input.addEventListener('change', refresh);
         });
     }
+
+    // Переключение категорий сохраняет активные фильтры, поиск и сортировку.
+    document.addEventListener('click', function (e) {
+        const link = e.target.closest('.filter-link');
+        if (!link || !filterForm) return;
+        e.preventDefault();
+        const categoryInput = filterForm.querySelector('[name="category"]');
+        categoryInput.value = link.dataset.category || '';
+        document.querySelectorAll('.filter-link').forEach(item => {
+            item.classList.toggle('filter-link--active', item === link);
+        });
+        loadProducts();
+    });
 
     // ============================================
     // 3. ДОБАВЛЕНИЕ В КОРЗИНУ
@@ -241,7 +268,30 @@
     // ============================================
     window.addEventListener('popstate', function () {
         const urlParams = new URLSearchParams(window.location.search);
-        loadProducts(urlParams); // <--- ТУТ БЫЛО ОБОРВАНО, ТЕПЕРЬ ВСЁ НА МЕСТЕ
+        if (filterForm) {
+            const categoryInput = filterForm.querySelector('[name="category"]');
+            if (categoryInput) categoryInput.value = urlParams.get('category') || '';
+            filterForm.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                input.checked = urlParams.get(input.name) === input.value;
+            });
+            ['price_min', 'price_max', 'sort'].forEach(name => {
+                const input = filterForm.elements.namedItem(name);
+                if (input) {
+                    const fallback = name === 'price_min' ? '100' : name === 'price_max' ? '900' : 'popular';
+                    input.value = urlParams.get(name) || fallback;
+                }
+            });
+            if (slider && slider.noUiSlider) {
+                slider.noUiSlider.set([
+                    filterForm.elements.namedItem('price_min').value,
+                    filterForm.elements.namedItem('price_max').value
+                ]);
+            }
+            document.querySelectorAll('.filter-link').forEach(link => {
+                link.classList.toggle('filter-link--active', (link.dataset.category || '') === (urlParams.get('category') || ''));
+            });
+        }
+        loadProducts(urlParams, false);
     });
 
         // ДОБАВЛЕНИЕ В ИЗБРАННОЕ

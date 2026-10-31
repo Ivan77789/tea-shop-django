@@ -1,0 +1,101 @@
+{% load static %}
+
+<section class="cookie-consent" data-cookie-consent hidden aria-label="Настройки cookie">
+    <div class="cookie-consent__main">
+        <div class="cookie-consent__mark" aria-hidden="true">
+            <img src="{% static 'icons/tea-leaf-green.png' %}" alt="">
+        </div>
+        <div class="cookie-consent__copy">
+            <h2>Мы заботимся о вашей конфиденциальности</h2>
+            <p>
+                Сайт использует необходимые cookie для работы корзины и аккаунта, а с вашего разрешения —
+                для статистики посещений. Подробнее — в
+                <a href="{% url 'main:privacy_policy' %}">Политике конфиденциальности</a>.
+            </p>
+        </div>
+        <div class="cookie-consent__actions">
+            <button type="button" class="cookie-consent__button cookie-consent__button--accept" data-cookie-accept-all>
+                Принять все
+            </button>
+            <button type="button" class="cookie-consent__button cookie-consent__button--settings" data-cookie-open-settings aria-expanded="false">
+                Настроить
+            </button>
+        </div>
+        <button type="button" class="cookie-consent__close" data-cookie-necessary aria-label="Отклонить необязательные cookie и закрыть">
+            <i class="bi bi-x-lg" aria-hidden="true"></i>
+        </button>
+    </div>
+
+    <div class="cookie-consent__settings" data-cookie-settings hidden>
+        <div class="cookie-consent__setting">
+            <div>
+                <strong>Необходимые</strong>
+                <p>Корзина, вход в аккаунт и защита форм. Всегда включены.</p>
+            </div>
+            <span class="cookie-consent__required">Всегда включены</span>
+        </div>
+        <label class="cookie-consent__setting">
+            <span>
+                <strong>Статистика посещений</strong>
+                <p>Помогает понять, какие страницы сайта используются.</p>
+            </span>
+            <input type="checkbox" data-cookie-analytics>
+        </label>
+        <div class="cookie-consent__settings-actions">
+            <button type="button" class="cookie-consent__button cookie-consent__button--accept" data-cookie-save>
+                Сохранить выбор
+            </button>
+            <button type="button" class="cookie-consent__button cookie-consent__button--settings" data-cookie-necessary>
+                Только необходимые
+            </button>
+        </div>
+    </div>
+</section>
+
+<script>
+(() => {
+    const banner = document.querySelector('[data-cookie-consent]');
+    if (!banner) return;
+
+    const consentName = 'tea_cookie_consent';
+    const settings = banner.querySelector('[data-cookie-settings]');
+    const analyticsToggle = banner.querySelector('[data-cookie-analytics]');
+    const settingsButton = banner.querySelector('[data-cookie-open-settings]');
+    const readConsent = () => document.cookie
+        .split('; ')
+        .find(cookie => cookie.startsWith(`${consentName}=`))
+        ?.split('=')[1];
+    const currentConsent = readConsent();
+
+    const saveConsent = (analyticsAllowed) => {
+        const value = analyticsAllowed ? 'all' : 'necessary';
+        const secure = window.location.protocol === 'https:' ? '; Secure' : '';
+        document.cookie = `${consentName}=${value}; Max-Age=15552000; Path=/; SameSite=Lax${secure}`;
+        banner.hidden = true;
+    };
+
+    if (!['all', 'necessary'].includes(currentConsent)) banner.hidden = false;
+    if (currentConsent === 'all') analyticsToggle.checked = true;
+
+    banner.querySelector('[data-cookie-accept-all]').addEventListener('click', () => saveConsent(true));
+    banner.querySelectorAll('[data-cookie-necessary]').forEach(button => {
+        button.addEventListener('click', () => saveConsent(false));
+    });
+    banner.querySelector('[data-cookie-save]').addEventListener('click', () => {
+        saveConsent(analyticsToggle.checked);
+    });
+    settingsButton.addEventListener('click', () => {
+        settings.hidden = !settings.hidden;
+        settingsButton.setAttribute('aria-expanded', String(!settings.hidden));
+    });
+    document.querySelectorAll('[data-cookie-reopen]').forEach(button => {
+        button.addEventListener('click', () => {
+            analyticsToggle.checked = readConsent() === 'all';
+            banner.hidden = false;
+            settings.hidden = false;
+            settingsButton.setAttribute('aria-expanded', 'true');
+            banner.scrollIntoView({ behavior: 'smooth', block: 'end' });
+        });
+    });
+})();
+</script>

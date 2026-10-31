@@ -113,7 +113,11 @@
                     <div class="order-summary-items">
                         {% for item in cart %}
                         <div class="order-summary-item">
-                            <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}">
+                            {% if item.product.display_image_url %}
+                                <img src="{{ item.product.display_image_url }}" alt="{{ item.product.name }}" onerror="this.onerror=null;this.remove();this.parentElement.classList.add('image-missing');">
+                            {% else %}
+                                <span class="image-placeholder">Фото скоро появится</span>
+                            {% endif %}
                             <div class="order-summary-info">
                                 <p class="order-summary-name">{{ item.product.name }}</p>
                                 <p class="order-summary-desc">{% if item.sale_mode == 'cake' %}<del>{{ item.regular_price }} ₴</del> {% endif %}{{ item.price }} ₴ {{ item.price_unit_label }}{% if item.sale_mode == 'cake' %} · скидка {{ item.discount_percent }}%{% endif %}</p>
@@ -122,6 +126,15 @@
                             <p class="order-summary-price">{{ item.total_price }} ₴</p>
                         </div>
                         {% endfor %}
+                    </div>
+
+                    <div class="checkout-promo" data-validate-url="{% url 'orders:promo_validate' %}">
+                        <label for="{{ form.promo_code.id_for_label }}">Промокод на первый заказ</label>
+                        <div class="checkout-promo__controls">
+                            {{ form.promo_code }}
+                            <button type="button" class="checkout-promo__button" id="apply-promo">Применить</button>
+                        </div>
+                        <p class="checkout-promo__message" id="promo-message" aria-live="polite">Подпишитесь на новости и получите скидку 10% по коду TEA10.</p>
                     </div>
 
                     <div class="order-summary-totals">
@@ -142,9 +155,14 @@
                             <span>По тарифам Новой Почты</span>
                         </div>
 
+                        <div class="order-summary-row" id="promo-discount-row" hidden>
+                            <span>Промокод TEA10</span>
+                            <span id="promo-discount-amount"></span>
+                        </div>
+
                         <div class="order-summary-total">
                             <span>Итого</span>
-                            <span>{{ cart.get_total_price }} ₴</span>
+                            <span id="checkout-total" data-subtotal="{{ cart.get_total_price }}">{{ cart.get_total_price }} ₴</span>
                         </div>
                     </div>
 
@@ -165,4 +183,52 @@
         </form>
     </div>
 </section>
+{% endblock %}
+{% block extra_js %}
+<script>
+(() => {
+    const box = document.querySelector('.checkout-promo');
+    if (!box) return;
+    const button = document.getElementById('apply-promo');
+    const codeInput = document.getElementById('{{ form.promo_code.id_for_label }}');
+    const emailInput = document.getElementById('{{ form.email.id_for_label }}');
+    const message = document.getElementById('promo-message');
+    const discountRow = document.getElementById('promo-discount-row');
+    const discountAmount = document.getElementById('promo-discount-amount');
+    const total = document.getElementById('checkout-total');
+    const originalTotal = total.dataset.subtotal;
+    button.addEventListener('click', async () => {
+        message.textContent = 'Проверяем промокод…';
+        message.classList.remove('is-error', 'is-success');
+        button.disabled = true;
+        try {
+            const body = new URLSearchParams({
+                promo_code: codeInput.value,
+                email: emailInput.value,
+                csrfmiddlewaretoken: document.querySelector('[name=csrfmiddlewaretoken]').value
+            });
+            const response = await fetch(box.dataset.validateUrl, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8', 'X-Requested-With': 'XMLHttpRequest'},
+                body
+            });
+            const result = await response.json();
+            if (!response.ok || !result.valid) throw new Error(result.message || 'Не удалось проверить промокод.');
+            message.textContent = result.message;
+            message.classList.add('is-success');
+            discountAmount.textContent = '−' + result.discount + ' ₴';
+            discountRow.hidden = false;
+            total.textContent = result.total + ' ₴';
+            codeInput.value = result.promo_code;
+        } catch (error) {
+            message.textContent = error.message;
+            message.classList.add('is-error');
+            discountRow.hidden = true;
+            total.textContent = originalTotal + ' ₴';
+        } finally {
+            button.disabled = false;
+        }
+    });
+})();
+</script>
 {% endblock %}

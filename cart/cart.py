@@ -31,6 +31,12 @@ class Cart:
             return 'gram', 50
         if mode in ('piece', 'cake'):
             return mode, None
+        if mode == 'piece-box':
+            return 'piece', None
+        if mode == 'piece-trial':
+            return 'trial', None
+        if mode == Product.SALE_UNIT_PORTION:
+            return Product.SALE_UNIT_PORTION, None
         return None, None
 
     def _upgrade_legacy_keys(self):
@@ -69,8 +75,14 @@ class Cart:
             raise ValueError('Неизвестный размер порции.')
         if mode == 'cake' and not product.whole_cake_weight_grams:
             raise ValueError('Для товара не задан вес целого блина.')
-        if mode == 'piece' and product.sale_unit != Product.SALE_UNIT_PIECE:
+        if mode in ('piece', 'trial') and product.sale_unit != Product.SALE_UNIT_PIECE:
             raise ValueError('Этот товар продаётся на развес.')
+        if mode == 'trial' and product.trial_price is None:
+            raise ValueError('Пробник для этого товара не продаётся.')
+        if mode == Product.SALE_UNIT_PORTION and (
+            product.sale_unit != Product.SALE_UNIT_PORTION or not product.portion_weight_grams
+        ):
+            raise ValueError('Для порции не задан вес или товар продаётся в другом формате.')
         if mode == 'gram' and product.sale_unit != Product.SALE_UNIT_GRAM:
             raise ValueError('Этот товар продаётся поштучно.')
         if not isinstance(quantity, int) or quantity < 1:
@@ -84,18 +96,30 @@ class Cart:
             weight_grams = new_quantity * pack_weight
             if weight_grams > MAX_CART_WEIGHT_GRAMS:
                 raise ValueError('Максимум для одного заказа — 100 кг развесного чая.')
-            if product.stock_quantity is not None and weight_grams > product.stock_quantity:
-                raise ValueError(f'В наличии только {product.stock_quantity} г')
+            if not product.can_supply_grams(weight_grams):
+                raise ValueError(f'В наличии только {product.available_grams} г')
         elif mode == 'cake':
             if new_quantity > MAX_CART_QUANTITY:
                 raise ValueError(f'Максимальное количество — {MAX_CART_QUANTITY} блинов.')
             if new_quantity > product.whole_cake_stock:
                 raise ValueError(f'В наличии только {product.whole_cake_stock} целых блинов.')
+        elif mode == 'trial':
+            if new_quantity > MAX_CART_QUANTITY:
+                raise ValueError(f'Максимальное количество пробников — {MAX_CART_QUANTITY} шт.')
+            if product.trial_stock_available is not None and new_quantity > product.trial_stock_available:
+                raise ValueError(f'В наличии только {product.trial_stock_available} пакетиков.')
+        elif mode == Product.SALE_UNIT_PORTION:
+            if new_quantity > MAX_CART_QUANTITY:
+                raise ValueError(f'Максимальное количество порций — {MAX_CART_QUANTITY} шт.')
+            available_portions = product.portion_stock_available
+            if available_portions is not None and new_quantity > available_portions:
+                raise ValueError(f'В наличии только {available_portions} порций.')
         else:
             if new_quantity > MAX_CART_QUANTITY:
                 raise ValueError(f'Максимальное количество товара — {MAX_CART_QUANTITY} шт.')
             if product.stock_quantity is not None and new_quantity > product.stock_quantity:
-                raise ValueError(f'В наличии только {product.stock_quantity} шт.')
+                available_boxes = product.stock_quantity
+                raise ValueError(f'В наличии только {available_boxes} коробок.')
 
         self.cart[item_key] = {'quantity': new_quantity}
         self.save()
@@ -138,7 +162,7 @@ class Cart:
                 ) * item['quantity']
             elif mode == 'gram':
                 item['weight_grams'] = pack_weight * item['quantity']
-                item['discount_percent'] = product.discount_for_weight(pack_weight)
+                item['discount_percent'] = max(product.discount_percent, product.discount_for_weight(pack_weight))
                 item['price'] = product.discounted_line_total(pack_weight, item['discount_percent'])
                 item['regular_price'] = product.line_total(pack_weight)
                 item['unit_label'] = f'уп. по {pack_weight} г'
@@ -150,16 +174,54 @@ class Cart:
                 item['discount_savings'] = (
                     product.line_total(item['weight_grams']) - item['total_price']
                 )
+            elif mode == 'trial':
+                item['weight_grams'] = 0
+                item['price'] = product.trial_price
+                item['regular_price'] = product.trial_price
+                item['discount_percent'] = 0
+                item['unit_label'] = 'пробник'
+                item['display_quantity'] = f'{item["quantity"]} × пробник'
+                item['price_unit_label'] = 'за пробник'
+                item['total_price'] = product.trial_price * item['quantity']
+                item['discount_savings'] = 0
+            elif mode == Product.SALE_UNIT_PORTION:
+                portion_weight = product.portion_weight_grams
+                discount_percent = product.discount_percent
+                item['weight_grams'] = portion_weight * item['quantity']
+                item['price'] = product.price
+                item['regular_price'] = product.price
+                item['discount_percent'] = discount_percent
+                item['unit_label'] = (
+                    f'{portion_weight} г'
+                    if product.slug == 'smola-shu-puera'
+                    else f'коробка, {portion_weight} г'
+                )
+                item['display_quantity'] = f'{item["quantity"]} × {item["unit_label"]}'
+                item['price_unit_label'] = (
+                    f'за {portion_weight} г'
+                    if product.slug == 'smola-shu-puera'
+                    else 'за коробку'
+                )
+                item['total_price'] = product._price_after_discount(
+                    product.price * item['quantity'], discount_percent
+                )
+                item['discount_savings'] = product.price * item['quantity'] - item['total_price']
             else:
                 item['weight_grams'] = 0
                 item['price'] = product.price
                 item['regular_price'] = product.price
-                item['discount_percent'] = 0
-                item['unit_label'] = 'шт.'
-                item['display_quantity'] = f'{item["quantity"]} шт.'
-                item['price_unit_label'] = 'за шт.'
-                item['total_price'] = product.price * item['quantity']
-                item['discount_savings'] = 0
+                discount_percent = product.discount_percent if mode != 'trial' else 0
+                item['discount_percent'] = discount_percent
+                item['unit_label'] = (
+                    f'коробка — {product.box_pack_count} шт.'
+                    if product.box_pack_count > 1 else 'упаковка'
+                )
+                item['display_quantity'] = f'{item["quantity"]} × {item["unit_label"]}'
+                item['price_unit_label'] = f'за {item["unit_label"]}'
+                item['total_price'] = product._price_after_discount(
+                    product.price * item['quantity'], discount_percent
+                )
+                item['discount_savings'] = product.price * item['quantity'] - item['total_price']
             item['step'] = 1
             yield item
 

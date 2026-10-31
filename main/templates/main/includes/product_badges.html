@@ -1,0 +1,17 @@
+{% load static %}
+{% if product.is_new or product.default_discount_percent %}
+<div class="product-card-badges" aria-label="Отметки товара">
+    {% if product.is_new %}
+    <span class="product-card-badge product-card-badge--new">
+        <img src="{% static 'icons/tea-leaf-green.png' %}" alt="" aria-hidden="true">
+        Новинка
+    </span>
+    {% endif %}
+    {% if product.default_discount_percent %}
+    <span class="product-card-badge product-card-badge--discount">
+        <i class="bi bi-tag-fill" aria-hidden="true"></i>
+        Скидка
+    </span>
+    {% endif %}
+</div>
+{% endif %}

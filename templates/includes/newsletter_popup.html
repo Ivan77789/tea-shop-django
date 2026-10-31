@@ -1,0 +1,80 @@
+{% load static %}
+<div class="newsletter-popup" id="newsletter-popup" hidden aria-hidden="true">
+    <div class="newsletter-popup__backdrop" data-newsletter-close></div>
+    <section class="newsletter-popup__dialog" role="dialog" aria-modal="true" aria-labelledby="newsletter-title">
+        <button class="newsletter-popup__close" type="button" aria-label="Закрыть окно" data-newsletter-close>×</button>
+        <div class="newsletter-popup__photo" role="img" aria-label="Чайник и чашка чая в тёплом свете"></div>
+        <div class="newsletter-popup__content">
+            <div class="newsletter-popup__ornament" aria-hidden="true"><span></span><img src="{% static 'icons/tea-leaf-green.png' %}" alt=""><span></span></div>
+            <h2 id="newsletter-title">Присоединяйтесь<br>к чайной культуре</h2>
+            <p class="newsletter-popup__lead">Получите скидку 10% на первый заказ — промокод отправим на вашу почту</p>
+            <form id="newsletter-form" action="{% url 'main:newsletter_signup' %}" method="post">
+                {% csrf_token %}
+                <label class="visually-hidden" for="newsletter-email">Ваш Email</label>
+                <div class="newsletter-popup__input-wrap">
+                    <input id="newsletter-email" name="email" type="email" placeholder="Ваш Email" autocomplete="email" required>
+                    <i class="bi bi-envelope" aria-hidden="true"></i>
+                </div>
+                <button class="newsletter-popup__submit" type="submit">Получить промокод <i class="bi bi-chevron-right" aria-hidden="true"></i></button>
+            </form>
+            <p class="newsletter-popup__status" id="newsletter-status" aria-live="polite"></p>
+            <div class="newsletter-popup__foot">
+                <div class="newsletter-popup__ornament" aria-hidden="true"><span></span><img src="{% static 'icons/tea-leaf-green.png' %}" alt=""><span></span></div>
+                <p>Никакого спама — только чайные новости<br>и полезные советы</p>
+            </div>
+        </div>
+    </section>
+</div>
+<script>
+(() => {
+    const modal = document.getElementById('newsletter-popup');
+    const form = document.getElementById('newsletter-form');
+    if (!modal || !form) return;
+    const close = () => {
+        modal.hidden = true;
+        modal.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('newsletter-popup-open');
+        try { localStorage.setItem('tea_newsletter_closed_until', String(Date.now() + 30 * 24 * 60 * 60 * 1000)); } catch (_) {}
+    };
+    const show = () => {
+        modal.hidden = false;
+        modal.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('newsletter-popup-open');
+        document.getElementById('newsletter-email').focus({preventScroll: true});
+    };
+    modal.querySelectorAll('[data-newsletter-close]').forEach(button => button.addEventListener('click', close));
+    document.addEventListener('keydown', event => { if (event.key === 'Escape' && !modal.hidden) close(); });
+    let alreadySubscribed = false;
+    try {
+        alreadySubscribed = localStorage.getItem('tea_newsletter_subscribed') === '1';
+        const closedUntil = Number(localStorage.getItem('tea_newsletter_closed_until') || 0);
+        if (!alreadySubscribed && closedUntil < Date.now()) window.setTimeout(show, 8000);
+    } catch (_) { window.setTimeout(show, 8000); }
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        const submit = form.querySelector('[type=submit]');
+        const status = document.getElementById('newsletter-status');
+        submit.disabled = true;
+        status.className = 'newsletter-popup__status';
+        status.textContent = 'Отправляем…';
+        try {
+            const response = await fetch(form.action, {
+                method: 'POST',
+                headers: {'X-Requested-With': 'XMLHttpRequest'},
+                body: new FormData(form)
+            });
+            const result = await response.json();
+            if (!response.ok || !result.ok) throw new Error(result.message || 'Не удалось оформить подписку.');
+            try { localStorage.setItem('tea_newsletter_subscribed', '1'); } catch (_) {}
+            form.hidden = true;
+            status.classList.add('is-success');
+            status.textContent = result.message;
+        } catch (error) {
+            status.classList.add('is-error');
+            status.textContent = error.message;
+        } finally {
+            submit.disabled = false;
+        }
+    });
+})();
+</script>

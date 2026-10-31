@@ -103,23 +103,26 @@ TURNSTILE_ENABLED = bool(TURNSTILE_SITE_KEY and TURNSTILE_SECRET_KEY)
 
 ROOT_URLCONF = 'tea_shop.urls'
 
+
+
 SOCIALACCOUNT_PROVIDERS = {
     'google': {
-        # Google verifies the email address it returns. Allow that verified
-        # address to authenticate an existing local account and link Google.
+        # Разрешаем автоматически связывать Google-аккаунт с существующим локальным
+        # аккаунтом по подтвержденному email
         'EMAIL_AUTHENTICATION': True,
+        
         'APP': {
             'client_id': os.getenv('GOOGLE_CLIENT_ID'),
             'secret': os.getenv('GOOGLE_CLIENT_SECRET'),
             'key': ''
         },
+        
         'SCOPE': [
             'https://www.googleapis.com/auth/userinfo.profile',
-            'https://www.googleapis.com/auth/userinfo.email'
-        ,],
+            'https://www.googleapis.com/auth/userinfo.email',
+        ],
     }
 }
-
 # Email-аутентификация разрешена только для Google через настройку провайдера выше.
 SOCIALACCOUNT_EMAIL_AUTHENTICATION = False
 
@@ -141,6 +144,10 @@ DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@example.com')
 ACCOUNT_EMAIL_VERIFICATION = 'mandatory'
 ACCOUNT_SIGNUP_FIELDS = ['username*', 'email*', 'password1*', 'password2*']
 
+
+GOOGLE_ANALYTICS_ID = os.getenv('GOOGLE_ANALYTICS_ID', '')
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -153,6 +160,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 
                 'cart.context_processors.cart',
+                'main.context_processors.google_analytics',
             ],
         },
     },
